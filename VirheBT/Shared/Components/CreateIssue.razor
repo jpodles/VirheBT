@@ -1,0 +1,124 @@
+﻿
+@using VirheBT.Data.Enums
+<Modal @ref="createIssueModalRef">
+    <ModalContent Centered="true" Size="ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>Create issue</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Issue Title</FieldLabel>
+                <TextEdit Placeholder="Enter title..." />
+            </Field>
+            <Row>
+                <Column>
+                    <Field>
+                        <FieldLabel>Created By</FieldLabel>
+                        <Autocomplete TItem="MySelectModel" TValue="string"
+                                      Data="@myDdlData"
+                                      Disabled="true"
+                                      TextField="@((item)=>item.MyTextField)"
+                                      ValueField="@((item)=>item.MyTextField)"
+                                      SelectedValue="@selectedSearchValue"
+                                      SelectedValueChanged="@MySearchHandler"
+                                      Placeholder="Search..." />
+                    </Field>
+
+                </Column>
+                <Column>
+                    <Field>
+                        <FieldLabel>Assigned To</FieldLabel>
+                        <Autocomplete TItem="MySelectModel" TValue="string"
+                                      Data="@myDdlData"
+                                      TextField="@((item)=>item.MyTextField)"
+                                      ValueField="@((item)=>item.MyTextField)"
+                                      SelectedValue="@selectedSearchValue"
+                                      SelectedValueChanged="@MySearchHandler"
+                                      Placeholder="Search..." />
+                    </Field>
+                </Column>
+            </Row>
+
+            <Row Margin="Margin.Is2.OnY">
+                <Column ColumnSize="ColumnSize.Is3">
+                    Issue Type:
+                </Column>
+                <Column>
+
+                    <RadioGroup TValue="string" Name="test" Color="Color.Light">
+                        <Radio TValue="string" Value="@("red")" Style="color: red">
+                            <label><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>Bug</span></label>
+                        </Radio>
+                        <Radio TValue="string" Value="@("green")" Style="color: forestgreen">
+                            <label><Icon Name="IconName.PlusCircle" /> <span>Feature</span></label>
+                        </Radio>
+
+                    </RadioGroup>
+                </Column>
+            </Row>
+            <Row Margin="Margin.Is2.OnY">
+                <Column ColumnSize="ColumnSize.Is3">
+                    Issue Priority:
+                </Column>
+                <Column>
+
+                    <RadioGroup TValue="string" Name="colors" Color="Color.Light">
+                        <Radio TValue="string" Value="@("red")" Style="color: darkgreen">
+                            <label><Icon Name="IconName.ArrowUp" /> <span>Low</span></label>
+                        </Radio>
+                        <Radio TValue="string" Value="@("green")" Style="color: orange">
+                            <label><Icon Name="IconName.ArrowUp" /> <span>Medium</span></label>
+                        </Radio>
+                        <Radio TValue="string" Value="@("blue")" Style="color: red">
+                            <label><Icon Name="IconName.ArrowUp" /> <span>High</span></label>
+                        </Radio>
+                    </RadioGroup>
+                </Column>
+            </Row>
+            <Field>
+                <FieldLabel>Description</FieldLabel>
+                <TextEditor></TextEditor>
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideCreateIssueModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@HideCreateIssueModal">Add Issue</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+
+@code{
+    // reference to the modal component
+    public Modal createIssueModalRef;
+
+    public void ShowCreateIssueModal()
+    {
+        createIssueModalRef.Show();
+    }
+
+    private void HideCreateIssueModal()
+    {
+        createIssueModalRef.Hide();
+    }
+}
+
+@code{
+    public class MySelectModel
+    {
+        public int MyValueField { get; set; }
+        public string MyTextField { get; set; }
+    }
+
+    static string[] Employees = { "Tomasz", "Michał", "Marek" };
+    IEnumerable<MySelectModel> myDdlData = Enumerable.Range(1, Employees.Length).Select(x => new MySelectModel { MyTextField = Employees[x - 1], MyValueField = x });
+
+    string selectedSearchValue { get; set; }
+
+    void MySearchHandler(string newValue)
+    {
+        selectedSearchValue = newValue;
+    }
+}
+

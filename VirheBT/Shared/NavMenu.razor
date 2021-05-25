@@ -1,0 +1,65 @@
+﻿@using VirheBT.Shared.Components
+
+<Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet"
+     Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small"
+     Style="background-color: #ECECEC">
+    <BarBrand>
+        <BarItem>
+            <BarLink To="">
+                <BarIcon IconName="IconName.Bug" />
+                VirheBT
+            </BarLink>
+        </BarItem>
+    </BarBrand>
+    <BarMenu>
+        <BarStart>
+
+            <BarItem>
+                <BarLink To="/dashboard">
+                    <BarIcon IconName="IconName.Dashboard" />
+                    Dashboard
+                </BarLink>
+            </BarItem>
+            <BarItem>
+                <BarLink To="/issues">
+                    <BarIcon IconName="IconName.ListUl" />
+                    Issues
+                </BarLink>
+            </BarItem>
+            <BarItem>
+                <BarItem>
+
+                    <BarLink To="/projects">
+                        <BarIcon IconName="IconName.Code" />
+                        My Projects
+                    </BarLink>
+                </BarItem>
+            </BarItem>
+            <BarItem>
+                <BarLink To="/team">
+                    <BarIcon IconName="IconName.Users" />
+                    My Team
+                </BarLink>
+            </BarItem>
+            <Divider></Divider>
+            <BarItem>
+
+                <BarLink @onclick="() => CreateIssueModal.ShowCreateIssueModal()">
+
+                    <BarIcon IconName="IconName.Add" />
+                    Create Issue
+                </BarLink>
+
+
+            </BarItem>
+            <Divider></Divider>
+        </BarStart>
+    </BarMenu>
+    <BarToggler />
+</Bar>
+
+<CreateIssue @ref="CreateIssueModal"></CreateIssue>
+
+@code {
+    private CreateIssue CreateIssueModal { get; set; }
+} 
