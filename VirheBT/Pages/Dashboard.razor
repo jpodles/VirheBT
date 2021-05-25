@@ -1,0 +1,79 @@
+﻿@page "/dashboard"
+
+
+
+<Container Fluid="true" Margin="Margin.Is5.OnY">
+    <Row>
+        <Column ColumnSize="ColumnSize.Is6">
+            <Jumbotron Background="Background.Light">
+                <JumbotronTitle Size="JumbotronTitleSize.Is4">Witaj, Jakub!</JumbotronTitle>
+                <JumbotronSubtitle>
+                    Projekt testowy
+                </JumbotronSubtitle>
+                <Divider></Divider>
+                <Paragraph>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam rhoncus lacus justo, nec vehicula nisi fermentum nec. Pellentesque ut pellentesque neque. Duis luctus, ligula quis congue blandit, arcu metus tempor orci, nec venenatis leo tortor tempus ipsum. Maecenas quis vehicula metus. Sed lectus mi, imperdiet eget auctor in, tempus et velit.
+                </Paragraph>
+            </Jumbotron>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is6">
+            <Card Margin="Margin.Is4.FromBottom" Background="Background.Light">
+                <CardHeader>
+                    <CardTitle>Your Tasks</CardTitle>
+                </CardHeader>
+
+                <CardBody>
+                    <Chart @ref="yourTasksChart" Type="ChartType.PolarArea" TItem="int" />
+                </CardBody>
+            </Card>
+        </Column>
+    </Row>
+    <Row>
+        <Column ColumnSize="ColumnSize.Is3">
+            <Card Margin="Margin.Is4.FromBottom" Background="Background.Light">
+                <CardHeader>
+                    <CardTitle>All Tasks Status In Projects</CardTitle>
+                </CardHeader>
+
+                <CardBody>
+                    <Chart @ref="allTasksStatusInProjectChart" Type="ChartType.Doughnut" TItem="int" />
+                </CardBody>
+            </Card>
+        </Column>
+        <Column ColumnSize=" ColumnSize.Is3">
+            <Card Margin="Margin.Is4.FromBottom" Background="Background.Light">
+                <CardHeader>
+                    <CardTitle>All Tasks In Project</CardTitle>
+                </CardHeader>
+
+                <CardBody>
+                    <Chart @ref="allFeatureBugsInProjectChart" Type="ChartType.Pie" TItem="int" />
+                </CardBody>
+            </Card>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is3">
+            <Card Background="Background.Light">
+                <CardHeader>
+                    <CardTitle>Bugs By Priority</CardTitle>
+                </CardHeader>
+
+                <CardBody>
+                    <Chart @ref="bugsPriorityChart" Type="ChartType.Bar" TItem="int" />
+                </CardBody>
+            </Card>
+        </Column>
+        <Column ColumnSize="ColumnSize.Is3">
+            <Card Background="Background.Light">
+                <CardHeader>
+                    <CardTitle>Features By Priority</CardTitle>
+                </CardHeader>
+
+                <CardBody>
+                    <Chart @ref="featuresPriorityChart" Type="ChartType.Bar" TItem="int" />
+                </CardBody>
+            </Card>
+        </Column>
+    </Row>
+
+
+</Container>
