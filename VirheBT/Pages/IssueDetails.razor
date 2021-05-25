@@ -1,0 +1,69 @@
+﻿@page "/issue/{IssueId}"
+@using System.Collections.ObjectModel
+@using VirheBT.Shared.Components
+<Row Margin="Margin.Is2.OnY" Style=" margin-bottom: 0px">
+    <Column ColumnSize="ColumnSize.Is8">
+        <Card Background="Background.Transparent" Style="border: none;">
+            <TextEdit Size="Size.Large" Text="@title" />
+        </Card>
+
+    </Column>
+    <Column ColumnSize="ColumnSize.Is4">
+        <Buttons Size="Size.Medium" Float="Float.Right">
+            <Button Color="Color.Info">Save Changes</Button>
+            <Button Color="Color.Light">Cancel</Button>
+        </Buttons>
+    </Column>
+
+</Row>
+<Divider Style="margin-top: 0px" Padding="Padding.Is0" />
+<Row>
+    <Column ColumnSize="ColumnSize.Is7">
+        <Accordion>
+            @*DESCRIPTION TEXT EDIT*@
+            <Collapse Visible="@descSectionVisible">
+                <CollapseHeader Padding="Padding.Is0">
+                    <Button Clicked="@(()=>descSectionVisible = !descSectionVisible)" Style="width:100%">
+                        Description
+                        @if (descSectionVisible == true)
+                        {
+                            <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
+                        }
+                        @if (descSectionVisible == false)
+                        {
+                            <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
+                        }
+                    </Button>
+
+                </CollapseHeader>
+                <CollapseBody Style="height: 400px">
+                    <TextEditor></TextEditor>
+
+
+                </CollapseBody>
+            </Collapse>
+            @*COMMENT SECTION*@
+            <IssueComment></IssueComment>
+        </Accordion>
+
+    </Column>
+    <Column ColumnSize="ColumnSize.Is5">
+        @*ISSUE DEATILS SECTION*@
+        <DetailsComponent></DetailsComponent>
+
+        @*ISSUE HISTORY SECTION*@
+        <IssueHistory></IssueHistory>
+
+
+    </Column>
+</Row>
+
+@code{
+    string title = "BLAZOR ISSUE TITLE";
+
+    bool descSectionVisible = true;
+
+    [Parameter]
+    public string IssueId { get; set; }
+}
+

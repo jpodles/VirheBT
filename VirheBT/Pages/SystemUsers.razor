@@ -1,0 +1,199 @@
+﻿@page "/users"
+
+@using VirheBT.Data.Enums
+
+
+<Card Margin="Margin.Is4.OnY" WhiteText="false">
+    <CardHeader>
+        <CardTitle>SYTEM USERS</CardTitle>
+    </CardHeader>
+    <CardBody>
+
+        <DataGrid @ref="dataGrid"
+                  TItem="UserDto"
+                  Data="data"
+                  Editable="@editable"
+                  EditMode="@editMode"
+                  Sortable="@sortable"
+                  SortMode="@sortMode"
+                  Filterable="@filterable"
+                  ShowPager="@showPager"
+                  SelectionMode="@selectionMode"
+                  CommandMode="@commandsMode"
+                  PageSize="15"
+                  CurrentPage="currentPage"
+                  PageChanged="(e) => currentPage = e.Page"
+                  PagerPosition="DataGridPagerPosition.TopAndBottom"
+                  Striped="false"
+                  Bordered="true"
+                  Hoverable="true"
+                  Responsive="true"
+                  Narrow="true">
+
+            <DataGridColumns>
+                <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.ID)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
+
+                <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.FirstName)" Caption="First Name" Editable="true" Width="100px">
+                    <CaptionTemplate>
+                        <Icon Name="IconName.User" /> @context.Caption
+                    </CaptionTemplate>
+
+                    <DisplayTemplate>
+                        <Link To=@($"project/{context.ID}") />
+                        <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                            @context.FirstName
+                        </Card>
+
+                    </DisplayTemplate>
+
+                </DataGridColumn>
+                <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.LastName)" Caption="Last Name" Editable="true" Width="100px">
+                    <CaptionTemplate>
+                        <Icon Name="IconName.User" /> @context.Caption
+                    </CaptionTemplate>
+
+                    <DisplayTemplate>
+                        <Link To=@($"project/{context.ID}") />
+                        <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                            @context.LastName
+                        </Card>
+
+                    </DisplayTemplate>
+
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.Email)" Caption="Email" Editable="true" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
+                    <CaptionTemplate>
+                        <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Envelope" /> @context.Caption
+                    </CaptionTemplate>
+                </DataGridColumn>
+
+                <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.UserRole)" Caption="User Role" Editable="true" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                    <CaptionTemplate>
+                        <Icon Name="IconName.UserTie" /> @context.Caption
+                    </CaptionTemplate>
+                    <DisplayTemplate>
+
+                        @{
+                            var item = (context as UserDto);
+                            if (item.UserRole == UserRole.Admin)
+                            {
+                                <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" /> <span>@context.UserRole</span></label>
+                            }
+                            if (item.UserRole == UserRole.Programmer)
+                            {
+                                <label style="color:green"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
+
+                            }
+                            if (item.UserRole == UserRole.Tester)
+                            {
+                                <label style="color: cornflowerblue"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
+
+                            }
+                            if (item.UserRole == UserRole.ProjectManager)
+                            {
+                                <label style="color:darkorange"><Icon Name="IconName.UserTie" /> <span>@context.UserRole</span></label>
+
+                            }
+
+                        }
+                    </DisplayTemplate>
+                    <EditTemplate>
+                        <Select TValue=@UserRole SelectedValue="@((UserRole)( context.CellValue ))" SelectedValueChanged="@(( v ) => context.CellValue = v)">
+                            <SelectItem TValue="UserRole" Value=UserRole.Tester>Tester</SelectItem>
+                            <SelectItem TValue="UserRole" Value=UserRole.Admin>Admin</SelectItem>
+                            <SelectItem TValue="UserRole" Value=UserRole.Programmer>Programmer</SelectItem>
+                            <SelectItem TValue="UserRole" Value=UserRole.ProjectManager>ProjectManager</SelectItem>
+                        </Select>
+                    </EditTemplate>
+                    <FilterTemplate>
+                        @{
+                            var selectedValue = @context.SearchValue ?? "*";
+                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                                <SelectItem Value="@("*")">All</SelectItem>
+                                @foreach (var item in Enum.GetValues(typeof(UserRole)))
+                                {
+                                    <SelectItem Value="@item">@item</SelectItem>
+                                }
+                            </Select>
+                        }
+                    </FilterTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="UserDto" Field="@nameof(UserDto.UserStatus)" Caption="User Status" Editable="true" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                    <CaptionTemplate>
+                        <Icon Name="IconName.UserTie" /> @context.Caption
+                    </CaptionTemplate>
+                    <DisplayTemplate>
+
+                        @{
+                            var item = (context as UserDto);
+                            if (item.UserStatus == UserStatus.Inactive)
+                            {
+                                <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserSlash" /> <span>@context.UserStatus</span></label>
+                            }
+                            if (item.UserStatus == UserStatus.Active)
+                            {
+                                <label style="color:green"><Icon Name="IconName.UserPlus" /> <span>@context.UserStatus</span></label>
+
+                            }
+
+
+                        }
+                    </DisplayTemplate>
+                    <EditTemplate>
+                        <Select TValue=@UserStatus SelectedValue="@((UserStatus)( context.CellValue ))" SelectedValueChanged="@(( v ) => context.CellValue = v)">
+                            <SelectItem TValue="UserStatus" Value=UserStatus.Active>Active</SelectItem>
+                            <SelectItem TValue="UserStatus" Value=UserStatus.Inactive>Inactive</SelectItem>
+
+                        </Select>
+                    </EditTemplate>
+
+                    <FilterTemplate>
+                        @{
+                            var selectedValue = @context.SearchValue ?? "*";
+                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                                <SelectItem Value="@("*")">All</SelectItem>
+                                @foreach (var item in Enum.GetValues(typeof(UserStatus)))
+                                {
+                                    <SelectItem Value="@item">@item</SelectItem>
+                                }
+                            </Select>
+                        }
+                    </FilterTemplate>
+                </DataGridColumn>
+                <DataGridCommandColumn TItem="UserDto" Width="50px" TextAlignment="TextAlignment.Center">
+                    <ClearFilterCommandTemplate>
+                        <Button Color="Color.Warning" Clicked="@context.Clicked">
+
+                            Clear filter
+                        </Button>
+                    </ClearFilterCommandTemplate>
+                    <DeleteCommandTemplate>
+                        <Button Clicked="@context.Clicked" Color="Color.Danger">
+                            <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Trash" />
+                        </Button>
+                    </DeleteCommandTemplate>
+
+                    <NewCommandTemplate>
+                        <Button Color="Color.Success" Clicked="@context.Clicked" Style="display:none">New</Button>
+                    </NewCommandTemplate>
+                    <EditCommandTemplate>
+                        <Button Color="Color.Primary" Clicked="@context.Clicked">Edit</Button>
+                    </EditCommandTemplate>
+                </DataGridCommandColumn>
+            </DataGridColumns>
+            <PopupTitleTemplate>
+                @if (context.EditState == DataGridEditState.Edit)
+                {
+                    @($"{context.LocalizationString} Employee {context.Item.FirstName} {context.Item.LastName}")
+                }
+                else
+                {
+                    @($"{context.LocalizationString} Employee")
+                }
+            </PopupTitleTemplate>
+        </DataGrid>
+
+    </CardBody>
+
+</Card>

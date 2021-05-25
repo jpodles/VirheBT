@@ -1,0 +1,35 @@
+﻿<Modal @ref="modalRef">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Add Comment</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Your Comment:</FieldLabel>
+                <MemoEdit Rows="5" />
+            </Field>
+
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@HideModal">Add</Button>
+        </ModalFooter>
+    </ModalContent>
+
+</Modal>
+
+@code{
+    // reference to the modal component
+    private Modal modalRef;
+
+    public void ShowModal()
+    {
+        modalRef.Show();
+    }
+
+    private void HideModal()
+    {
+        modalRef.Hide();
+    }
+}
