@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Components;
+
 using VirheBT.Data.Enums;
 
 namespace VirheBT.Data.Models
@@ -29,7 +31,7 @@ namespace VirheBT.Data.Models
 
         [ForeignKey("AssignedToId")]
         public ApplicationUser AssignedTo { get; set; }
-        public int AssignedToId { get; set; }
+        public int? AssignedToId { get; set; }
 
         [ForeignKey("ProjectId")]
         public Project Project { get; set; }
