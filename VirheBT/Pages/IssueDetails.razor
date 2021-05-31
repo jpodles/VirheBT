@@ -2,7 +2,14 @@
 @using System.Collections.ObjectModel
 @using VirheBT.Shared.Components
 <Row Margin="Margin.Is2.OnY" Style=" margin-bottom: 0px">
-    <Column ColumnSize="ColumnSize.Is8">
+    <Column ColumnSize="ColumnSize.Is1">
+
+        <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/projects">
+            <Icon Name="IconName.ArrowLeft">Back</Icon>
+
+        </Button>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is7">
         <Card Background="Background.Transparent" Style="border: none;">
             <TextEdit Size="Size.Large" Text="@title" />
         </Card>

@@ -71,7 +71,7 @@
                     </CaptionTemplate>
 
                     <DisplayTemplate>
-                        <Link To=@($"project/{context.ID}")>
+                        <Link To=@($"user_details/{context.ID}")>
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
                             @context.Name
                         </Card>
@@ -81,7 +81,7 @@
 
                 <DataGridColumn TItem="UserShortDto" Field="@nameof(UserShortDto.Email)" Caption="Email" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
                     <CaptionTemplate>
-                        <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Envelope" /> @context.Caption
+                        <Icon Name="IconName.Mail" /> @context.Caption
                     </CaptionTemplate>
                 </DataGridColumn>
 
