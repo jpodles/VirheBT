@@ -1,5 +1,8 @@
 ﻿@using VirheBT.Shared.Components
 
+<style>
+</style>
+
 <Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet"
      Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small"
      Style="background-color: #ECECEC">
@@ -15,7 +18,7 @@
         <BarStart>
 
             <BarItem>
-                <BarLink To="/dashboard">
+                <BarLink To="/dashboard" Class="activated">
                     <BarIcon IconName="IconName.Dashboard" />
                     Dashboard
                 </BarLink>
@@ -57,6 +60,7 @@
     </BarMenu>
     <BarToggler />
 </Bar>
+
 
 <CreateIssue @ref="CreateIssueModal"></CreateIssue>
 

@@ -1,1 +1,106 @@
-﻿
+﻿@page "/user_details/{UserId}"
+
+<Row Margin="Margin.Is2.OnY" Style=" margin-bottom: 0px">
+    <Column ColumnSize="ColumnSize.Is3">
+
+        <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/team" Margin="Margin.Is3">
+            <Icon Name="IconName.ArrowLeft"> </Icon>
+            Back
+
+        </Button>
+    </Column>
+</Row>
+<Row>
+    <Column ColumnSize="ColumnSize.Is4">
+        <Card>
+            <CardHeader>
+                <CardTitle>Employee details</CardTitle>
+            </CardHeader>
+            <CardBody>
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is1">
+                        <Icon Name="IconName.UserCircle" />
+                    </Column>
+                    <Column>
+                        <CardText>Marek Pietrzak</CardText>
+                    </Column>
+
+                </Row>
+                <Row Margin="Margin.Is2.OnY">
+                    <Column ColumnSize="ColumnSize.Is1">
+                        <Icon Name="IconName.UserTie" />
+                    </Column>
+                    <Column>
+                        Tester
+                    </Column>
+                </Row>
+                <Row Margin="Margin.Is2.OnY">
+                    <Column ColumnSize="ColumnSize.Is1">
+                        <Icon Name="IconName.Mail" />
+                    </Column>
+                    <Column>
+                        marek@virhbt.com
+                    </Column>
+                </Row>
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is1">
+                        <Icon Name="IconName.Phone" />
+                    </Column>
+                    <Column>
+                        +123123123
+                    </Column>
+                </Row>
+
+
+            </CardBody>
+        </Card>
+    </Column>
+
+    <Column ColumnSize="ColumnSize.Is6">
+        <Card>
+            <CardHeader>
+                <CardTitle>Working on:</CardTitle>
+            </CardHeader>
+            <CardBody>
+                <CardText>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHeaderCell>#</TableHeaderCell>
+                                <TableHeaderCell>Project Name</TableHeaderCell>
+
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow>
+                                <TableRowHeader>1</TableRowHeader>
+                                <TableRowCell>Project 1</TableRowCell>
+
+                            </TableRow>
+                            <TableRow>
+                                <TableRowHeader>2</TableRowHeader>
+                                <TableRowCell>Project 2</TableRowCell>
+
+                            </TableRow>
+                            <TableRow>
+                                <TableRowHeader>3</TableRowHeader>
+                                <TableRowCell>Project 3</TableRowCell>
+
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+
+                </CardText>
+            </CardBody>
+        </Card>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is2"></Column>
+</Row>
+
+
+
+@code {
+    [Parameter]
+    public string UserId { get; set; }
+
+} 
