@@ -12,6 +12,7 @@
     <PackageReference Include="Blazorise.DataGrid" Version="0.9.3.6" />
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.3.6" />
     <PackageReference Include="Blazorise.RichTextEdit" Version="0.9.3.6" />
+    <PackageReference Include="Blazorise.Snackbar" Version="0.9.3.6" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.6" />
