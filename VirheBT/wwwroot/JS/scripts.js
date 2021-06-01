@@ -9,7 +9,7 @@
         jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape' }
     };
 
-    // New Promise-based usage:
+
     html2pdf().set(opt).from(element).save();
 
 

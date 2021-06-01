@@ -21,6 +21,7 @@ using Blazorise.Icons.FontAwesome;
 using VirheBT.Areas.Identity;
 using VirheBT.Data;
 using Blazorise.RichTextEdit;
+using VirheBT.Data.Models;
 
 namespace VirheBT
 {
@@ -47,8 +48,11 @@ namespace VirheBT
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<ApplicationUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
