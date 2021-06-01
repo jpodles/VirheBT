@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using System.Text;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 using VirheBT.Data.Models;
+using VirheBT.Pages;
 
 namespace VirheBT.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Issue> Issues { get; set; }
@@ -23,14 +26,38 @@ namespace VirheBT.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelbuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            foreach (var relationship in modelbuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            }
 
-            base.OnModelCreating(modelbuilder);
+
+            modelBuilder.Entity<ApplicationUser>(entity =>
+            {
+                entity.ToTable(name: "ApplicationUsers");
+                entity.Property(e => e.Id).HasColumnName("UserId");
+
+            });
+
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(x => x.Projects)
+                .WithMany(x => x.ApplicationUsers);
+
+
+
+            modelBuilder.Entity<IssueComment>()
+                .HasOne(e => e.Issue)
+                .WithMany(e => e.IssueComments)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<IssueHistory>()
+                .HasOne(e => e.Issue)
+                .WithMany(e => e.IssueHistory)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+
+
+            base.OnModelCreating(modelBuilder);
         }
 
     }

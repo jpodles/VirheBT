@@ -10,14 +10,14 @@ namespace VirheBT.Data.Models
 {
     public class Project
     {
-        public int ID { get; set; }
+        public int ProjectId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime Created { get; set; }
         public ProjectStatus Status { get; set; }
-        public ApplicationUser Maintainer { get; set; }
-        public int MaintainerId { get; set; }
 
-        public ICollection<ApplicationUser> Team = new List<ApplicationUser>();
+        public ICollection<ApplicationUser> ApplicationUsers = new List<ApplicationUser>();
+
+        public ICollection<Issue> Issues = new List<Issue>();
     }
 }

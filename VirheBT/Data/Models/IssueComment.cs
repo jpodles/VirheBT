@@ -12,16 +12,16 @@ namespace VirheBT.Data.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        public int CommentId { get; set; }
         public string Text { get; set; }
         public DateTime Created { get; set; }
 
-        [ForeignKey("IssueId")]
-        public Issue Issue { get; set; }
-        public int IssueId { get; set; }
 
-        [ForeignKey("UserId")]
+        public int IssueId { get; set; }
+        public Issue Issue { get; set; }
+
+
         public ApplicationUser User { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
     }
 }

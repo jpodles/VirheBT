@@ -14,17 +14,16 @@ namespace VirheBT.Data.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        public int HistoryId { get; set; }
         public ChangeType ChangeType { get; set; }
 
         public DateTime ChangeDate { get; set; }
 
-        [ForeignKey("IssueId")]
-        public Issue Issue { get; set; }
         public int IssueId { get; set; }
+        public Issue Issue { get; set; }
 
-        [ForeignKey("UserId")]
+
         public ApplicationUser User { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
     }
 }
