@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-using VirheBT.Data.Models;
+
+using VirheBT.Infrastructure.Data.Models;
 
 namespace VirheBT.Areas.Identity.Pages.Account.Manage
 {

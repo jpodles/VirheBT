@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -16,8 +14,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
-using VirheBT.Data.Enums;
-using VirheBT.Data.Models;
+using VirheBT.Shared.Enums;
+using VirheBT.Infrastructure.Data.Models;
 
 namespace VirheBT.Areas.Identity.Pages.Account
 {

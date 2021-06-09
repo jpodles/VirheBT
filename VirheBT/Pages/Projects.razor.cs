@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 using Blazorise.DataGrid;
 
-using VirheBT.Data.Enums;
+using Microsoft.AspNetCore.Components;
+
+using VirheBT.Services.Interfaces;
+using VirheBT.Shared.DTOs;
+using VirheBT.Shared.Enums;
 
 namespace VirheBT.Pages
 {
@@ -22,47 +26,50 @@ namespace VirheBT.Pages
         DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
         DataGridCommandMode commandsMode = DataGridCommandMode.Default;
         public DataGrid<ProjectShortDto> dataGrid;
+        public List<ProjectShortDto> data;
         public int currentPage { get; set; } = 1;
 
-        List<ProjectShortDto> data = new List<ProjectShortDto>
+        [Inject]
+        IProjectService ProjectService { get; set; }
+
+        protected async override Task OnInitializedAsync()
         {
-            new ProjectShortDto
-            {
-                ID = 1,
-                Name = "test1",
-                Status = ProjectStatus.Finished,
-                Maintainer = "Michałek kox"
-            },
-            new ProjectShortDto
-            {
-                ID = 2,
-                Name = "test1",
-                Status = ProjectStatus.OnTrack,
-                Maintainer = "Michałek kox"
-            },
-            new ProjectShortDto
-            {
-                ID = 3,
-                Name = "test2",
-                Status = ProjectStatus.Canceled,
-                Maintainer = "Michałek kox"
-            },
-            new ProjectShortDto
-            {
-                ID = 4,
-                Name = "test3",
-                Status = ProjectStatus.Finished,
-                Maintainer = "Mareczek Pogczamp"
-            }
-        };
+            data = await ProjectService.GetProjectsAsync();
+        }
+
+        //List<ProjectShortDto> data = new List<ProjectShortDto>
+        //{
+        //    new ProjectShortDto
+        //    {
+        //        ID = 1,
+        //        Name = "test1",
+        //        Status = ProjectStatus.Finished,
+        //        Maintainer = "Michałek kox"
+        //    },
+        //    new ProjectShortDto
+        //    {
+        //        ID = 2,
+        //        Name = "test1",
+        //        Status = ProjectStatus.OnTrack,
+        //        Maintainer = "Michałek kox"
+        //    },
+        //    new ProjectShortDto
+        //    {
+        //        ID = 3,
+        //        Name = "test2",
+        //        Status = ProjectStatus.Canceled,
+        //        Maintainer = "Michałek kox"
+        //    },
+        //    new ProjectShortDto
+        //    {
+        //        ID = 4,
+        //        Name = "test3",
+        //        Status = ProjectStatus.Finished,
+        //        Maintainer = "Mareczek Pogczamp"
+        //    }
+        //};
     }
 
-    public class ProjectShortDto
-    {
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public ProjectStatus Status { get; set; }
-        public string Maintainer { get; set; }
-    }
+
 
 }

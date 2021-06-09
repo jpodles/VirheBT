@@ -1,69 +1,85 @@
 ﻿@using VirheBT.Shared.Components
 
-<style>
-</style>
+@inject State.ProjectState projectState
 
-<Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet"
-     Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small"
-     Style="background-color: #ECECEC">
-    <BarBrand>
-        <BarItem>
-            <BarLink To="">
-                <BarIcon IconName="IconName.Bug" />
-                VirheBT
-            </BarLink>
-        </BarItem>
-    </BarBrand>
-    <BarMenu>
-        <BarStart>
+<AuthorizeView>
+    <Authorized>
 
-            <BarItem>
-                <BarLink To="/dashboard" Class="activated">
-                    <BarIcon IconName="IconName.Dashboard" />
-                    Dashboard
-                </BarLink>
-            </BarItem>
-            <BarItem>
-                <BarLink To="/issues">
-                    <BarIcon IconName="IconName.ListUl" />
-                    Issues
-                </BarLink>
-            </BarItem>
-            <BarItem>
+        <Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet"
+             Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small"
+             Style="background-color: #ECECEC">
+            <BarBrand>
                 <BarItem>
-
-                    <BarLink To="/projects">
-                        <BarIcon IconName="IconName.Code" />
-                        My Projects
+                    <BarLink To="#">
+                        <BarIcon IconName="IconName.Bug" />
+                        VirheBT
                     </BarLink>
                 </BarItem>
-            </BarItem>
-            <BarItem>
-                <BarLink To="/team">
-                    <BarIcon IconName="IconName.Users" />
-                    My Team
-                </BarLink>
-            </BarItem>
-            <Divider></Divider>
-            <BarItem>
+            </BarBrand>
 
-                <BarLink @onclick="() => CreateIssueModal.ShowCreateIssueModal()">
+            <BarMenu>
 
-                    <BarIcon IconName="IconName.Add" />
-                    Create Issue
-                </BarLink>
+                <BarStart>
+
+                    @if (projectState.CurrentProjectId != 0)
+                    {
+                        <BarItem>
+                            <BarLink To="/" Class="activated">
+                                <BarIcon IconName="IconName.Dashboard" />
+                                Dashboard
+                            </BarLink>
+                        </BarItem>
+                        <BarItem>
+                            <BarLink To="/issues">
+                                <BarIcon IconName="IconName.ListUl" />
+                                Issues
+                            </BarLink>
+                        </BarItem>
+                        <BarItem>
+                            <BarLink To="/team">
+                                <BarIcon IconName="IconName.Users" />
+                                My Team
+                            </BarLink>
+                        </BarItem>
+
+                    }
+
+                    <BarItem>
+                        <BarItem>
+                            <BarLink To="/projects">
+                                <BarIcon IconName="IconName.Code" />
+                                My Projects
+                            </BarLink>
+                        </BarItem>
+                    </BarItem>
 
 
-            </BarItem>
-            <Divider></Divider>
-        </BarStart>
-    </BarMenu>
-    <BarToggler />
-</Bar>
 
+                    @if (projectState.CurrentProjectId != 0)
+                    {
+                        <Divider></Divider>
+                        <BarItem>
+                            <BarLink @onclick="() => CreateIssueModal.ShowCreateIssueModal()">
+                                <BarIcon IconName="IconName.Add" />
+                                Create Issue
+                            </BarLink>
+                        </BarItem>
+                        <Divider></Divider>
+                    }
+                </BarStart>
+
+
+
+
+
+            </BarMenu>
+            <BarToggler />
+        </Bar>
+    </Authorized>
+</AuthorizeView>
 
 <CreateIssue @ref="CreateIssueModal"></CreateIssue>
 
 @code {
     private CreateIssue CreateIssueModal { get; set; }
-} 
+}

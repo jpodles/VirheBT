@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Blazorise.DataGrid;
 
-using VirheBT.Data.Enums;
+using VirheBT.Shared.Enums;
 
 namespace VirheBT.Pages
 {

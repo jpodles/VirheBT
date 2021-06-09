@@ -1,5 +1,6 @@
 ﻿@page "/projects"
-@using VirheBT.Data.Enums
+@using VirheBT.Shared.Enums
+@using VirheBT.Shared.DTOs
 
 <Card Margin="Margin.Is4.OnY" WhiteText="false">
     <CardHeader>
@@ -36,7 +37,7 @@
                             </Label>
                         </MultiSelectTemplate>*@
                 </DataGridMultiSelectColumn>
-                <DataGridColumn TItem="ProjectShortDto" Field="@nameof(ProjectShortDto.ID)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
+                <DataGridColumn TItem="ProjectShortDto" Field="@nameof(ProjectShortDto.ProjectId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
 
                 <DataGridColumn TItem="ProjectShortDto" Field="@nameof(ProjectShortDto.Name)" Caption="Title" Editable="false" Width="500px">
                     <CaptionTemplate>
@@ -46,7 +47,7 @@
                     <DisplayTemplate>
 
 
-                        <Link To=@($"project/{context.ID}")>
+                        <Link To=@($"project/{context.ProjectId}")>
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
 
                             @context.Name

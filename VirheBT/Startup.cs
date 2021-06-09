@@ -19,9 +19,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Blazorise.Icons.FontAwesome;
 using VirheBT.Areas.Identity;
-using VirheBT.Data;
 using Blazorise.RichTextEdit;
-using VirheBT.Data.Models;
+using VirheBT.Infrastructure.Data.Models;
+using VirheBT.Infrastructure.Data;
+using AutoMapper;
 
 namespace VirheBT
 {
@@ -58,6 +59,9 @@ namespace VirheBT
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.AddSingleton<VirheBT.State.ProjectState>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
