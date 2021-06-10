@@ -22,6 +22,8 @@ namespace VirheBT.Infrastructure.Data
 
 
 
+
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -38,12 +40,9 @@ namespace VirheBT.Infrastructure.Data
 
             });
 
-
             modelBuilder.Entity<ApplicationUser>()
                 .HasMany(x => x.Projects)
                 .WithMany(x => x.ApplicationUsers);
-
-
 
             modelBuilder.Entity<IssueComment>()
                 .HasOne(e => e.Issue)
@@ -56,6 +55,11 @@ namespace VirheBT.Infrastructure.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
 
+
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Maintainer)
+                .WithOne(p => p.ProjectMaintained)
+                .HasForeignKey<ApplicationUser>(a => a.ProjectMaintainedId);
 
 
             base.OnModelCreating(modelBuilder);
