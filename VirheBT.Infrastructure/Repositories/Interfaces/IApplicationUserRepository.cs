@@ -11,7 +11,7 @@ namespace VirheBT.Infrastructure.Repositories.Interfaces
 
         Task<ApplicationUser> GetApplicationUserAsync(string userId);
 
-        void EdituserAsync(string userId);
+        Task UpdateUserAsync(ApplicationUser applicationUser, string userId);
 
         //to chyba nie ma miejsca
         //void AddUser(ApplicationUser user);
@@ -19,6 +19,6 @@ namespace VirheBT.Infrastructure.Repositories.Interfaces
         //Delete/Deactivate
         void DeactivateUserAsync(string userId);
 
-
+        Task<ApplicationUser> GetApplicationUserByEmailAsync(string userEmail);
     }
 }

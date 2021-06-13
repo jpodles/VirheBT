@@ -17,11 +17,12 @@ namespace VirheBT.Infrastructure.Repositories.Interfaces
 
         void CreateProjectAsync(Project project);
 
-        void UpdateProjectAsync(int projectId, Project project);
+        Task UpdateProjectAsync(int projectId, Project project);
 
-        void RemoveUserFromProjectAsync(string userId, int projectId);
+        Task RemoveUserFromProjectAsync(ApplicationUser user, int projectId);
 
         //void DeactivateProjectAsync(int projectId);
+        Task AddUserToProjectAsync(ApplicationUser user, int projectId);
 
     }
 }

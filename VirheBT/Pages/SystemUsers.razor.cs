@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 using Blazorise.DataGrid;
 
+using Microsoft.AspNetCore.Components;
 
-
+using VirheBT.Infrastructure.Data.Models;
+using VirheBT.Services.Interfaces;
 using VirheBT.Shared.Enums;
 
 namespace VirheBT.Pages
@@ -32,56 +34,75 @@ namespace VirheBT.Pages
         private DataGridSortMode sortMode = DataGridSortMode.Single;
         private DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
         private DataGridCommandMode commandsMode = DataGridCommandMode.Default;
-        public DataGrid<UserDto> dataGrid;
+        public DataGrid<ApplicationUser> dataGrid;
         public int currentPage { get; set; } = 1;
+        private List<ApplicationUser> data = new List<ApplicationUser>();
 
-        private List<UserDto> data = new List<UserDto>
+        [Inject]
+        IApplicationUserService ApplicationUserService { get; set; }
+
+
+        protected async override Task OnInitializedAsync()
         {
-            new UserDto
-            {
-                ID = 1,
-                FirstName = "Michał",
-                LastName =" Nowak",
-                Email = "michał@virhe.com",
-                UserRole = UserRole.Tester,
-                UserStatus = UserStatus.Active
-            },
-            new UserDto
-            {
-                ID = 1,
-                FirstName = "Michał",
-                LastName =" Nowak",
-                Email = "michał@virhe.com",
-                UserRole = UserRole.Tester,
-                UserStatus = UserStatus.Active
-            },
-            new UserDto
-            {
-                ID = 1,
-                FirstName = "Michał",
-                LastName =" Nowak",
-                Email = "michał@virhe.com",
-                UserRole = UserRole.Tester,
-                UserStatus = UserStatus.Inactive
-            },
-            new UserDto
-            {
-                ID = 1,
-                FirstName = "Michał",
-                LastName =" Nowak",
-                Email = "michał@virhe.com",
-                UserRole = UserRole.Tester,
-                UserStatus = UserStatus.Active
-            },
-             new UserDto
-            {
-                ID = 1,
-                FirstName = "Michał",
-                LastName =" Nowak",
-                Email = "michał@virhe.com",
-                UserRole = UserRole.Tester,
-                UserStatus = UserStatus.Active
-            }
-        };
+            data = await ApplicationUserService.GetApplicationUsersAsync();
+        }
+
+
+        async Task OnRowUpdated(SavedRowItem<ApplicationUser, Dictionary<string, object>> e)
+        {
+            var applicationUser = e.Item;
+            await ApplicationUserService.UpdateUserAsync(applicationUser, e.Item.Id);
+            data = await ApplicationUserService.GetApplicationUsersAsync();
+            StateHasChanged();
+        }
+
+
+        //{
+        //    new UserDto
+        //    {
+        //        ID = 1,
+        //        FirstName = "Michał",
+        //        LastName =" Nowak",
+        //        Email = "michał@virhe.com",
+        //        UserRole = UserRole.Tester,
+        //        UserStatus = UserStatus.Active
+        //    },
+        //    new UserDto
+        //    {
+        //        ID = 1,
+        //        FirstName = "Michał",
+        //        LastName =" Nowak",
+        //        Email = "michał@virhe.com",
+        //        UserRole = UserRole.Tester,
+        //        UserStatus = UserStatus.Active
+        //    },
+        //    new UserDto
+        //    {
+        //        ID = 1,
+        //        FirstName = "Michał",
+        //        LastName =" Nowak",
+        //        Email = "michał@virhe.com",
+        //        UserRole = UserRole.Tester,
+        //        UserStatus = UserStatus.Inactive
+        //    },
+        //    new UserDto
+        //    {
+        //        ID = 1,
+        //        FirstName = "Michał",
+        //        LastName =" Nowak",
+        //        Email = "michał@virhe.com",
+        //        UserRole = UserRole.Tester,
+        //        UserStatus = UserStatus.Active
+        //    },
+        //     new UserDto
+        //    {
+        //        ID = 1,
+        //        FirstName = "Michał",
+        //        LastName =" Nowak",
+        //        Email = "michał@virhe.com",
+        //        UserRole = UserRole.Tester,
+        //        UserStatus = UserStatus.Active
+        //    }
+        //};
     }
 }

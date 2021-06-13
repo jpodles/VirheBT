@@ -1,56 +1,67 @@
-﻿
+﻿@inject NavigationManager NavigationManager
 @using VirheBT.Shared.Enums
-<Modal @ref="createIssueModalRef">
-    <ModalContent Centered="true" Size="ModalSize.Large">
-        <ModalHeader>
-            <ModalTitle>Create issue</ModalTitle>
-            <CloseButton />
-        </ModalHeader>
-        <ModalBody>
-            <Field>
-                <FieldLabel>Issue Title</FieldLabel>
-                <TextEdit Placeholder="Enter title..." />
-            </Field>
+@using VirheBT.Infrastructure.Data.Models
+@page "/project/{ProjectId:int}/createissue"
+<AuthorizeView>
+
+    <Authorized>
+
+        <Container Margin="Margin.Is5">
+            <Row Margin="Margin.Is3.OnY">
+                <Column>
+                    <h2>Create issue</h2>
+                </Column>
+                <Column>
+                    <h2>Project ID: @ProjectId</h2>
+                </Column>
+            </Row>
+            <Divider></Divider>
+
             <Row>
                 <Column>
                     <Field>
-                        <FieldLabel>Created By</FieldLabel>
-                        <Autocomplete TItem="MySelectModel" TValue="string"
-                                      Data="@myDdlData"
-                                      Disabled="true"
-                                      TextField="@((item)=>item.MyTextField)"
-                                      ValueField="@((item)=>item.MyTextField)"
-                                      SelectedValue="@selectedSearchValue"
-                                      SelectedValueChanged="@MySearchHandler"
-                                      Placeholder="Search..." />
+                        <FieldLabel>Issue Title</FieldLabel>
+                        <TextEdit Placeholder="Enter title..." />
+                    </Field>
+                </Column>
+            </Row>
+            <Row>
+                <Column>
+                    <Field>
+                        <FieldLabel>Created By:</FieldLabel>
+                        <FieldBody>
+                            <TextEdit Disabled="true" Placeholder="@context.User.Identity.Name" />
+
+                        </FieldBody>
                     </Field>
 
                 </Column>
                 <Column>
                     <Field>
-                        <FieldLabel>Assigned To</FieldLabel>
-                        <Autocomplete TItem="MySelectModel" TValue="string"
-                                      Data="@myDdlData"
-                                      TextField="@((item)=>item.MyTextField)"
-                                      ValueField="@((item)=>item.MyTextField)"
-                                      SelectedValue="@selectedSearchValue"
-                                      SelectedValueChanged="@MySearchHandler"
+
+                        <FieldLabel>Assigned To:</FieldLabel>
+                        <Autocomplete TItem="ApplicationUser" TValue="string"
+                                      Data="@projectUsers"
+                                      TextField="@((item)=>item.Email)"
+                                      ValueField="@((item)=>item.Email)"
+                                      SelectedValue="@SelectedUser"
+                                      SelectedValueChanged="@AssignedUserHandler"
                                       Placeholder="Search..." />
                     </Field>
                 </Column>
             </Row>
 
             <Row Margin="Margin.Is2.OnY">
-                <Column ColumnSize="ColumnSize.Is3">
+                <Column ColumnSize="ColumnSize.Is2">
                     Issue Type:
                 </Column>
                 <Column>
 
-                    <RadioGroup TValue="string" Name="test" Color="Color.Light">
-                        <Radio TValue="string" Value="@("red")" Style="color: red">
+                    <RadioGroup TValue="IssueType" Name="issueType" CheckedValue="CheckedIssueType" Color="Color.Light">
+                        <Radio TValue="IssueType" Value="@(IssueType.Bug)" Style="color: red">
                             <label><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>Bug</span></label>
                         </Radio>
-                        <Radio TValue="string" Value="@("green")" Style="color: forestgreen">
+                        <Radio TValue="IssueType" Value="@(IssueType.Feature)" Style="color: forestgreen">
                             <label><Icon Name="IconName.PlusCircle" /> <span>Feature</span></label>
                         </Radio>
 
@@ -58,67 +69,39 @@
                 </Column>
             </Row>
             <Row Margin="Margin.Is2.OnY">
-                <Column ColumnSize="ColumnSize.Is3">
+                <Column ColumnSize="ColumnSize.Is2">
                     Issue Priority:
                 </Column>
-                <Column>
+                <Column ColumnSize="ColumnSize.Is10">
 
-                    <RadioGroup TValue="string" Name="colors" Color="Color.Light">
-                        <Radio TValue="string" Value="@("red")" Style="color: darkgreen">
+                    <RadioGroup TValue="IssuePriority" Name="issuePriority" Color="Color.Light" CheckedValue="@CheckedIssuePriority">
+                        <Radio TValue="IssuePriority" Value="@(IssuePriority.Low)" Style="color: darkgreen">
                             <label><Icon Name="IconName.ArrowUp" /> <span>Low</span></label>
                         </Radio>
-                        <Radio TValue="string" Value="@("green")" Style="color: orange">
+                        <Radio TValue="IssuePriority" Value="@(IssuePriority.Normal)" Style="color: orange">
                             <label><Icon Name="IconName.ArrowUp" /> <span>Medium</span></label>
                         </Radio>
-                        <Radio TValue="string" Value="@("blue")" Style="color: red">
+                        <Radio TValue="IssuePriority" Value="@(IssuePriority.High)" Style="color: red">
                             <label><Icon Name="IconName.ArrowUp" /> <span>High</span></label>
                         </Radio>
                     </RadioGroup>
                 </Column>
             </Row>
-            <Field>
-                <FieldLabel>Description</FieldLabel>
-                <TextEditor></TextEditor>
-            </Field>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="@HideCreateIssueModal">Cancel</Button>
-            <Button Color="Color.Primary" Clicked="@HideCreateIssueModal">Add Issue</Button>
-        </ModalFooter>
-    </ModalContent>
-</Modal>
+            <Row>
+                <Column>
+                    <Field>
+                        <FieldLabel>Description</FieldLabel>
+                        <MemoEdit Rows="5" @bind-Text="@Description" />
+                    </Field>
+                </Column>
+            </Row>
+            <Row Margin="Margin.Is3.OnY">
+                <Column>
+                    <Button Color="Color.Primary" Clicked="@OnAddIssue">Add Issue</Button>
+                </Column>
+            </Row>
 
+        </Container>
+    </Authorized>
 
-@code{
-    // reference to the modal component
-    public Modal createIssueModalRef;
-
-    public void ShowCreateIssueModal()
-    {
-        createIssueModalRef.Show();
-    }
-
-    private void HideCreateIssueModal()
-    {
-        createIssueModalRef.Hide();
-    }
-}
-
-@code{
-    public class MySelectModel
-    {
-        public int MyValueField { get; set; }
-        public string MyTextField { get; set; }
-    }
-
-    static string[] Employees = { "Tomasz", "Michał", "Marek" };
-    IEnumerable<MySelectModel> myDdlData = Enumerable.Range(1, Employees.Length).Select(x => new MySelectModel { MyTextField = Employees[x - 1], MyValueField = x });
-
-    string selectedSearchValue { get; set; }
-
-    void MySearchHandler(string newValue)
-    {
-        selectedSearchValue = newValue;
-    }
-}
-
+</AuthorizeView>

@@ -14,7 +14,7 @@ namespace VirheBT.Shared.DTOs
         public int ProjectId { get; set; }
         public string Name { get; set; }
         public ProjectStatus Status { get; set; }
-        public UserDto Maintainer { get; set; }
+        public string Maintainer { get; set; }
 
     }
 }

@@ -12,16 +12,18 @@ namespace VirheBT.Services.Interfaces
     public interface IProjectService
     {
 
-        Task<List<ProjectShortDto>> GetProjectsAsync();
+        Task<List<Project>> GetProjectsAsync();
         Task<Project> GetProjectAsync(int projectId);
 
-        Task<IEnumerable<ApplicationUser>> GetProjectUsersAsync(int projectId);
+        Task<List<ApplicationUser>> GetProjectUsersAsync(int projectId);
 
-        void CreateProject(Project project);
+        void CreateProject(string title, string description, string maintainerEmail);
 
-        void UpdateProject(int projectId, Project project);
+        Task UpdateProjectAsync(int projectId, Project project);
 
-        void RemoveUserFromProject(string userId, int projectId);
+        Task RemoveUserFromProject(string userId, int projectId);
+
+        Task AddUserToProjectAsync(string userEmail, int projecId);
 
     }
 }

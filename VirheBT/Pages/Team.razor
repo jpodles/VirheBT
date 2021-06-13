@@ -1,7 +1,7 @@
-﻿@page "/team"
+﻿@page "/project/{ProjectId:int}/team"
 
 @using VirheBT.Shared.Enums
-
+@using VirheBT.Infrastructure.Data.Models
 
 
 
@@ -19,16 +19,16 @@
                     </Column>
 
                     <Column ColumnSize="ColumnSize.Is4">
-                        <Autocomplete TItem="MySelectModel" TValue="string"
-                                      Data="@myDdlData"
-                                      TextField="@((item)=>item.MyTextField)"
-                                      ValueField="@((item)=>item.MyTextField)"
+                        <Autocomplete TItem="ApplicationUser" TValue="string"
+                                      Data="@appUsers"
+                                      TextField="@((item)=>item.Email)"
+                                      ValueField="@((item)=>item.Email)"
                                       SelectedValue="@selectedSearchValue"
                                       SelectedValueChanged="@MySearchHandler"
                                       Placeholder="Search..." />
                     </Column>
                     <Column ColumnSize="ColumnSize.Is6">
-                        <Button Color="Color.Success">
+                        <Button Color="Color.Success" Clicked="@OnAddUserToProject">
                             <Icon Name="IconName.PlusSquare"></Icon>
                             ADD EMPLOYEE
                         </Button>
@@ -42,7 +42,7 @@
 
 
         <DataGrid @ref="dataGrid"
-                  TItem="UserShortDto"
+                  TItem="ApplicationUser"
                   Data="data"
                   Editable="@editable"
                   EditMode="@editMode"
@@ -60,39 +60,40 @@
                   Bordered="true"
                   Hoverable="true"
                   Responsive="true"
-                  Narrow="true">
+                  Narrow="true"
+                  RowRemoved="@OnRowRemoved">
 
             <DataGridColumns>
-                <DataGridColumn TItem="UserShortDto" Field="@nameof(UserShortDto.ID)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
+                @*<DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.ID)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />*@
 
-                <DataGridColumn TItem="UserShortDto" Field="@nameof(UserShortDto.Name)" Caption="Name" Editable="false" Width="350px">
+                <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Name" Editable="false" Width="350px">
                     <CaptionTemplate>
                         <Icon Name="IconName.User" /> @context.Caption
                     </CaptionTemplate>
 
                     <DisplayTemplate>
-                        <Link To=@($"user_details/{context.ID}")>
+                        <Link To=@($"userdetails/{context.Id}")>
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
-                            @context.Name
+                            @context.Email
                         </Card>
                         </Link>
                     </DisplayTemplate>
                 </DataGridColumn>
 
-                <DataGridColumn TItem="UserShortDto" Field="@nameof(UserShortDto.Email)" Caption="Email" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
+                <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Email" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
                     <CaptionTemplate>
                         <Icon Name="IconName.Mail" /> @context.Caption
                     </CaptionTemplate>
                 </DataGridColumn>
 
-                <DataGridColumn TItem="UserShortDto" Field="@nameof(UserShortDto.UserRole)" Caption="Role" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="Role" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
                     <CaptionTemplate>
                         <Icon Name="IconName.UserTie" /> @context.Caption
                     </CaptionTemplate>
                     <DisplayTemplate>
 
                         @{
-                            var item = (context as UserShortDto);
+                            var item = (context as ApplicationUser);
                             if (item.UserRole == UserRole.Admin)
                             {
                                 <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" /> <span>@context.UserRole</span></label>
@@ -129,7 +130,7 @@
                     </FilterTemplate>
                 </DataGridColumn>
 
-                <DataGridCommandColumn TItem="UserShortDto" Width="50px" TextAlignment="TextAlignment.Center">
+                <DataGridCommandColumn TItem="ApplicationUser" Width="50px" TextAlignment="TextAlignment.Center">
                     <ClearFilterCommandTemplate>
                         <Button Color="Color.Warning" Clicked="@context.Clicked">
 
@@ -158,19 +159,5 @@
 
 
 @code{
-    public class MySelectModel
-    {
-        public int MyValueField { get; set; }
-        public string MyTextField { get; set; }
-    }
 
-    static string[] Countries = { "Albania", "Andorra", "Armenia", "Austria", "Azerbaijan", "Belarus", "Belgium", "Bosnia & Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands", "Norway", "Poland", "Portugal", "Romania", "Russia", "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Turkey", "Ukraine", "United Kingdom", "Vatican City" };
-    IEnumerable<MySelectModel> myDdlData = Enumerable.Range(1, Countries.Length).Select(x => new MySelectModel { MyTextField = Countries[x - 1], MyValueField = x });
-
-    string selectedSearchValue { get; set; }
-
-    void MySearchHandler(string newValue)
-    {
-        selectedSearchValue = newValue;
-    }
 }

@@ -23,6 +23,11 @@ using Blazorise.RichTextEdit;
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Infrastructure.Data;
 using AutoMapper;
+using VirheBT.Services.Interfaces;
+using VirheBT.Services.Implementations;
+using VirheBT.Infrastructure.Repositories.Interfaces;
+using VirheBT.Infrastructure.Repositories.Implementations;
+using VirheBT.State;
 
 namespace VirheBT
 {
@@ -59,7 +64,15 @@ namespace VirheBT
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddSingleton<VirheBT.State.ProjectState>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddScoped<IApplicationUserService, ApplicationUserService>();
+
+
+
+
+            services.AddSingleton<IAppState, AppState>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }

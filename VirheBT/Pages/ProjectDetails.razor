@@ -1,5 +1,7 @@
-﻿@page "/project/{ProjectId}"
+﻿@page "/projects/{ProjectId:int}"
 @using VirheBT.Shared.Enums
+@using VirheBT.Infrastructure.Data.Models
+
 <Row Margin="Margin.Is2.OnY" Style=" margin-bottom: 0px">
     <Column ColumnSize="ColumnSize.Is1">
 
@@ -12,7 +14,8 @@
         <Card Background="Background.Transparent" Style="border: none;">
             <CardBody>
                 <h3>
-                    TYTUŁ PROJEKTU
+                    @Name
+
                 </h3>
             </CardBody>
 
@@ -25,12 +28,12 @@
             <CardBody>
                 <Addons>
                     <Addon AddonType="AddonType.Start">
-                        <AddonLabel>PM:</AddonLabel>
+                        <AddonLabel>Maintainer:</AddonLabel>
                     </Addon>
                     <Addon AddonType="AddonType.Body">
 
                         <Card>
-                            <h4 style="margin: 3px 10px 0 10px;">Marek Pietrzak</h4>
+                            <h4 style="margin: 3px 10px 0 10px;">@Maintainer</h4>
                         </Card>
                     </Addon>
                 </Addons>
@@ -40,14 +43,17 @@
 
         </Card>
     </Column>
-    <Column ColumnSize="ColumnSize.Is4">
-        <Button Color="Color.Info" Size="Size.Medium" Type="ButtonType.Link" To="/projects" Margin="Margin.Is3">
+    <Column ColumnSize="ColumnSize.Is4" Margin="Margin.Is2.OnY">
+        <Button Color="Color.Info" Size="Size.Medium" Type="ButtonType.Link" Clicked="@SwitchToProject" Margin="Margin.Is1">
             SWITCH TO PROJECT
 
         </Button>
-        <Button Color="Color.Warning" Size="Size.Medium" Type="ButtonType.Link" To="/projects" Margin="Margin.Is3">
-            EDIT PROJECT
 
+        <Button Color="Color.Warning" Size="Size.Medium" Type="ButtonType.Link" To="@($"projects/{ProjectId}/editproject")" Margin="Margin.Is1">
+            EDIT
+        </Button>
+        <Button Color="Color.Danger" Size="Size.Medium" Type="ButtonType.Link" Clicked="@OnDeleteProject" Margin="Margin.Is1">
+            DELETE
         </Button>
     </Column>
 
@@ -65,9 +71,7 @@
             </CardHeader>
             <CardBody>
                 <CardText>
-                    dasdasdasdasd
-                    sadadasdas
-                    dasdasds
+                    @Description
                 </CardText>
             </CardBody>
 
@@ -80,7 +84,7 @@
             </CardHeader>
             <CardBody>
                 <CardText>
-                    2021/05/05
+                    @Created
                 </CardText>
             </CardBody>
 
@@ -97,7 +101,7 @@
                         All Tasks:
                     </Column>
                     <Column>
-                        555
+                        @AllTasks
                     </Column>
                 </Row>
                 <Row Class="alert-danger">
@@ -105,7 +109,7 @@
                         To Do:
                     </Column>
                     <Column>
-                        555
+                        @ToDoCount
                     </Column>
                 </Row>
 
@@ -114,7 +118,7 @@
                         In Progress:
                     </Column>
                     <Column>
-                        555
+                        @InProgressCount
                     </Column>
                 </Row>
                 <Row Class="alert-success">
@@ -122,7 +126,7 @@
                         Done:
                     </Column>
                     <Column>
-                        555
+                        @DoneCount
                     </Column>
                 </Row>
 
@@ -139,8 +143,8 @@
             </CardHeader>
             <CardBody>
                 <DataGrid @ref="dataGrid"
-                          TItem="UserShortDto"
-                          Data="data"
+                          TItem="ApplicationUser"
+                          Data="team"
                           Editable="@editable"
                           EditMode="@editMode"
                           Sortable="@sortable"
@@ -160,36 +164,36 @@
                           Narrow="true">
 
                     <DataGridColumns>
-                        <DataGridColumn TItem="UserShortDto" Field="@nameof(UserShortDto.ID)" Caption="#" Sortable="true" TextAlignment="TextAlignment.Center" Width="80px" />
+                        @*<DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Id)" Caption="#" Sortable="true" TextAlignment="TextAlignment.Center" Width="80px" />*@
 
-                        <DataGridColumn TItem="UserShortDto" Field="@nameof(UserShortDto.Name)" Caption="Name" Editable="false">
-                            <CaptionTemplate>
-                                <Icon Name="IconName.User" /> @context.Caption
-                            </CaptionTemplate>
+                        @*<DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Name)" Caption="Name" Editable="false">
+                                <CaptionTemplate>
+                                    <Icon Name="IconName.User" /> @context.Caption
+                                </CaptionTemplate>
 
-                            <DisplayTemplate>
-                                <Link To=@($"project/{context.ID}")>
-                                <Card Background="Background.Transparent" Style="height: 40px; border:none">
-                                    @context.Name
-                                </Card>
-                                </Link>
-                            </DisplayTemplate>
-                        </DataGridColumn>
+                                <DisplayTemplate>
+                                    <Link To=@($"project/{context.}")>
+                                    <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                        @context.Name
+                                    </Card>
+                                    </Link>
+                                </DisplayTemplate>
+                            </DataGridColumn>*@
 
-                        <DataGridColumn TItem="UserShortDto" Field="@nameof(UserShortDto.Email)" Caption="Email" Editable="false" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
+                        <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Email" Editable="false" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
                             <CaptionTemplate>
                                 <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Envelope" /> @context.Caption
                             </CaptionTemplate>
                         </DataGridColumn>
 
-                        <DataGridColumn TItem="UserShortDto" Field="@nameof(UserShortDto.UserRole)" Caption="Role" Editable="false" Sortable="false" HeaderTextAlignment="TextAlignment.Center">
+                        <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="Role" Editable="false" Sortable="false" HeaderTextAlignment="TextAlignment.Center" TextAlignment="TextAlignment.Center">
                             <CaptionTemplate>
                                 <Icon Name="IconName.UserTie" /> @context.Caption
                             </CaptionTemplate>
                             <DisplayTemplate>
 
                                 @{
-                                    var item = (context as UserShortDto);
+                                    var item = (context as ApplicationUser);
                                     if (item.UserRole == UserRole.Admin)
                                     {
                                         <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" /> <span>@context.UserRole</span></label>
@@ -236,9 +240,3 @@
 
 </Row>
 
-@code {
-
-    [Parameter]
-    public string ProjectId { get; set; }
-
-} 

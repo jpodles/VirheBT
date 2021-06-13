@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +12,8 @@ namespace VirheBT.Infrastructure.Data.Models
 {
     public class Project
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProjectId { get; set; }
 
         public ApplicationUser Maintainer { get; set; }
@@ -21,6 +25,6 @@ namespace VirheBT.Infrastructure.Data.Models
 
         public ICollection<ApplicationUser> ApplicationUsers = new List<ApplicationUser>();
 
-        public ICollection<Issue> Issues = new List<Issue>();
+        public IEnumerable<Issue> Issues = new List<Issue>();
     }
 }

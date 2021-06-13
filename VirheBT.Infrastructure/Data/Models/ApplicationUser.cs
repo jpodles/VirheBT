@@ -23,6 +23,8 @@ namespace VirheBT.Infrastructure.Data.Models
         public UserStatus UserStatus { get; set; }
         public ICollection<Project> Projects { get; set; } = new List<Project>();
 
+        public UserRole UserRole { get; set; }
+
         public Project ProjectMaintained { get; set; }
         public int? ProjectMaintainedId { get; }
     }

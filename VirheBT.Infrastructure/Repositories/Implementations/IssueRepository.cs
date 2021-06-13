@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 
 using VirheBT.Infrastructure.Data;
@@ -31,12 +33,15 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
 
         public async Task<Issue> GetIssueByIdAsync(int projectId, int issueId)
         {
-            throw new NotImplementedException();
+            return await _context.Issues
+                .Where(p => p.ProjectId == projectId)
+                .Where(i => i.IssueId == issueId).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Issue>> GetIssuesAsync(int projectId)
         {
-            throw new NotImplementedException();
+            return await _context.Issues
+                .Where(p => p.ProjectId == projectId).ToListAsync();
         }
 
         public bool IssueExists(int projectId, int issueId)

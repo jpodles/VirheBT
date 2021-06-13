@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VirheBT.Infrastructure.Data;
 
 namespace VirheBT.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210610192514_testProject")]
+    partial class testProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,9 +235,6 @@ namespace VirheBT.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("UserRole")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserStatus")
                         .HasColumnType("int");
 
@@ -390,9 +389,9 @@ namespace VirheBT.Infrastructure.Migrations
                         new
                         {
                             ProjectId = 1,
-                            Created = new DateTime(2021, 6, 11, 13, 1, 25, 113, DateTimeKind.Local).AddTicks(67),
+                            Created = new DateTime(2021, 6, 10, 21, 25, 14, 199, DateTimeKind.Local).AddTicks(8120),
                             Description = "This is test project",
-                            MaintainerId = "xxxd",
+                            MaintainerId = "265b5c29-2d5d-4d8b-b68e-6030d124fd14",
                             Name = "TestProject",
                             Status = 0
                         });

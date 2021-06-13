@@ -10,49 +10,85 @@ using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Infrastructure.Repositories.Interfaces;
 using VirheBT.Services.Interfaces;
 using VirheBT.Shared.DTOs;
+using VirheBT.Shared.Enums;
 
 namespace VirheBT.Services.Implementations
 {
     public class ProjectService : IProjectService
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IApplicationUserService _userService;
         private readonly IMapper _mapper;
 
-        public ProjectService(IProjectRepository projectRepository, IMapper mapper)
+        public ProjectService(IProjectRepository projectRepository, IApplicationUserService userService, IMapper mapper)
         {
+            _userService = userService;
             _projectRepository = projectRepository;
             _mapper = mapper;
         }
 
-        public void CreateProject(Project project)
+        public async Task AddUserToProjectAsync(string userEmail, int projectId)
         {
+            var user = await _userService.GetApplicationUserByEmailAsync(userEmail);
+
+            await _projectRepository.AddUserToProjectAsync(user, projectId);
+        }
+
+        public async void CreateProject(string projectName, string description, string maintainerEmail)
+        {
+            var maintainer = await _userService.GetApplicationUserByEmailAsync(maintainerEmail);
+
+
+
+            var project = new Project
+            {
+                Maintainer = maintainer,
+                Name = projectName,
+                Description = description,
+                Status = ProjectStatus.OnTrack,
+                Created = DateTime.Now,
+            };
+
+            project.ApplicationUsers.Add(maintainer);
             _projectRepository.CreateProjectAsync(project);
+
+
         }
 
         public async Task<Project> GetProjectAsync(int projectId)
         {
+
+
             return await _projectRepository.GetProjectAsync(projectId);
+
         }
 
-        public async Task<List<ProjectShortDto>> GetProjectsAsync()
+        public async Task<List<Project>> GetProjectsAsync()
         {
             var projects = await _projectRepository.GetProjectsAsync();
 
-            return _mapper.Map<List<ProjectShortDto>>(projects);
+            return projects.ToList();
 
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetProjectUsersAsync(int projectId)
+        public async Task<List<ApplicationUser>> GetProjectUsersAsync(int projectId)
         {
-            return await _projectRepository.GetProjectUsersAsync(projectId);
+
+            var projectUsers = await _projectRepository.GetProjectUsersAsync(projectId);
+            return projectUsers.ToList();
         }
 
-        public void RemoveUserFromProject(string userId, int projectId)
+        public async Task RemoveUserFromProject(string userId, int projectId)
         {
-            _projectRepository.RemoveUserFromProjectAsync(userId, projectId);
+            var userEntity = await _userService.GetApplicationUserAsync(userId);
+
+
+            await _projectRepository.RemoveUserFromProjectAsync(userEntity, projectId);
+
+
         }
 
-        public void UpdateProject(int projectId, Project project)
+        public async Task UpdateProjectAsync(int projectId, Project project)
         {
             if (projectId == 0)
             {
@@ -64,7 +100,7 @@ namespace VirheBT.Services.Implementations
                 throw new ArgumentNullException("Object cannot be null", nameof(project));
             }
 
-            _projectRepository.UpdateProjectAsync(projectId, project);
+            await _projectRepository.UpdateProjectAsync(projectId, project);
         }
     }
 }

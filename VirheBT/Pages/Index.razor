@@ -1,44 +1,64 @@
 ﻿@page "/"
 
-<Container Margin="Margin.Is5.OnY">
-    <Row Margin="Margin.Is5.OnY">
-        <Column ColumnSize="ColumnSize.Is2"></Column>
-        <Column ColumnSize="ColumnSize.Is8">
-            <Card>
-                <CardHeader>
-                    <CardTitle Size="1" Alignment="TextAlignment.Center" Color="TextColor.Black50">
-                        Welcome in VirheBT
-                    </CardTitle>
-                </CardHeader>
-                <CardBody>
-                    <Row Margin="Margin.Is4.OnY">
+@inject ProtectedSessionStorage ProtectedSessionStore
+<AuthorizeView>
+    <NotAuthorized>
+        <Container Margin="Margin.Is5.OnY">
+            <Row Margin="Margin.Is5.OnY">
+                <Column ColumnSize="ColumnSize.Is2"></Column>
+                <Column ColumnSize="ColumnSize.Is8">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle Size="1" Alignment="TextAlignment.Center" Color="TextColor.Black50">
+                                Welcome in VirheBT
+                            </CardTitle>
+                        </CardHeader>
+                        <CardBody>
+                            <Row Margin="Margin.Is4.OnY">
 
-                        <Column ColumnSize="ColumnSize.Is6">
-                            <Button Color="Color.Secondary" Type="ButtonType.Link" Size="Size.ExtraLarge" Style="width: 100%; height: 200px; padding:70px;" To="Identity/Account/Login">
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <Button Color="Color.Secondary" Type="ButtonType.Link" Size="Size.ExtraLarge" Style="width: 100%; height: 200px; padding:70px;" To="Identity/Account/Login">
 
-                                <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.SignInAlt"></Icon>
-                                Log In
+                                        <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.SignInAlt"></Icon>
+                                        Log In
 
-                            </Button>
-                        </Column>
-                        <Column ColumnSize="ColumnSize.Is6">
-                            <Button Color="Color.Secondary" Type="ButtonType.Link" Size="Size.ExtraLarge" To="Identity/Account/Register"
-                                    Style="width: 100%;height: 200px;padding: 70px;
+                                    </Button>
+                                </Column>
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <Button Color="Color.Secondary" Type="ButtonType.Link" Size="Size.ExtraLarge" To="Identity/Account/Register"
+                                            Style="width: 100%;height: 200px;padding: 70px;
 ">
-                                <Icon Name="IconName.UserPlus"></Icon>
-                                Register
-                            </Button>
-                        </Column>
+                                        <Icon Name="IconName.UserPlus"></Icon>
+                                        Register
+                                    </Button>
+                                </Column>
 
-                    </Row>
-                </CardBody>
-            </Card>
-        </Column>
-        <Column ColumnSize="ColumnSize.Is2"></Column>
+                            </Row>
+                        </CardBody>
+                    </Card>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is2"></Column>
 
-    </Row>
+            </Row>
 
-</Container>
+        </Container>
+    </NotAuthorized>
+    <Authorized>
+        <Projects></Projects>
+    </Authorized>
 
-@*
-*@
+</AuthorizeView>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //var result = await ProtectedSessionStore.GetAsync<string>("currentProject");
+        //string xd = result.Value;
+
+        //if ()
+        //{
+
+        //}
+        await ProtectedSessionStore.DeleteAsync("currentProject");
+    }
+}

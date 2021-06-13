@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
-using System.Text;
-
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,10 +16,6 @@ namespace VirheBT.Infrastructure.Data
         public DbSet<IssueHistory> IssueHistories { get; set; }
         public DbSet<Project> Projects { get; set; }
 
-
-
-
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -31,13 +23,10 @@ namespace VirheBT.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-
             modelBuilder.Entity<ApplicationUser>(entity =>
             {
                 entity.ToTable(name: "ApplicationUsers");
                 entity.Property(e => e.Id).HasColumnName("UserId");
-
             });
 
             modelBuilder.Entity<ApplicationUser>()
@@ -54,16 +43,25 @@ namespace VirheBT.Infrastructure.Data
                 .WithMany(e => e.IssueHistory)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
-
             modelBuilder.Entity<Project>()
                 .HasOne(p => p.Maintainer)
                 .WithOne(p => p.ProjectMaintained)
                 .HasForeignKey<ApplicationUser>(a => a.ProjectMaintainedId);
 
+            modelBuilder.Entity<Project>().HasData(
+                 new Project
+                 {
+                     ProjectId = 1,
+                     MaintainerId = "xxxd",
+                     Name = "TestProject",
+                     Description = "This is test project",
+                     Created = DateTime.Now,
+                     Status = Shared.Enums.ProjectStatus.OnTrack,
+
+                 }
+                );
 
             base.OnModelCreating(modelBuilder);
         }
-
     }
 }

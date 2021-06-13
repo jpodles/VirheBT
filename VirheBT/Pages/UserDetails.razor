@@ -1,9 +1,9 @@
-﻿@page "/user_details/{UserId}"
+﻿@page "/userdetails/{UserId}"
 
 <Row Margin="Margin.Is2.OnY" Style=" margin-bottom: 0px">
     <Column ColumnSize="ColumnSize.Is3">
 
-        <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/team" Margin="Margin.Is3">
+        <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/users" Margin="Margin.Is3">
             <Icon Name="IconName.ArrowLeft"> </Icon>
             Back
 
@@ -22,7 +22,7 @@
                         <Icon Name="IconName.UserCircle" />
                     </Column>
                     <Column>
-                        <CardText>Marek Pietrzak</CardText>
+                        <CardText>@UserName</CardText>
                     </Column>
 
                 </Row>
@@ -31,7 +31,7 @@
                         <Icon Name="IconName.UserTie" />
                     </Column>
                     <Column>
-                        Tester
+                        @UserRole
                     </Column>
                 </Row>
                 <Row Margin="Margin.Is2.OnY">
@@ -39,7 +39,7 @@
                         <Icon Name="IconName.Mail" />
                     </Column>
                     <Column>
-                        marek@virhbt.com
+                        @Email
                     </Column>
                 </Row>
                 <Row>
@@ -47,7 +47,7 @@
                         <Icon Name="IconName.Phone" />
                     </Column>
                     <Column>
-                        +123123123
+                        @PhoneNumber
                     </Column>
                 </Row>
 
@@ -72,21 +72,16 @@
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow>
-                                <TableRowHeader>1</TableRowHeader>
-                                <TableRowCell>Project 1</TableRowCell>
+                            @foreach (var project in Projects)
+                            {
 
-                            </TableRow>
-                            <TableRow>
-                                <TableRowHeader>2</TableRowHeader>
-                                <TableRowCell>Project 2</TableRowCell>
 
-                            </TableRow>
-                            <TableRow>
-                                <TableRowHeader>3</TableRowHeader>
-                                <TableRowCell>Project 3</TableRowCell>
+                                <TableRow>
+                                    <TableRowHeader>@project.ProjectId</TableRowHeader>
+                                    <TableRowCell>@project.Name</TableRowCell>
 
-                            </TableRow>
+                                </TableRow>
+                            }
                         </TableBody>
                     </Table>
 
@@ -100,7 +95,5 @@
 
 
 @code {
-    [Parameter]
-    public string UserId { get; set; }
 
 } 

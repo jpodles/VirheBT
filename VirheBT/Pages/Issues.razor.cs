@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 using Blazorise.DataGrid;
+
+using Microsoft.AspNetCore.Components;
 
 using VirheBT.Shared.Enums;
 
@@ -22,6 +25,16 @@ namespace VirheBT.Pages
         DataGridCommandMode commandsMode = DataGridCommandMode.Default;
         public DataGrid<IssueShortDto> dataGrid;
         public int currentPage { get; set; } = 1;
+
+
+        [Parameter]
+        public string ProjectId { get; set; }
+
+        protected async override Task OnInitializedAsync()
+        {
+
+        }
+
         List<IssueShortDto> data = new List<IssueShortDto>
         {
             new IssueShortDto

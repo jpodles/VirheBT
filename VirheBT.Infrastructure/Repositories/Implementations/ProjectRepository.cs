@@ -27,9 +27,20 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
             _mapper = mapper;
         }
 
+        public async Task AddUserToProjectAsync(ApplicationUser user, int projectId)
+        {
+
+            var project = await GetProjectAsync(projectId);
+            project.ApplicationUsers.Add(user);
+            Save();
+        }
+
+
+
         public async void CreateProjectAsync(Project project)
         {
             await _context.Projects.AddAsync(project);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Project> GetProjectAsync(int projectId)
@@ -40,7 +51,7 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
 
         public async Task<IEnumerable<Project>> GetProjectsAsync()
         {
-            return await _context.Projects
+            return await _context.Projects.Include(p => p.ApplicationUsers)
                 .OrderBy(p => p.ProjectId).ToListAsync();
         }
 
@@ -51,22 +62,30 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
 
         }
 
-        public async void UpdateProjectAsync(int projectId, Project project)
+        public async Task UpdateProjectAsync(int projectId, Project project)
         {
             var projectEntity = await GetProjectAsync(projectId);
-            _mapper.Map(project, projectEntity);
+
+            projectEntity.Name = project.Name;
+            projectEntity.Description = project.Description;
+
 
             Save();
 
         }
 
-        public async void RemoveUserFromProjectAsync(string userId, int projectId)
+        public async Task RemoveUserFromProjectAsync(ApplicationUser user, int projectId)
         {
-            var project = await _context.Projects.Include(p => p.ProjectId).FirstAsync();
+            var project = await GetProjectAsync(projectId);
 
-            var userToRemove = project.ApplicationUsers.Single(u => u.Id == userId);
-            project.ApplicationUsers.Remove(userToRemove);
-            Save();
+            if (user != project.Maintainer)
+            {
+                project.ApplicationUsers.Remove(user);
+                Save();
+            }
+
+
+
 
 
         }

@@ -1,6 +1,7 @@
 ﻿@page "/projects"
+@using VirheBT.Infrastructure.Data.Models
 @using VirheBT.Shared.Enums
-@using VirheBT.Shared.DTOs
+
 
 <Card Margin="Margin.Is4.OnY" WhiteText="false">
     <CardHeader>
@@ -8,7 +9,7 @@
     </CardHeader>
     <CardBody>
         <DataGrid @ref="dataGrid"
-                  TItem="ProjectShortDto"
+                  TItem="Project"
                   Data="data"
                   Editable="@editable"
                   EditMode="@editMode"
@@ -29,7 +30,7 @@
                   Narrow="true">
 
             <DataGridColumns>
-                <DataGridMultiSelectColumn TItem="ProjectShortDto" Width="15px">
+                <DataGridMultiSelectColumn TItem="Project" Width="15px">
 
                     @*<MultiSelectTemplate>
                             <Label @onclick:stopPropagation>
@@ -37,9 +38,9 @@
                             </Label>
                         </MultiSelectTemplate>*@
                 </DataGridMultiSelectColumn>
-                <DataGridColumn TItem="ProjectShortDto" Field="@nameof(ProjectShortDto.ProjectId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
+                <DataGridColumn TItem="Project" Field="@nameof(Project.ProjectId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
 
-                <DataGridColumn TItem="ProjectShortDto" Field="@nameof(ProjectShortDto.Name)" Caption="Title" Editable="false" Width="500px">
+                <DataGridColumn TItem="Project" Field="@nameof(Project.Name)" Caption="Title" Editable="false" Width="500px">
                     <CaptionTemplate>
                         <Icon Name="IconName.Tag" /> @context.Caption
                     </CaptionTemplate>
@@ -47,7 +48,7 @@
                     <DisplayTemplate>
 
 
-                        <Link To=@($"project/{context.ProjectId}")>
+                        <Link To=@($"projects/{context.ProjectId}")>
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
 
                             @context.Name
@@ -59,7 +60,9 @@
 
                 </DataGridColumn>
 
-                <DataGridColumn TItem="ProjectShortDto" Field="@nameof(ProjectShortDto.Maintainer)" Caption="Maintainter" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
+                <DataGridColumn TItem="Project"
+                                Field="@nameof(Project.Maintainer)"
+                                Caption="Maintainter" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
                     <CaptionTemplate>
                         <Icon Name="IconName.UserCheck" /> @context.Caption
                     </CaptionTemplate>
@@ -81,14 +84,14 @@
                     </FilterTemplate>
                 </DataGridColumn>
 
-                <DataGridColumn TItem="ProjectShortDto" Field="@nameof(ProjectShortDto.Status)" Caption="Status" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                <DataGridColumn TItem="Project" Field="@nameof(Project.Status)" Caption="Status" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
                     <CaptionTemplate>
                         <Icon Name="IconName.ExclamationTriangle" /> @context.Caption
                     </CaptionTemplate>
                     <DisplayTemplate>
 
                         @{
-                            var item = (context as ProjectShortDto);
+                            var item = (context as Project);
                             if (item.Status == ProjectStatus.OnTrack)
                             {
                                 <label style="color:cornflowerblue"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Spinner" /> <span>@context.Status</span></label>
@@ -125,7 +128,7 @@
 
 
 
-                <DataGridCommandColumn TItem="ProjectShortDto" Width="50px" TextAlignment="TextAlignment.Center">
+                <DataGridCommandColumn TItem="Project" Width="50px" TextAlignment="TextAlignment.Center">
                     <ClearFilterCommandTemplate>
                         <Button Color="Color.Warning" Clicked="@context.Clicked">
 
@@ -133,7 +136,7 @@
                         </Button>
                     </ClearFilterCommandTemplate>
                     <DeleteCommandTemplate>
-                        <Button Clicked="@context.Clicked" Color="Color.Danger">
+                        <Button Clicked="@context.Clicked" Color="Color.Danger" Style="display:none">
                             <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Trash" />
                         </Button>
                     </DeleteCommandTemplate>

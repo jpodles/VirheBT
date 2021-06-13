@@ -1,0 +1,61 @@
+﻿@page "/createproject"
+<AuthorizeView>
+    <Authorized>
+        <Container Margin="Margin.Is5">
+            <Row Margin="Margin.Is3.OnY">
+                <Column>
+                    <h2>Create new project</h2>
+                </Column>
+            </Row>
+            <Divider></Divider>
+
+            <Row>
+
+                <Column ColumnSize="ColumnSize.Is6">
+                    <Field>
+                        <FieldLabel>
+                            Project Name:
+                        </FieldLabel>
+                        <FieldBody>
+                            <TextEdit @bind-Text="@title" Placeholder="Name..." />
+                        </FieldBody>
+                    </Field>
+                </Column>
+                <Column ColumnSize="ColumnSize.Is6">
+                    <Field>
+                        <FieldLabel>
+                            Maintainer:
+                        </FieldLabel>
+                        <FieldBody>
+
+                            <TextEdit Placeholder="@context.User.Identity.Name" Disabled="true" />
+
+                        </FieldBody>
+                    </Field>
+                </Column>
+
+
+            </Row>
+            <Row>
+                <Column ColumnSize="ColumnSize.Is12">
+                    <Field>
+                        <FieldLabel>
+                            Description:
+                        </FieldLabel>
+                        <FieldBody>
+                            <MemoEdit Rows="5" @bind-Text="@description" />
+                        </FieldBody>
+                    </Field>
+                </Column>
+            </Row>
+            <Row Margin="Margin.Is3.OnY">
+                <Column>
+                    <Button Color="Color.Primary" Clicked="@OnCreateAsync"> Create project</Button>
+                </Column>
+            </Row>
+        </Container>
+    </Authorized>
+</AuthorizeView>
+
+
+
