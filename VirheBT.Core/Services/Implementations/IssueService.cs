@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Infrastructure.Repositories.Interfaces;
@@ -12,59 +14,67 @@ namespace VirheBT.Services.Implementations
         private readonly IIssueRepository _issueRepo;
         private readonly IIssueCommentRepository _issueCommentRepo;
         private readonly IIssueHistoryRepository _issueHistoryRepo;
+        private readonly IProjectService _projectService;
 
-        public IssueService(IIssueRepository issue, IIssueCommentRepository issueComment, IIssueHistoryRepository issueHistory)
+        public IssueService(IIssueRepository issue, IIssueCommentRepository issueComment, IIssueHistoryRepository issueHistory, IProjectService projectService)
         {
             _issueRepo = issue;
             _issueCommentRepo = issueComment;
             _issueHistoryRepo = issueHistory;
+            _projectService = projectService;
         }
 
-        public IEnumerable<Issue> GetIssues(int projecId)
+        public Task AddCommentAsync(int projectId, int issueId, IssueComment comment)
         {
             throw new NotImplementedException();
         }
 
-        public Issue GetIssue(int projectId, int issueId)
+        public async Task AddIssueAsync(int projectId, Issue issue)
+        {
+            var issues = await GetIssuesAsync(projectId);
+            await _issueRepo.AddIsssueAsync(issues, issue);
+
+        }
+
+        public Task DeleteCommentAsync(int projectId, int issueId, int commentId)
         {
             throw new NotImplementedException();
         }
 
-        public void AddIssue(int ProjectId, Issue issue)
+        public async Task DeleteIssueAsync(int projectId, int issueId)
         {
-            //var project = projectrepo.getproject(int projecid); <-- to w reposisotry
-            //issuerepo.addissue(project, issue);
-            //isshuehistoryrepo.addissuehistory(changetype.created);
+            var issue = await GetIssueAsync(projectId, issueId);
+            await _issueRepo.DeleteIssueAsync(projectId, issue);
         }
 
-        public void EditIssue(int projectId, int issueId, Issue issue)
+        public Task EditCommentAsync(int projectId, int issueId, IssueComment comment)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteIssue(int projectId, int issueId)
+        public async Task EditIssueAsync(int projectId, int issueId, Issue issue)
+        {
+
+
+            await _issueRepo.UpdateIssueAsync(projectId, issueId, issue);
+        }
+
+        public async Task<Issue> GetIssueAsync(int projectId, int issueId)
+        {
+
+            return await _issueRepo.GetIssueByIdAsync(projectId, issueId);
+
+        }
+
+        public Task<List<IssueComment>> GetIssueCommentsAsync(int projectId, int issueId)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IssueComment> GetIssueComments(int projectId, int issueId)
+        public async Task<List<Issue>> GetIssuesAsync(int projectId)
         {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteComment(int projectId, int issueId, int commentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddComment(int projectId, int issueId, IssueComment comment)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void EditComment(int projectId, int issueId, IssueComment comment)
-        {
-            throw new NotImplementedException();
+            var issues = await _issueRepo.GetIssuesAsync(projectId);
+            return issues.ToList();
         }
     }
 }

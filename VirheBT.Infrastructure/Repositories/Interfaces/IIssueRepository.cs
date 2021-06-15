@@ -11,11 +11,11 @@ namespace VirheBT.Infrastructure.Repositories.Interfaces
 
         Task<Issue> GetIssueByIdAsync(int projectId, int issueId);
 
-        void AddIsssueAsync(int projectId, Issue issue);
+        Task AddIsssueAsync(List<Issue> issues, Issue issue);
 
-        void DeleteIssueAsync(int projectId, Issue issue);
+        Task DeleteIssueAsync(int projectId, Issue issue);
 
-        void UpdateIssueAsync(int projectId, Issue issue);
+        Task UpdateIssueAsync(int projectId, int issueId, Issue issue);
 
         bool IssueExists(int projectId, int issueId);
 

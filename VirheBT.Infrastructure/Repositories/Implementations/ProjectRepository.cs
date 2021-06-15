@@ -57,8 +57,9 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
 
         public async Task<IEnumerable<ApplicationUser>> GetProjectUsersAsync(int projectId)
         {
-            var project = await GetProjectAsync(projectId);
-            return project.ApplicationUsers;
+            return await _context.ApplicationUsers
+                .Where(x => x.Projects.Any(p => p.ProjectId == projectId))
+                .ToListAsync();
 
         }
 

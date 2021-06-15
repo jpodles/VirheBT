@@ -51,7 +51,7 @@ namespace VirheBT.Pages
 
         private bool isAlreadyInitialised;
 
-        private Random random = new Random(DateTime.Now.Millisecond);
+        // private Random random = new Random(DateTime.Now.Millisecond);
         private List<Issue> issues = new List<Issue>();
         private int ToDoCount { get; set; }
         private int InProgressCount { get; set; }
@@ -69,6 +69,9 @@ namespace VirheBT.Pages
         [Inject]
         IProjectService ProjectService { get; set; }
 
+        [Inject]
+        IIssueService IssueService { get; set; }
+
         //private string CurrentProjectId { get; set; }
 
         private string Name { get; set; }
@@ -78,13 +81,29 @@ namespace VirheBT.Pages
         protected async override Task OnInitializedAsync()
         {
             CurrentProject = await ProjectService.GetProjectAsync(ProjectId);
+            issues = await IssueService.GetIssuesAsync(ProjectId);
             Name = CurrentProject.Name;
             Description = CurrentProject.Description;
-            issues = CurrentProject.Issues.ToList();
 
 
+            CalculateCount();
+
+            await Task.WhenAll(
+                 HandleRedraw(bugsPriorityChart, GetBugsBarChartDataset, _priorityLabels),
+                 HandleRedraw(featuresPriorityChart, GetFeaturesBarChartDataset, _priorityLabels),
+                 HandleRedraw(allFeatureBugsInProjectChart, GetFeaturesBugsChartDataset, _bugFeatureLabels),
+                 HandleRedraw(allTasksStatusInProjectChart, GetAllTaskStatusChartDataset, _taskStatusLabels),
+                 HandleRedraw(yourTasksChart, GetUserTasksChartDataset, _taskStatusLabels));
+
+
+        }
+
+
+
+        private void CalculateCount()
+        {
             ToDoCount = issues
-              .Where(x => x.Status == IssueStatus.ToDo).Count();
+             .Where(x => x.Status == IssueStatus.ToDo).Count();
             InProgressCount = issues
                 .Where(x => x.Status == IssueStatus.InProgress).Count();
             DoneCount = issues
@@ -106,30 +125,8 @@ namespace VirheBT.Pages
             FeaturesHigh = issues
                  .Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.High);
 
-        }
-
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-
-
-            if (!isAlreadyInitialised)
-            {
-                isAlreadyInitialised = true;
-
-                await Task.WhenAll(
-
-                HandleRedraw(bugsPriorityChart, GetBugsBarChartDataset, _priorityLabels),
-                HandleRedraw(featuresPriorityChart, GetFeaturesBarChartDataset, _priorityLabels),
-                HandleRedraw(allFeatureBugsInProjectChart, GetFeaturesBugsChartDataset, _bugFeatureLabels),
-                HandleRedraw(allTasksStatusInProjectChart, GetAllTaskStatusChartDataset, _taskStatusLabels),
-                HandleRedraw(yourTasksChart, GetUserTasksChartDataset, _taskStatusLabels));
-            }
-            this.StateHasChanged();
 
         }
-
-
 
         private async Task HandleRedraw<TDataSet, TItem, TOptions, TModel>
             (Blazorise.Charts.BaseChart<TDataSet, TItem, TOptions, TModel> chart, Func<TDataSet> getDataSet, string[] labels)
@@ -141,24 +138,6 @@ namespace VirheBT.Pages
 
             await chart.AddLabelsDatasetsAndUpdate(labels, getDataSet());
         }
-
-        //private async Task GetProjectId()
-        //{
-        //    var result = await ProtectedSessionStore.GetAsync<int>("currentProject");
-        //    CurrentProjectId = result.Value;
-        //    Console.WriteLine("currentProjectId session =" + CurrentProjectId);
-
-        //}
-
-        //private async Task SetDataAndUpdate<TDataSet, TItem, TOptions, TModel>
-        //    (Blazorise.Charts.BaseChart<TDataSet, TItem, TOptions, TModel> chart, Func<List<TItem>> items)
-        //    where TDataSet : ChartDataset<TItem>
-        //    where TOptions : ChartOptions
-        //    where TModel : ChartModel
-        //{
-        //    await chart.SetData(0, items());
-        //    await chart.Update();
-        //}
 
         private BarChartDataset<int> GetBugsBarChartDataset()
         {
@@ -216,15 +195,6 @@ namespace VirheBT.Pages
                 BorderColor = backgroundColors,
                 BorderWidth = 1
             };
-        }
-
-        private List<int> GetData()
-        {
-            return new List<int> {
-                random.Next(10, 20),
-                random.Next(10, 15) ,
-                random.Next(10, 30) ,
-              };
         }
     }
 }

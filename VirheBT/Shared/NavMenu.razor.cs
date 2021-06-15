@@ -15,7 +15,7 @@ namespace VirheBT.Shared
         [Inject]
         NavigationManager NavigationManager { get; set; }
 
-        private CreateIssue CreateIssueModal { get; set; }
+
 
         private int currentProject;
 

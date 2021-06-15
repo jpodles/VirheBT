@@ -67,31 +67,37 @@ namespace VirheBT.Pages
         [Inject]
         NavigationManager NavigationManager { get; set; }
 
-
+        [Inject]
+        IIssueService IssueService { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
 
             CurrentProject = await ProjectService.GetProjectAsync(ProjectId);
+            issues = await IssueService.GetIssuesAsync(ProjectId);
             Name = CurrentProject.Name;
             Description = CurrentProject.Description;
-            FirstName = CurrentProject.Maintainer.FirstName;
-            LastName = CurrentProject.Maintainer.LastName;
+            FirstName = CurrentProject.Maintainer?.FirstName;
+            LastName = CurrentProject.Maintainer?.LastName;
             Status = CurrentProject.Status;
             Created = CurrentProject.Created;
             team = CurrentProject.ApplicationUsers.ToList();
-            issues = CurrentProject.Issues.ToList();
+
 
             Maintainer = FirstName + " " + LastName;
 
             AllTasks = issues.Count();
             ToDoCount = issues
-                .Where(x => x.Status == IssueStatus.ToDo).Count();
+             .Where(x => x.Status == IssueStatus.ToDo).Count();
             InProgressCount = issues
                 .Where(x => x.Status == IssueStatus.InProgress).Count();
             DoneCount = issues
                 .Where(x => x.Status == IssueStatus.Done).Count();
 
+        }
+
+        protected override void OnAfterRender(bool firstRender)
+        {
 
         }
 
@@ -99,7 +105,7 @@ namespace VirheBT.Pages
         private async void SwitchToProject()
         {
             await ProtectedSessionStore.SetAsync("currentProject", ProjectId);
-            NavigationManager.NavigateTo("/project/" + ProjectId.ToString() + "/dashboard");
+            NavigationManager.NavigateTo("/project/" + ProjectId.ToString() + "/dashboard", true);
 
         }
 

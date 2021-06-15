@@ -44,7 +44,7 @@
         </Card>
     </Column>
     <Column ColumnSize="ColumnSize.Is4" Margin="Margin.Is2.OnY">
-        <Button Color="Color.Info" Size="Size.Medium" Type="ButtonType.Link" Clicked="@SwitchToProject" Margin="Margin.Is1">
+        <Button Color="Color.Info" Size="Size.Medium" Type="ButtonType.Button" Clicked="@SwitchToProject" Margin="Margin.Is1">
             SWITCH TO PROJECT
 
         </Button>
@@ -52,9 +52,9 @@
         <Button Color="Color.Warning" Size="Size.Medium" Type="ButtonType.Link" To="@($"projects/{ProjectId}/editproject")" Margin="Margin.Is1">
             EDIT
         </Button>
-        <Button Color="Color.Danger" Size="Size.Medium" Type="ButtonType.Link" Clicked="@OnDeleteProject" Margin="Margin.Is1">
-            DELETE
-        </Button>
+        @*<Button Color="Color.Danger" Size="Size.Medium" Type="ButtonType.Link" Clicked="@OnDeleteProject" Margin="Margin.Is1">
+                DELETE
+            </Button>*@
     </Column>
 
 

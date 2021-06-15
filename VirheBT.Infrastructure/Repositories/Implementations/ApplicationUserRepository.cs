@@ -48,7 +48,7 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
 
         public async Task<ApplicationUser> GetApplicationUserAsync(string userId)
         {
-            return await _context.ApplicationUsers
+            return await _context.ApplicationUsers.Include(x => x.Projects)
                 .Where(u => u.Id == userId).FirstOrDefaultAsync();
         }
 

@@ -1,5 +1,6 @@
-﻿@page "/project/{ProjectId}/issues"
+﻿@page "/project/{ProjectId:int}/issues"
 @using VirheBT.Shared.Enums
+@using VirheBT.Infrastructure.Data.Models
 
 <Card Margin="Margin.Is4.OnY" WhiteText="false">
     <CardHeader>
@@ -7,8 +8,8 @@
     </CardHeader>
     <CardBody>
         <DataGrid @ref="dataGrid"
-                  TItem="IssueShortDto"
-                  Data="data"
+                  TItem="Issue"
+                  Data="issues"
                   Editable="@editable"
                   EditMode="@editMode"
                   Sortable="@sortable"
@@ -25,10 +26,11 @@
                   Bordered="true"
                   Hoverable="true"
                   Responsive="true"
-                  Narrow="true">
+                  Narrow="true"
+                  RowRemoved="@OnRowRemoved">
 
             <DataGridColumns>
-                <DataGridMultiSelectColumn TItem="IssueShortDto" Width="15px">
+                <DataGridMultiSelectColumn TItem="Issue" Width="15px">
 
                     @*<MultiSelectTemplate>
                             <Label @onclick:stopPropagation>
@@ -36,9 +38,9 @@
                             </Label>
                         </MultiSelectTemplate>*@
                 </DataGridMultiSelectColumn>
-                <DataGridColumn TItem="IssueShortDto" Field="@nameof(IssueShortDto.ID)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
+                <DataGridColumn TItem="Issue" Field="@nameof(Issue.IssueId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
 
-                <DataGridColumn TItem="IssueShortDto" Field="@nameof(IssueShortDto.Title)" Caption="Title" Editable="false" Width="500px">
+                <DataGridColumn TItem="Issue" Field="@nameof(Issue.Title)" Caption="Title" Editable="false" Width="500px">
                     <CaptionTemplate>
                         <Icon Name="IconName.Tag" /> @context.Caption
                     </CaptionTemplate>
@@ -46,7 +48,7 @@
                     <DisplayTemplate>
 
 
-                        <Link To=@($"issue/{context.ID}")>
+                        <Link To=@($"project/{ProjectId}/issue/{context.IssueId}")>
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
 
                             @context.Title
@@ -58,7 +60,7 @@
 
                 </DataGridColumn>
 
-                <DataGridColumn TItem="IssueShortDto" Field="@nameof(IssueShortDto.AssignedTo)" Caption="Assigned To" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
+                <DataGridColumn TItem="Issue" Field="@nameof(Issue.AssignedTo)" Caption="Assigned To" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
                     <CaptionTemplate>
                         <Icon Name="IconName.UserCheck" /> @context.Caption
                     </CaptionTemplate>
@@ -70,7 +72,7 @@
                                 <SelectItem Value="@("*")">All</SelectItem>
 
 
-                                @foreach (var item in data.Select(p => p.AssignedTo).Distinct())
+                                @foreach (var item in issues.Select(p => p.AssignedTo).Distinct())
                                 {
                                     <SelectItem Value="@item">@item</SelectItem>
                                 }
@@ -79,14 +81,14 @@
                         }
                     </FilterTemplate>
                 </DataGridColumn>
-                <DataGridColumn TItem="IssueShortDto" Field="@nameof(IssueShortDto.Type)" Caption="Type" Editable="false" Width="100px" Sortable="false" HeaderTextAlignment="TextAlignment.Center">
+                <DataGridColumn TItem="Issue" Field="@nameof(Issue.Type)" Caption="Type" Editable="false" Width="100px" Sortable="false" HeaderTextAlignment="TextAlignment.Center">
                     <CaptionTemplate>
                         <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Robot" /> @context.Caption
                     </CaptionTemplate>
                     <DisplayTemplate>
 
                         @{
-                            var issueItem = (context as IssueShortDto);
+                            var issueItem = (context as Issue);
                             if (issueItem.Type == IssueType.Feature)
                             {
                                 <label style="color:forestgreen"><Icon Name="IconName.PlusCircle" /> <span>@context.Type</span></label>
@@ -113,14 +115,14 @@
                         }
                     </FilterTemplate>
                 </DataGridColumn>
-                <DataGridColumn TItem="IssueShortDto" Field="@nameof(IssueShortDto.Priority)" Caption="Priority" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                <DataGridColumn TItem="Issue" Field="@nameof(Issue.Priority)" Caption="Priority" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
                     <CaptionTemplate>
                         <Icon Name="IconName.ExclamationTriangle" /> @context.Caption
                     </CaptionTemplate>
                     <DisplayTemplate>
 
                         @{
-                            var issueItem = (context as IssueShortDto);
+                            var issueItem = (context as Issue);
                             if (issueItem.Priority == IssuePriority.Low)
                             {
                                 <label style="color:darkgreen"><Icon Name="IconName.ArrowUp" /> <span>@context.Priority</span></label>
@@ -152,14 +154,14 @@
                         }
                     </FilterTemplate>
                 </DataGridColumn>
-                <DataGridColumn TItem="IssueShortDto" Field="@nameof(IssueShortDto.Status)" Caption="Status" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                <DataGridColumn TItem="Issue" Field="@nameof(Issue.Status)" Caption="Status" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
                     <CaptionTemplate>
                         <Icon Name="IconName.Compass" /> @context.Caption
                     </CaptionTemplate>
                     <DisplayTemplate>
 
                         @{
-                            var issueItem = (context as IssueShortDto);
+                            var issueItem = (context as Issue);
                             if (issueItem.Status == IssueStatus.ToDo)
                             {
                                 <label style="color:darkred"><Icon Name="IconName.ExclamationTriangle" /> <span>@context.Status</span></label>
@@ -196,7 +198,7 @@
 
                 </DataGridColumn>
 
-                <DataGridCommandColumn TItem="IssueShortDto" Width="87px" TextAlignment="TextAlignment.Center">
+                <DataGridCommandColumn TItem="Issue" Width="87px" TextAlignment="TextAlignment.Center">
                     <ClearFilterCommandTemplate>
                         <Button Color="Color.Warning" Clicked="@context.Clicked">
                             Clear filter

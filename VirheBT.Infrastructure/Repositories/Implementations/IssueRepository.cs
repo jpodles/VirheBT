@@ -21,26 +21,29 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
             _context = context;
         }
 
-        public async void AddIsssueAsync(int projectId, Issue issue)
+        public async Task AddIsssueAsync(List<Issue> issues, Issue issue)
         {
-            throw new NotImplementedException();
+            _context.Issues.Add(issue);
+            await _context.SaveChangesAsync();
         }
 
-        public async void DeleteIssueAsync(int projectId, Issue issue)
+        public async Task DeleteIssueAsync(int projectId, Issue issue)
         {
-            throw new NotImplementedException();
+            _context.Issues.Remove(issue);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Issue> GetIssueByIdAsync(int projectId, int issueId)
         {
             return await _context.Issues
+                .Include(x => x.AssignedTo).Include(x => x.CreatedBy)
                 .Where(p => p.ProjectId == projectId)
                 .Where(i => i.IssueId == issueId).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Issue>> GetIssuesAsync(int projectId)
         {
-            return await _context.Issues
+            return await _context.Issues.Include(x => x.AssignedTo)
                 .Where(p => p.ProjectId == projectId).ToListAsync();
         }
 
@@ -54,9 +57,17 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public async void UpdateIssueAsync(int projectId, Issue issue)
+        public async Task UpdateIssueAsync(int projectId, int issueId, Issue issue)
         {
-            throw new NotImplementedException();
+            var issueEntity = await GetIssueByIdAsync(projectId, issueId);
+
+            issueEntity.Title = issue.Title;
+            issueEntity.Description = issue.Description;
+            issueEntity.Priority = issue.Priority;
+            issueEntity.Type = issue.Type;
+            issueEntity.Status = issue.Status;
+
+            await _context.SaveChangesAsync();
         }
     }
 }

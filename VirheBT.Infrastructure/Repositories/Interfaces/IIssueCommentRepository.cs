@@ -13,8 +13,8 @@ namespace VirheBT.Infrastructure.Repositories.Interfaces
         Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(int projectId, int issueId);
 
         Task<IssueComment> GetIssueCommentAsync(int projectId, int issueId, int commentId);
-        void AddCommentAsync(int projectId, int issueId, IssueComment comment);
-        void EditCommentAsync(int projectId, int issueId, IssueComment comment);
-        void DeleteCommentAsync(int projectId, int issueId);
+        Task AddCommentAsync(int projectId, int issueId, IssueComment comment);
+        Task EditCommentAsync(int projectId, int issueId, IssueComment comment);
+        Task DeleteCommentAsync(int projectId, int issueId);
     }
 }

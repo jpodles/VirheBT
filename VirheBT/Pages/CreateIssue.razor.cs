@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 using VirheBT.Infrastructure.Data.Models;
+using VirheBT.Services.Implementations;
 using VirheBT.Services.Interfaces;
 using VirheBT.Shared.Enums;
 
-namespace VirheBT.Shared.Components
+namespace VirheBT.Pages
 {
     public partial class CreateIssue
     {
@@ -22,17 +23,21 @@ namespace VirheBT.Shared.Components
         [Inject]
         IProjectService ProjectService { get; set; }
 
+
+        [Inject]
+        IIssueService IssueService { get; set; }
+
         [Inject]
         IApplicationUserService ApplicationUserService { get; set; }
 
-        [Inject]
-        ProtectedSessionStorage ProtectedSessionStorage { get; set; }
+        //[Inject]
+        //ProtectedSessionStorage ProtectedSessionStorage { get; set; }
 
 
-        private int CurrentProjectId { get; set; }
+        //private int CurrentProjectId { get; set; }
 
         private string SelectedUser { get; set; }
-        private string selectedSearchValue;
+        //private string selectedSearchValue;
         void AssignedUserHandler(string newValue)
         {
             SelectedUser = newValue;
@@ -52,19 +57,23 @@ namespace VirheBT.Shared.Components
 
         List<ApplicationUser> projectUsers = new List<ApplicationUser>();
 
+        Project Project { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
 
             projectUsers = await ProjectService.GetProjectUsersAsync(ProjectId);
+            //Project = await ProjectService.GetProjectAsync(ProjectId)
+
+
 
         }
 
-        protected async override Task OnAfterRenderAsync(bool firstRender)
-        {
+        //protected async Task OnAfterRenderAsync(bool firstRender)
+        //{
 
-            //projectUsers = await ProjectService.GetProjectUsersAsync(CurrentProjectId);
-        }
+        //    //projectUsers = await ProjectService.GetProjectUsersAsync(CurrentProjectId);
+        //}
 
         async Task OnAddIssue()
         {
@@ -72,9 +81,23 @@ namespace VirheBT.Shared.Components
                .GetAuthenticationStateAsync();
             var user = authState.User.Identity.Name;
 
+            Issue issueToAdd = new Issue
+            {
+                ProjectId = ProjectId,
+                Title = Title,
+                Description = Description,
+                Created = DateTime.Now,
+                CreatedBy = projectUsers.Where(x => x.Email == user).FirstOrDefault(),
+                Type = CheckedIssueType,
+                Priority = CheckedIssuePriority,
+                AssignedTo = projectUsers.Where(x => x.Email == SelectedUser).FirstOrDefault(),
+            };
 
+            await IssueService.AddIssueAsync(ProjectId, issueToAdd);
 
-            StateHasChanged();
+            NavigationManager.NavigateTo($"/project/{ProjectId}/issues");
+
+            //StateHasChanged();
         }
     }
 }

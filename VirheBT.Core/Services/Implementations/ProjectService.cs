@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using AutoMapper;
@@ -9,7 +8,6 @@ using AutoMapper;
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Infrastructure.Repositories.Interfaces;
 using VirheBT.Services.Interfaces;
-using VirheBT.Shared.DTOs;
 using VirheBT.Shared.Enums;
 
 namespace VirheBT.Services.Implementations
@@ -20,7 +18,9 @@ namespace VirheBT.Services.Implementations
         private readonly IApplicationUserService _userService;
         private readonly IMapper _mapper;
 
-        public ProjectService(IProjectRepository projectRepository, IApplicationUserService userService, IMapper mapper)
+        public ProjectService(IProjectRepository projectRepository,
+            IApplicationUserService userService,
+            IMapper mapper)
         {
             _userService = userService;
             _projectRepository = projectRepository;
@@ -38,8 +38,6 @@ namespace VirheBT.Services.Implementations
         {
             var maintainer = await _userService.GetApplicationUserByEmailAsync(maintainerEmail);
 
-
-
             var project = new Project
             {
                 Maintainer = maintainer,
@@ -49,18 +47,16 @@ namespace VirheBT.Services.Implementations
                 Created = DateTime.Now,
             };
 
-            project.ApplicationUsers.Add(maintainer);
-            _projectRepository.CreateProjectAsync(project);
-
-
+            if (maintainer.ProjectMaintained == null)
+            {
+                project.ApplicationUsers.Add(maintainer);
+                _projectRepository.CreateProjectAsync(project);
+            }
         }
 
         public async Task<Project> GetProjectAsync(int projectId)
         {
-
-
             return await _projectRepository.GetProjectAsync(projectId);
-
         }
 
         public async Task<List<Project>> GetProjectsAsync()
@@ -68,12 +64,10 @@ namespace VirheBT.Services.Implementations
             var projects = await _projectRepository.GetProjectsAsync();
 
             return projects.ToList();
-
         }
 
         public async Task<List<ApplicationUser>> GetProjectUsersAsync(int projectId)
         {
-
             var projectUsers = await _projectRepository.GetProjectUsersAsync(projectId);
             return projectUsers.ToList();
         }
@@ -82,10 +76,7 @@ namespace VirheBT.Services.Implementations
         {
             var userEntity = await _userService.GetApplicationUserAsync(userId);
 
-
             await _projectRepository.RemoveUserFromProjectAsync(userEntity, projectId);
-
-
         }
 
         public async Task UpdateProjectAsync(int projectId, Project project)

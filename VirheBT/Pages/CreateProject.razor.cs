@@ -33,7 +33,7 @@ namespace VirheBT.Pages
 
             ProjectService.CreateProject(title, description, user);
 
-
+            NavigationManager.NavigateTo("/projects");
 
         }
     }

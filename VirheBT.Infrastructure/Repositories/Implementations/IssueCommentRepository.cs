@@ -11,27 +11,27 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
 {
     public class IssueCommentRepository : IIssueCommentRepository
     {
-        public async void AddCommentAsync(int projectId, int issueId, IssueComment comment)
+        public Task AddCommentAsync(int projectId, int issueId, IssueComment comment)
         {
             throw new NotImplementedException();
         }
 
-        public async void DeleteCommentAsync(int projectId, int issueId)
+        public Task DeleteCommentAsync(int projectId, int issueId)
         {
             throw new NotImplementedException();
         }
 
-        public async void EditCommentAsync(int projectId, int issueId, IssueComment comment)
+        public Task EditCommentAsync(int projectId, int issueId, IssueComment comment)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IssueComment> GetIssueCommentAsync(int projectId, int issueId, int commentId)
+        public Task<IssueComment> GetIssueCommentAsync(int projectId, int issueId, int commentId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(int projectId, int issueId)
+        public Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(int projectId, int issueId)
         {
             throw new NotImplementedException();
         }
