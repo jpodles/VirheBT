@@ -1,37 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Blazorise.DataGrid;
+﻿using Blazorise.DataGrid;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
-using VirheBT.Shared;
 using VirheBT.Shared.Enums;
 using VirheBT.State;
-
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-
 
 namespace VirheBT.Pages
 {
     public partial class ProjectDetails
     {
-        bool editable = true;
-        bool sortable = true;
-        bool filterable = true;
-        bool showPager = true;
-        DataGridEditMode editMode = DataGridEditMode.Popup;
-        DataGridSortMode sortMode = DataGridSortMode.Single;
-        DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
-        DataGridCommandMode commandsMode = DataGridCommandMode.Default;
+        private bool editable = true;
+        private bool sortable = true;
+        private bool filterable = true;
+        private bool showPager = true;
+        private DataGridEditMode editMode = DataGridEditMode.Popup;
+        private DataGridSortMode sortMode = DataGridSortMode.Single;
+        private DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
+        private DataGridCommandMode commandsMode = DataGridCommandMode.Default;
         public DataGrid<ApplicationUser> dataGrid;
         public int currentPage { get; set; } = 1;
-
 
         public string Name { get; set; }
         public string Description { get; set; }
@@ -53,26 +48,20 @@ namespace VirheBT.Pages
         [Parameter]
         public int ProjectId { get; set; }
 
+        [Inject]
+        private ProtectedSessionStorage ProtectedSessionStore { get; set; }
 
         [Inject]
-        ProtectedSessionStorage ProtectedSessionStore { get; set; }
-
-
-        [Inject]
-        IProjectService ProjectService { get; set; }
+        private IProjectService ProjectService { get; set; }
 
         [Inject]
-        IAppState AppState { get; set; }
+        private NavigationManager NavigationManager { get; set; }
 
         [Inject]
-        NavigationManager NavigationManager { get; set; }
-
-        [Inject]
-        IIssueService IssueService { get; set; }
+        private IIssueService IssueService { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
-
             CurrentProject = await ProjectService.GetProjectAsync(ProjectId);
             issues = await IssueService.GetIssuesAsync(ProjectId);
             Name = CurrentProject.Name;
@@ -83,81 +72,30 @@ namespace VirheBT.Pages
             Created = CurrentProject.Created;
             team = CurrentProject.ApplicationUsers.ToList();
 
-
             Maintainer = FirstName + " " + LastName;
 
-            AllTasks = issues.Count();
+            AllTasks = issues.Count;
             ToDoCount = issues
-             .Where(x => x.Status == IssueStatus.ToDo).Count();
+             .Count(x => x.Status == IssueStatus.ToDo);
             InProgressCount = issues
-                .Where(x => x.Status == IssueStatus.InProgress).Count();
+                .Count(x => x.Status == IssueStatus.InProgress);
             DoneCount = issues
-                .Where(x => x.Status == IssueStatus.Done).Count();
-
+                .Count(x => x.Status == IssueStatus.Done);
         }
 
         protected override void OnAfterRender(bool firstRender)
         {
-
         }
-
 
         private async void SwitchToProject()
         {
             await ProtectedSessionStore.SetAsync("currentProject", ProjectId);
             NavigationManager.NavigateTo("/project/" + ProjectId.ToString() + "/dashboard", true);
-
         }
 
         private async void OnDeleteProject()
         {
-
+            throw new NotImplementedException();
         }
-
-        //List<UserShortDto> data = new List<UserShortDto>
-        //{
-        //    new UserShortDto
-        //    {
-        //        ID = 1,
-        //        Name = "Michał Nowak",
-        //        Email = "michał@virhe.com",
-        //        UserRole = UserRole.Tester
-        //    },
-        //    new UserShortDto
-        //    {
-        //        ID = 2,
-        //        Name = "Jan Kowalski",
-        //        Email = "jan@virhe.com",
-        //        UserRole = UserRole.Programmer
-        //    },
-        //    new UserShortDto
-        //    {
-        //        ID = 3,
-        //        Name = "Tomasz Kowalski",
-        //        Email = "tomek@virhe.com",
-        //        UserRole = UserRole.ProjectManager
-        //    },
-        //    new UserShortDto
-        //    {
-        //        ID = 4,
-        //        Name = "Jakub Podleś",
-        //        Email = "jakub@virhe.com",
-        //        UserRole = UserRole.Programmer
-        //    },
-        //    new UserShortDto
-        //    {
-        //        ID = 5,
-        //        Name = "Adam Nowak",
-        //        Email = "adam@virhe.com",
-        //        UserRole = UserRole.Tester
-        //    },
-        //    new UserShortDto
-        //    {
-        //        ID = 5,
-        //        Name = "Adam Nowak",
-        //        Email = "adam@virhe.com",
-        //        UserRole = UserRole.Admin
-        //    }
-        //};
     }
 }

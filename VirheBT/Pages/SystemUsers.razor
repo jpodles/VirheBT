@@ -45,9 +45,7 @@
                             @context.FirstName
                         </Card>
                         </Link>
-
                     </DisplayTemplate>
-
                 </DataGridColumn>
                 <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.LastName)" Caption="Last Name" Editable="true" Width="100px">
                     <CaptionTemplate>
@@ -60,9 +58,7 @@
                             @context.LastName
                         </Card>
                         </Link>
-
                     </DisplayTemplate>
-
                 </DataGridColumn>
 
                 <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Email" Editable="true" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
@@ -112,7 +108,7 @@
                     <FilterTemplate>
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
                                 <SelectItem Value="@("*")">All</SelectItem>
                                 @foreach (var item in Enum.GetValues(typeof(UserRole)))
                                 {
@@ -140,21 +136,19 @@
 
                             }
 
-
                         }
                     </DisplayTemplate>
                     <EditTemplate>
                         <Select TValue=@UserStatus SelectedValue="@((UserStatus)( context.CellValue ))" SelectedValueChanged="@(( v ) => context.CellValue = v)">
                             <SelectItem TValue="UserStatus" Value=UserStatus.Active>Active</SelectItem>
                             <SelectItem TValue="UserStatus" Value=UserStatus.Inactive>Inactive</SelectItem>
-
                         </Select>
                     </EditTemplate>
 
                     <FilterTemplate>
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
                                 <SelectItem Value="@("*")">All</SelectItem>
                                 @foreach (var item in Enum.GetValues(typeof(UserStatus)))
                                 {
@@ -196,7 +190,5 @@
                 }
             </PopupTitleTemplate>
         </DataGrid>
-
     </CardBody>
-
 </Card>

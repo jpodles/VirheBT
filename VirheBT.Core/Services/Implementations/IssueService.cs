@@ -6,74 +6,93 @@ using System.Threading.Tasks;
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Infrastructure.Repositories.Interfaces;
 using VirheBT.Services.Interfaces;
+using VirheBT.Shared.Enums;
 
 namespace VirheBT.Services.Implementations
 {
     public class IssueService : IIssueService
     {
-        private readonly IIssueRepository _issueRepo;
-        private readonly IIssueCommentRepository _issueCommentRepo;
-        private readonly IIssueHistoryRepository _issueHistoryRepo;
-        private readonly IProjectService _projectService;
+        private readonly IIssueRepository issueRepo;
+        private readonly IIssueCommentRepository issueCommentRepo;
+        private readonly IIssueHistoryRepository issueHistoryRepo;
+        private readonly IApplicationUserService userService;
 
-        public IssueService(IIssueRepository issue, IIssueCommentRepository issueComment, IIssueHistoryRepository issueHistory, IProjectService projectService)
+        public IssueService(IIssueRepository issueRepo, IIssueCommentRepository issueCommentRepo, IIssueHistoryRepository issueHistoryRepo, IApplicationUserService userService)
         {
-            _issueRepo = issue;
-            _issueCommentRepo = issueComment;
-            _issueHistoryRepo = issueHistory;
-            _projectService = projectService;
+            this.issueRepo = issueRepo;
+            this.issueCommentRepo = issueCommentRepo;
+            this.issueHistoryRepo = issueHistoryRepo;
+            this.userService = userService;
         }
 
-        public Task AddCommentAsync(int projectId, int issueId, IssueComment comment)
+        public async Task AddHistoryEntry(ChangeType changeType, int projectId, int issueId, string userId)
         {
-            throw new NotImplementedException();
+            var issue = await issueRepo.GetIssueByIdAsync(projectId, issueId);
+            var user = await userService.GetApplicationUserAsync(userId);
+            var historyEntry = new IssueHistory
+            {
+                ChangeType = changeType,
+                ChangeDate = DateTime.UtcNow,
+                Issue = issue,
+                User = user
+            };
+
+            await issueHistoryRepo.AddIssueHistoryAsync(historyEntry);
+        }
+
+        public async Task<List<IssueHistory>> GetIssueHistory(int issueId)
+        {
+            var issueHistory = await issueHistoryRepo.GetIssueHistory(issueId);
+            return issueHistory.ToList();
+        }
+
+        public async Task AddCommentAsync(IssueComment comment)
+        {
+            await issueCommentRepo.AddCommentAsync(comment);
         }
 
         public async Task AddIssueAsync(int projectId, Issue issue)
         {
             var issues = await GetIssuesAsync(projectId);
-            await _issueRepo.AddIsssueAsync(issues, issue);
-
+            await issueRepo.AddIsssueAsync(issues, issue);
         }
 
-        public Task DeleteCommentAsync(int projectId, int issueId, int commentId)
+        public async Task DeleteCommentAsync(int issueId, int commentId)
         {
-            throw new NotImplementedException();
+            var comment = await issueCommentRepo.GetIssueCommentAsync(issueId, commentId);
+            await issueCommentRepo.DeleteCommentAsync(comment);
         }
 
         public async Task DeleteIssueAsync(int projectId, int issueId)
         {
             var issue = await GetIssueAsync(projectId, issueId);
-            await _issueRepo.DeleteIssueAsync(projectId, issue);
+            await issueRepo.DeleteIssueAsync(projectId, issue);
         }
 
-        public Task EditCommentAsync(int projectId, int issueId, IssueComment comment)
+        public async Task EditCommentAsync(IssueComment comment)
         {
-            throw new NotImplementedException();
+            await issueCommentRepo.EditCommentAsync(comment);
         }
 
         public async Task EditIssueAsync(int projectId, int issueId, Issue issue)
         {
-
-
-            await _issueRepo.UpdateIssueAsync(projectId, issueId, issue);
+            await issueRepo.UpdateIssueAsync(projectId, issueId, issue);
         }
 
         public async Task<Issue> GetIssueAsync(int projectId, int issueId)
         {
-
-            return await _issueRepo.GetIssueByIdAsync(projectId, issueId);
-
+            return await issueRepo.GetIssueByIdAsync(projectId, issueId);
         }
 
-        public Task<List<IssueComment>> GetIssueCommentsAsync(int projectId, int issueId)
+        public async Task<List<IssueComment>> GetIssueCommentsAsync(int projectId, int issueId)
         {
-            throw new NotImplementedException();
+            var issues = await issueCommentRepo.GetIssueCommentsAsync(issueId);
+            return issues.ToList();
         }
 
         public async Task<List<Issue>> GetIssuesAsync(int projectId)
         {
-            var issues = await _issueRepo.GetIssuesAsync(projectId);
+            var issues = await issueRepo.GetIssuesAsync(projectId);
             return issues.ToList();
         }
     }

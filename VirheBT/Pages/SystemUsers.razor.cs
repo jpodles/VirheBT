@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Blazorise.DataGrid;
+﻿using Blazorise.DataGrid;
 
 using Microsoft.AspNetCore.Components;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
@@ -39,23 +36,20 @@ namespace VirheBT.Pages
         private List<ApplicationUser> data = new List<ApplicationUser>();
 
         [Inject]
-        IApplicationUserService ApplicationUserService { get; set; }
-
+        private IApplicationUserService ApplicationUserService { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
             data = await ApplicationUserService.GetApplicationUsersAsync();
         }
 
-
-        async Task OnRowUpdated(SavedRowItem<ApplicationUser, Dictionary<string, object>> e)
+        private async Task OnRowUpdated(SavedRowItem<ApplicationUser, Dictionary<string, object>> e)
         {
             var applicationUser = e.Item;
             await ApplicationUserService.UpdateUserAsync(applicationUser, e.Item.Id);
             data = await ApplicationUserService.GetApplicationUsersAsync();
             StateHasChanged();
         }
-
 
         //{
         //    new UserDto

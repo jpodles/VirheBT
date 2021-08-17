@@ -1,7 +1,6 @@
 ﻿@page "/project/{ProjectId:int}/dashboard"
 @inject NavigationManager NavigationManager
 
-
 <AuthorizeView>
     <Authorized>
         <Container Fluid="true" Margin="Margin.Is5.OnY" ElementId="dashboard">
@@ -15,8 +14,6 @@
                         <Divider></Divider>
                         <Paragraph>
                             ID : @ProjectId
-
-
                         </Paragraph>
                         <Paragraph>
                             @Description
@@ -81,20 +78,14 @@
                     </Card>
                 </Column>
             </Row>
-
-
         </Container>
-
 
         <Button @onclick="GeneratePDF" Color="Color.Secondary" Float="Float.Right"> Generate PDF File</Button>
 
         @using Microsoft.JSInterop
         @inject IJSRuntime JS;
 
-
         @code{
-
-
 
             Snackbar PDFGenerated;
 
@@ -105,18 +96,12 @@
 
             }
 
-
         }
-
-
 
         <Snackbar @ref="PDFGenerated" Color="SnackbarColor.Success">
             <SnackbarBody>
                 PDF file generated succesfully!
             </SnackbarBody>
         </Snackbar>
-
     </Authorized>
 </AuthorizeView>
-
-

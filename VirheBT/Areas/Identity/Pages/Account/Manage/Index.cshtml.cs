@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
 
@@ -50,8 +46,6 @@ namespace VirheBT.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
-
-
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -69,7 +63,6 @@ namespace VirheBT.Areas.Identity.Pages.Account.Manage
                 FirstName = firstName,
                 LastName = lastName,
                 PhoneNumber = phoneNumber,
-
             };
         }
 

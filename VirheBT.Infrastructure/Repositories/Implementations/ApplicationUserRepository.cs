@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AutoMapper;
+﻿using AutoMapper;
 
 using Microsoft.EntityFrameworkCore;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data;
 using VirheBT.Infrastructure.Data.Models;
@@ -41,9 +39,6 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
             userEntity.UserStatus = applicationUser.UserStatus;
             //_mapper.Map(applicationUser, userEntity);
             _context.SaveChanges();
-
-
-
         }
 
         public async Task<ApplicationUser> GetApplicationUserAsync(string userId)

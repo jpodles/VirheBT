@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VirheBT.Shared.Enums
+﻿namespace VirheBT.Shared.Enums
 {
-
     public enum IssuePriority
     {
         Low = 0,
@@ -21,6 +14,7 @@ namespace VirheBT.Shared.Enums
         InProgress = 1,
         Done = 2
     }
+
     public enum IssueType
     {
         Bug = 0,
@@ -33,7 +27,4 @@ namespace VirheBT.Shared.Enums
         Modified = 1,
         Closed = 2
     }
-
-
-
 }

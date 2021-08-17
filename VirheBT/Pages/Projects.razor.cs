@@ -1,43 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Blazorise.DataGrid;
+﻿using Blazorise.DataGrid;
 
 using Microsoft.AspNetCore.Components;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
 
-
 namespace VirheBT.Pages
 {
-
     public partial class Projects
     {
-        bool editable = true;
-        bool sortable = true;
-        bool filterable = true;
-        bool showPager = true;
-        DataGridEditMode editMode = DataGridEditMode.Popup;
-        DataGridSortMode sortMode = DataGridSortMode.Single;
-        DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
-        DataGridCommandMode commandsMode = DataGridCommandMode.Default;
+        private bool editable = true;
+        private bool sortable = true;
+        private bool filterable = true;
+        private bool showPager = true;
+        private DataGridEditMode editMode = DataGridEditMode.Popup;
+        private DataGridSortMode sortMode = DataGridSortMode.Single;
+        private DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
+        private DataGridCommandMode commandsMode = DataGridCommandMode.Default;
         public DataGrid<Project> dataGrid;
         public List<Project> data = new List<Project>();
         public int currentPage { get; set; } = 1;
 
-
-
         [Inject]
-        IProjectService ProjectService { get; set; }
+        private IProjectService ProjectService { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             data = await ProjectService.GetProjectsAsync();
-
         }
 
         //protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -45,12 +37,5 @@ namespace VirheBT.Pages
         //    data = await ProjectService.GetProjectsAsync();
 
         //}
-
-
-
-
     }
-
-
-
 }

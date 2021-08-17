@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using AutoMapper;
+﻿using AutoMapper;
 
 using Microsoft.EntityFrameworkCore;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data;
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Infrastructure.Repositories.Interfaces;
-using VirheBT.Shared.Enums;
 
 namespace VirheBT.Infrastructure.Repositories.Implementations
 {
     public class ProjectRepository : IProjectRepository
     {
-
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
 
         public ProjectRepository(ApplicationDbContext context, IMapper mapper)
@@ -29,13 +25,10 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
 
         public async Task AddUserToProjectAsync(ApplicationUser user, int projectId)
         {
-
             var project = await GetProjectAsync(projectId);
             project.ApplicationUsers.Add(user);
             Save();
         }
-
-
 
         public async void CreateProjectAsync(Project project)
         {
@@ -47,6 +40,8 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
         {
             return await _context.Projects
                 .Where(p => p.ProjectId == projectId).FirstOrDefaultAsync();
+
+
         }
 
         public async Task<IEnumerable<Project>> GetProjectsAsync()
@@ -60,7 +55,6 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
             return await _context.ApplicationUsers
                 .Where(x => x.Projects.Any(p => p.ProjectId == projectId))
                 .ToListAsync();
-
         }
 
         public async Task UpdateProjectAsync(int projectId, Project project)
@@ -70,9 +64,7 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
             projectEntity.Name = project.Name;
             projectEntity.Description = project.Description;
 
-
             Save();
-
         }
 
         public async Task RemoveUserFromProjectAsync(ApplicationUser user, int projectId)
@@ -84,11 +76,6 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
                 project.ApplicationUsers.Remove(user);
                 Save();
             }
-
-
-
-
-
         }
 
         public bool Save()

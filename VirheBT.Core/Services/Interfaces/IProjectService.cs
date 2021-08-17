@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
-using VirheBT.Shared.DTOs;
 
 namespace VirheBT.Services.Interfaces
 {
     public interface IProjectService
     {
-
         Task<List<Project>> GetProjectsAsync();
+
         Task<Project> GetProjectAsync(int projectId);
 
         Task<List<ApplicationUser>> GetProjectUsersAsync(int projectId);
@@ -24,6 +20,5 @@ namespace VirheBT.Services.Interfaces
         Task RemoveUserFromProject(string userId, int projectId);
 
         Task AddUserToProjectAsync(string userEmail, int projecId);
-
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Components;
 
-using Microsoft.AspNetCore.Components;
+using System;
+using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
@@ -16,24 +13,20 @@ namespace VirheBT.Pages
     {
         [Parameter]
         public int ProjectId { get; set; }
-
         [Parameter]
         public int IssueId { get; set; }
-
-        private Issue Issue { get; set; }
+        public Issue Issue { get; set; }
 
         [Inject]
-        IIssueService IssueService { get; set; }
-
+        private IIssueService IssueService { get; set; }
         private string CreatedBy { get; set; }
         private string? AssignedTo { get; set; }
-
         private IssueType IssueType { get; set; }
         private IssueStatus IssueStatus { get; set; }
         private IssuePriority IssuePriority { get; set; }
 
         private string Title { get; set; }
-        private string Descripton { get; set; }
+        private string Description { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
@@ -41,20 +34,19 @@ namespace VirheBT.Pages
             Title = Issue.Title;
             CreatedBy = Issue.CreatedBy.Email;
             AssignedTo = Issue.AssignedTo?.Email ?? " ";
-            Descripton = Issue.Description;
+            Description = Issue.Description;
             IssueType = Issue.Type;
             IssueStatus = Issue.Status;
             IssuePriority = Issue.Priority;
 
         }
 
-
         private async Task OnEditAsync()
         {
             var issueEdit = new Issue
             {
                 Title = Title,
-                Description = Descripton,
+                Description = Description,
                 Type = IssueType,
                 CreatedBy = Issue.CreatedBy,
                 AssignedTo = Issue.AssignedTo,
@@ -65,7 +57,6 @@ namespace VirheBT.Pages
 
             await IssueService.EditIssueAsync(ProjectId, IssueId, issueEdit);
             StateHasChanged();
-
         }
     }
 }

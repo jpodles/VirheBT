@@ -1,32 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 using Blazorise;
 using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
+using Blazorise.RichTextEdit;
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Blazorise.Icons.FontAwesome;
+
+using System;
+
 using VirheBT.Areas.Identity;
-using Blazorise.RichTextEdit;
-using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Infrastructure.Data;
-using AutoMapper;
-using VirheBT.Services.Interfaces;
-using VirheBT.Services.Implementations;
-using VirheBT.Infrastructure.Repositories.Interfaces;
+using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Infrastructure.Repositories.Implementations;
+using VirheBT.Infrastructure.Repositories.Interfaces;
+using VirheBT.Services.Implementations;
+using VirheBT.Services.Interfaces;
 using VirheBT.State;
 
 namespace VirheBT
@@ -44,7 +38,6 @@ namespace VirheBT
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-
             services
              .AddBlazorise()
              .AddBootstrapProviders()
@@ -56,8 +49,6 @@ namespace VirheBT
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
-
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -72,13 +63,8 @@ namespace VirheBT
             services.AddScoped<IIssueCommentRepository, IssueCommentRepository>();
             services.AddScoped<IIssueHistoryRepository, IssueHistoryRepository>();
 
-
-
             services.AddScoped<IIssueRepository, IssueRepository>();
             services.AddScoped<IIssueService, IssueService>();
-
-
-
 
             services.AddSingleton<IAppState, AppState>();
 
@@ -98,7 +84,6 @@ namespace VirheBT
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-
             }
 
             app.UseHttpsRedirection();

@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-
 using VirheBT.Infrastructure.Data.Models;
-using VirheBT.Services.Implementations;
 using VirheBT.Services.Interfaces;
 using VirheBT.Shared.Enums;
 
@@ -21,61 +18,52 @@ namespace VirheBT.Pages
         public int ProjectId { get; set; }
 
         [Inject]
-        IProjectService ProjectService { get; set; }
-
-
-        [Inject]
-        IIssueService IssueService { get; set; }
+        private IProjectService ProjectService { get; set; }
 
         [Inject]
-        IApplicationUserService ApplicationUserService { get; set; }
+        private IIssueService IssueService { get; set; }
+
+        [Inject]
+        private IApplicationUserService ApplicationUserService { get; set; }
 
         //[Inject]
         //ProtectedSessionStorage ProtectedSessionStorage { get; set; }
 
-
         //private int CurrentProjectId { get; set; }
 
         private string SelectedUser { get; set; }
+
         //private string selectedSearchValue;
-        void AssignedUserHandler(string newValue)
+        private void AssignedUserHandler(string newValue)
         {
             SelectedUser = newValue;
             Console.WriteLine("search value =" + SelectedUser);
         }
-
 
         private string Description { get; set; }
         private string Title { get; set; }
         private IssueType CheckedIssueType { get; set; }
         private IssuePriority CheckedIssuePriority { get; set; }
 
-
         [Inject]
-        AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
+        private List<ApplicationUser> projectUsers = new List<ApplicationUser>();
 
-        List<ApplicationUser> projectUsers = new List<ApplicationUser>();
-
-        Project Project { get; set; }
+        private Project Project { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
-
             projectUsers = await ProjectService.GetProjectUsersAsync(ProjectId);
             //Project = await ProjectService.GetProjectAsync(ProjectId)
-
-
-
         }
 
         //protected async Task OnAfterRenderAsync(bool firstRender)
         //{
-
         //    //projectUsers = await ProjectService.GetProjectUsersAsync(CurrentProjectId);
         //}
 
-        async Task OnAddIssue()
+        private async Task OnAddIssue()
         {
             var authState = await AuthenticationStateProvider
                .GetAuthenticationStateAsync();

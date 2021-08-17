@@ -3,8 +3,6 @@
 @using VirheBT.Shared.Enums
 @using VirheBT.Infrastructure.Data.Models
 
-
-
 <Card Margin="Margin.Is4.OnY" WhiteText="false">
     <CardHeader>
         <CardTitle>MY TEAM</CardTitle>
@@ -34,12 +32,8 @@
                         </Button>
                     </Column>
                 </Row>
-
-
-
             </CardBody>
         </Card>
-
 
         <DataGrid @ref="dataGrid"
                   TItem="ApplicationUser"
@@ -119,7 +113,7 @@
                     <FilterTemplate>
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
                                 <SelectItem Value="@("*")">All</SelectItem>
                                 @foreach (var item in Enum.GetValues(typeof(UserRole)))
                                 {
@@ -152,11 +146,8 @@
                 </DataGridCommandColumn>
             </DataGridColumns>
         </DataGrid>
-
     </CardBody>
-
 </Card>
-
 
 @code{
 

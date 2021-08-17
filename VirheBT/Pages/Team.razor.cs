@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-using Blazorise.DataGrid;
+﻿using Blazorise.DataGrid;
 
 using Microsoft.AspNetCore.Components;
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
@@ -15,7 +12,6 @@ using VirheBT.Shared.Enums;
 
 namespace VirheBT.Pages
 {
-
     public class UserShortDto
     {
         public int Id { get; set; }
@@ -23,63 +19,60 @@ namespace VirheBT.Pages
         public string Email { get; set; }
         public UserRole UserRole { get; set; }
     }
+
     public partial class Team
     {
         [Parameter]
         public int ProjectId { get; set; }
 
         [Inject]
-        IProjectService ProjectService { get; set; }
+        private IProjectService ProjectService { get; set; }
 
         [Inject]
-        IApplicationUserService ApplicationUserService { get; set; }
+        private IApplicationUserService ApplicationUserService { get; set; }
 
-        bool editable = true;
-        bool sortable = true;
-        bool filterable = true;
-        bool showPager = true;
-        DataGridEditMode editMode = DataGridEditMode.Popup;
-        DataGridSortMode sortMode = DataGridSortMode.Single;
-        DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
-        DataGridCommandMode commandsMode = DataGridCommandMode.Default;
+        private bool editable = true;
+        private bool sortable = true;
+        private bool filterable = true;
+        private bool showPager = true;
+        private DataGridEditMode editMode = DataGridEditMode.Popup;
+        private DataGridSortMode sortMode = DataGridSortMode.Single;
+        private DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
+        private DataGridCommandMode commandsMode = DataGridCommandMode.Default;
         public DataGrid<ApplicationUser> dataGrid;
         public int currentPage { get; set; } = 1;
 
+        private List<ApplicationUser> data = new List<ApplicationUser>();
 
-        List<ApplicationUser> data = new List<ApplicationUser>();
+        private List<ApplicationUser> appUsers = new List<ApplicationUser>();
 
-        List<ApplicationUser> appUsers = new List<ApplicationUser>();
         protected async override Task OnInitializedAsync()
         {
             data = await ProjectService.GetProjectUsersAsync(ProjectId);
             appUsers = await ApplicationUserService.GetApplicationUsersAsync();
         }
 
-
-
         private string selectedSearchValue { get; set; }
 
-        void MySearchHandler(string newValue)
+        private void MySearchHandler(string newValue)
         {
             selectedSearchValue = newValue;
             Console.WriteLine("search value =" + selectedSearchValue);
         }
 
-        async Task OnAddUserToProject()
+        private async Task OnAddUserToProject()
         {
             await ProjectService.AddUserToProjectAsync(selectedSearchValue, ProjectId);
             data = await ProjectService.GetProjectUsersAsync(ProjectId);
             StateHasChanged();
         }
 
-        async Task OnRowRemoved(ApplicationUser applicationUser)
+        private async Task OnRowRemoved(ApplicationUser applicationUser)
         {
-
             await ProjectService.RemoveUserFromProject(applicationUser.Id, ProjectId);
             data = await ProjectService.GetProjectUsersAsync(ProjectId);
             StateHasChanged();
         }
-
 
         //List<UserShortDto> data = new List<UserShortDto>
         //{
@@ -127,6 +120,4 @@ namespace VirheBT.Pages
         //    }
         //};
     }
-
-
 }

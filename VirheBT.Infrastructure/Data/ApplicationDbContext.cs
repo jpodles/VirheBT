@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
-
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
+using System;
 
 using VirheBT.Infrastructure.Data.Models;
 
@@ -57,7 +56,6 @@ namespace VirheBT.Infrastructure.Data
                      Description = "This is test project",
                      Created = DateTime.Now,
                      Status = Shared.Enums.ProjectStatus.OnTrack,
-
                  }
                 );
 

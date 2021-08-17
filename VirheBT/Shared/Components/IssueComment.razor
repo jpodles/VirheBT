@@ -3,7 +3,6 @@
         <Button Clicked="@(()=>commentSectionVisible = !commentSectionVisible)" Style="width:100%">
             Comments
 
-
             @if (commentSectionVisible == true)
             {
                 <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
@@ -12,7 +11,6 @@
             {
                 <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
             }
-
         </Button>
     </CollapseHeader>
     <CollapseBody>
@@ -33,30 +31,9 @@
                 <CardText>Komentarz 1</CardText>
             </CardBody>
         </Card>
-        <Card>
-            <CardBody Padding="Padding.Is2.OnY">
-                <CardTitle>Marek pietrzak </CardTitle>
-                <CardText>Komentarz 1</CardText>
-            </CardBody>
-        </Card>
-        <Card>
-            <CardBody Padding="Padding.Is2.OnY">
-                <CardTitle>Marek pietrzak </CardTitle>
-                <CardText>Komentarz 1</CardText>
-
-            </CardBody>
-        </Card>
-        <Card>
-            <CardBody Padding="Padding.Is2.OnY">
-                <CardTitle>Marek pietrzak </CardTitle>
-                <CardText>Komentarz 1</CardText>
-            </CardBody>
-        </Card>
 
     </CollapseBody>
 </Collapse>
-
-
 
 @code{
 

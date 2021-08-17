@@ -7,7 +7,6 @@
 
         <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/projects" Margin="Margin.Is3">
             <Icon Name="IconName.ArrowLeft">Back</Icon>
-
         </Button>
     </Column>
     <Column ColumnSize="ColumnSize.Is4">
@@ -15,13 +14,9 @@
             <CardBody>
                 <h3>
                     @Name
-
                 </h3>
             </CardBody>
-
-
         </Card>
-
     </Column>
     <Column ColumnSize="ColumnSize.Is3">
         <Card Background="Background.Transparent" Style="border: none;">
@@ -37,16 +32,12 @@
                         </Card>
                     </Addon>
                 </Addons>
-
-
             </CardBody>
-
         </Card>
     </Column>
     <Column ColumnSize="ColumnSize.Is4" Margin="Margin.Is2.OnY">
         <Button Color="Color.Info" Size="Size.Medium" Type="ButtonType.Button" Clicked="@SwitchToProject" Margin="Margin.Is1">
             SWITCH TO PROJECT
-
         </Button>
 
         <Button Color="Color.Warning" Size="Size.Medium" Type="ButtonType.Link" To="@($"projects/{ProjectId}/editproject")" Margin="Margin.Is1">
@@ -56,8 +47,6 @@
                 DELETE
             </Button>*@
     </Column>
-
-
 </Row>
 <Divider Style="margin-top: 0px" Padding="Padding.Is0" />
 <Row>
@@ -74,7 +63,6 @@
                     @Description
                 </CardText>
             </CardBody>
-
         </Card>
         <Card Margin="Margin.Is3.OnY">
             <CardHeader>
@@ -87,7 +75,6 @@
                     @Created
                 </CardText>
             </CardBody>
-
         </Card>
         <Card Margin="Margin.Is3.OnY">
             <CardHeader>
@@ -129,12 +116,8 @@
                         @DoneCount
                     </Column>
                 </Row>
-
             </CardBody>
-
         </Card>
-
-
     </Column>
     <Column ColumnSize="ColumnSize.Is7">
         <Card>
@@ -219,7 +202,7 @@
                             <FilterTemplate>
                                 @{
                                     var selectedValue = @context.SearchValue ?? "*";
-                                    <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                                    <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
                                         <SelectItem Value="@("*")">All</SelectItem>
                                         @foreach (var item in Enum.GetValues(typeof(UserRole)))
                                         {
@@ -229,14 +212,9 @@
                                 }
                             </FilterTemplate>
                         </DataGridColumn>
-
-
                     </DataGridColumns>
                 </DataGrid>
             </CardBody>
         </Card>
     </Column>
-
-
 </Row>
-

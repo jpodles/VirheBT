@@ -1,29 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-
-using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
 
 namespace VirheBT.Pages
 {
     public partial class CreateProject
     {
-        string title;
-        string description;
-
-
-        [Inject]
-        AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+        private string title;
+        private string description;
 
         [Inject]
-        IProjectService ProjectService { get; set; }
+        private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+        [Inject]
+        private IProjectService ProjectService { get; set; }
 
         public async void OnCreateAsync()
         {
@@ -34,7 +25,6 @@ namespace VirheBT.Pages
             ProjectService.CreateProject(title, description, user);
 
             NavigationManager.NavigateTo("/projects");
-
         }
     }
 }

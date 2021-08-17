@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Blazorise.Charts;
+﻿using Blazorise.Charts;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 using VirheBT.Infrastructure.Data.Models;
-using VirheBT.Services.Implementations;
 using VirheBT.Services.Interfaces;
 using VirheBT.Shared.Enums;
 
@@ -18,11 +17,10 @@ namespace VirheBT.Pages
     public partial class Dashboard
     {
         [Inject]
-        ProtectedSessionStorage ProtectedSessionStore { get; set; }
+        private ProtectedSessionStorage ProtectedSessionStore { get; set; }
 
         [Parameter]
         public int ProjectId { get; set; }
-
 
         private Chart<int> bugsPriorityChart;
         private Chart<int> featuresPriorityChart;
@@ -53,6 +51,7 @@ namespace VirheBT.Pages
 
         // private Random random = new Random(DateTime.Now.Millisecond);
         private List<Issue> issues = new List<Issue>();
+
         private int ToDoCount { get; set; }
         private int InProgressCount { get; set; }
         private int DoneCount { get; set; }
@@ -67,10 +66,10 @@ namespace VirheBT.Pages
         private int FeaturesHigh { get; set; }
 
         [Inject]
-        IProjectService ProjectService { get; set; }
+        private IProjectService ProjectService { get; set; }
 
         [Inject]
-        IIssueService IssueService { get; set; }
+        private IIssueService IssueService { get; set; }
 
         //private string CurrentProjectId { get; set; }
 
@@ -85,7 +84,6 @@ namespace VirheBT.Pages
             Name = CurrentProject.Name;
             Description = CurrentProject.Description;
 
-
             CalculateCount();
 
             await Task.WhenAll(
@@ -94,24 +92,20 @@ namespace VirheBT.Pages
                  HandleRedraw(allFeatureBugsInProjectChart, GetFeaturesBugsChartDataset, _bugFeatureLabels),
                  HandleRedraw(allTasksStatusInProjectChart, GetAllTaskStatusChartDataset, _taskStatusLabels),
                  HandleRedraw(yourTasksChart, GetUserTasksChartDataset, _taskStatusLabels));
-
-
         }
-
-
 
         private void CalculateCount()
         {
             ToDoCount = issues
-             .Where(x => x.Status == IssueStatus.ToDo).Count();
+             .Count(x => x.Status == IssueStatus.ToDo);
             InProgressCount = issues
-                .Where(x => x.Status == IssueStatus.InProgress).Count();
+                .Count(x => x.Status == IssueStatus.InProgress);
             DoneCount = issues
-                .Where(x => x.Status == IssueStatus.Done).Count();
+                .Count(x => x.Status == IssueStatus.Done);
             Bugs = issues
-              .Where(x => x.Type == IssueType.Bug).Count();
+              .Count(x => x.Type == IssueType.Bug);
             Features = issues
-                .Where(x => x.Type == IssueType.Feature).Count();
+                .Count(x => x.Type == IssueType.Feature);
 
             BugLow = issues.Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.Low);
             BugNormal = issues
@@ -124,8 +118,6 @@ namespace VirheBT.Pages
                 .Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.Normal);
             FeaturesHigh = issues
                  .Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.High);
-
-
         }
 
         private async Task HandleRedraw<TDataSet, TItem, TOptions, TModel>
@@ -135,7 +127,6 @@ namespace VirheBT.Pages
             where TModel : ChartModel
         {
             await chart.Clear();
-
             await chart.AddLabelsDatasetsAndUpdate(labels, getDataSet());
         }
 
@@ -164,7 +155,6 @@ namespace VirheBT.Pages
         private PieChartDataset<int> GetFeaturesBugsChartDataset()
         {
             return new PieChartDataset<int>
-
             {
                 Data = new List<int> { Bugs, Features },
                 BackgroundColor = _featuresBugsColors,

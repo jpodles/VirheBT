@@ -2,7 +2,6 @@
 @using VirheBT.Infrastructure.Data.Models
 @using VirheBT.Shared.Enums
 
-
 <Card Margin="Margin.Is4.OnY" WhiteText="false">
     <CardHeader>
         <CardTitle>Projects</CardTitle>
@@ -47,17 +46,13 @@
 
                     <DisplayTemplate>
 
-
                         <Link To=@($"projects/{context.ProjectId}")>
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
 
                             @context.Name
-
                         </Card>
                         </Link>
-
                     </DisplayTemplate>
-
                 </DataGridColumn>
 
                 <DataGridColumn TItem="Project"
@@ -69,16 +64,14 @@
                     <FilterTemplate>
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
                                 <SelectItem Value="@("michałek")">ME</SelectItem>
                                 <SelectItem Value="@("*")">All</SelectItem>
-
 
                                 @foreach (var item in data.Select(p => p.Maintainer).Distinct())
                                 {
                                     <SelectItem Value="@item">@item</SelectItem>
                                 }
-
                             </Select>
                         }
                     </FilterTemplate>
@@ -108,14 +101,11 @@
                             }
 
                         }
-
-
-
                     </DisplayTemplate>
                     <FilterTemplate>
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
                                 <SelectItem Value="@("*")">All</SelectItem>
                                 @foreach (var item in Enum.GetValues(typeof(ProjectStatus)))
                                 {
@@ -125,8 +115,6 @@
                         }
                     </FilterTemplate>
                 </DataGridColumn>
-
-
 
                 <DataGridCommandColumn TItem="Project" Width="50px" TextAlignment="TextAlignment.Center">
                     <ClearFilterCommandTemplate>
@@ -147,14 +135,8 @@
                     <EditCommandTemplate>
                         <Button Color="Color.Primary" Clicked="@context.Clicked" Style="display:none">Edit</Button>
                     </EditCommandTemplate>
-
-
                 </DataGridCommandColumn>
-
-
             </DataGridColumns>
-
         </DataGrid>
-
     </CardBody>
 </Card>

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using AutoMapper;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using AutoMapper;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Infrastructure.Repositories.Interfaces;

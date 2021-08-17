@@ -32,10 +32,8 @@
                         <FieldLabel>Created By:</FieldLabel>
                         <FieldBody>
                             <TextEdit Disabled="true" Placeholder="@context.User.Identity.Name" />
-
                         </FieldBody>
                     </Field>
-
                 </Column>
                 <Column>
                     <Field>
@@ -65,7 +63,6 @@
                         <Radio TValue="IssueType" Value="@(IssueType.Feature)" Style="color: forestgreen">
                             <label><Icon Name="IconName.PlusCircle" /> <span>Feature</span></label>
                         </Radio>
-
                     </RadioGroup>
                 </Column>
             </Row>
@@ -101,8 +98,6 @@
                     <Button Color="Color.Primary" Clicked="@OnAddIssue">Add Issue</Button>
                 </Column>
             </Row>
-
         </Container>
     </Authorized>
-
 </AuthorizeView>

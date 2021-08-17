@@ -1,7 +1,9 @@
 ﻿@page "/"
 
 @inject ProtectedSessionStorage ProtectedSessionStore
+
 <AuthorizeView>
+
     <NotAuthorized>
         <Container Margin="Margin.Is5.OnY">
             <Row Margin="Margin.Is5.OnY">
@@ -21,7 +23,6 @@
 
                                         <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.SignInAlt"></Icon>
                                         Log In
-
                                     </Button>
                                 </Column>
                                 <Column ColumnSize="ColumnSize.Is6">
@@ -32,21 +33,17 @@
                                         Register
                                     </Button>
                                 </Column>
-
                             </Row>
                         </CardBody>
                     </Card>
                 </Column>
                 <Column ColumnSize="ColumnSize.Is2"></Column>
-
             </Row>
-
         </Container>
     </NotAuthorized>
     <Authorized>
         <Projects></Projects>
     </Authorized>
-
 </AuthorizeView>
 
 @code {

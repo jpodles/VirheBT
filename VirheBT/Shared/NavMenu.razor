@@ -25,7 +25,6 @@
                     @if (currentProject != 0)
                     {
 
-
                         <BarItem>
                             <BarLink To="@($"project/{currentProject}/dashboard")" Class="activated">
                                 <BarIcon IconName="IconName.Dashboard" />
@@ -45,7 +44,6 @@
                             </BarLink>
                         </BarItem>
 
-
                         <BarItem>
                             <BarLink To="@($"project/{currentProject}/createissue")">
                                 <BarIcon IconName="IconName.Add" />
@@ -54,7 +52,6 @@
                         </BarItem>
                         <Divider></Divider>
                     }
-
 
                     <BarItem>
                         <BarItem>
@@ -80,21 +77,10 @@
                         </BarItem>
                     </BarItem>
 
-
-
                     <Divider></Divider>
                 </BarStart>
-
-
-
-
-
             </BarMenu>
             <BarToggler />
         </Bar>
     </Authorized>
 </AuthorizeView>
-
-
-
-

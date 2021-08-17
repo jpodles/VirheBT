@@ -7,22 +7,17 @@
 
         <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="@($"project/{ProjectId}/issues")">
             <Icon Name="IconName.ArrowLeft">Back</Icon>
-
         </Button>
     </Column>
     <Column ColumnSize="ColumnSize.Is7">
         <Card Background="Background.Transparent" Style="border: none;">
             <TextEdit Size="Size.Large" @bind-Text="@Title" />
         </Card>
-
     </Column>
     <Column ColumnSize="ColumnSize.Is4">
 
         <Button Size="Size.Medium" Float="Float.Right" Color="Color.Info" Clicked="@OnEditAsync">Save Changes</Button>
-
-
     </Column>
-
 </Row>
 <Divider Style="margin-top: 0px" Padding="Padding.Is0" />
 <Row>
@@ -42,22 +37,17 @@
                             <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
                         }
                     </Button>
-
                 </CollapseHeader>
                 <CollapseBody Style="height: 400px">
-                    <MemoEdit Rows="10" @bind-Text="@Descripton"></MemoEdit>
-
-
+                    <MemoEdit Rows="10" @bind-Text="@Description"></MemoEdit>
                 </CollapseBody>
             </Collapse>
             @*COMMENT SECTION*@
-            @*<IssueComment></IssueComment>*@
+            <IssueComment></IssueComment>
         </Accordion>
-
     </Column>
     <Column ColumnSize="ColumnSize.Is5">
         @*ISSUE DEATILS SECTION*@
-        @*<DetailsComponent Issue="@Issue"></DetailsComponent>*@
         <Card>
             <CardBody>
                 <Row>
@@ -73,7 +63,7 @@
                         Assigned To:
                     </Column>
                     <Column ColumnSize="ColumnSize.Is8">
-                        @AssignedTo
+                        @AssignedTo @*dodać możliwość zmiany przypisania*@
                     </Column>
                 </Row>
                 <Divider></Divider>
@@ -86,7 +76,6 @@
                             <SelectItem Value="@IssueStatus.ToDo">To Do</SelectItem>
                             <SelectItem Value="@IssueStatus.InProgress">In Progress</SelectItem>
                             <SelectItem Value="@IssueStatus.Done">Done</SelectItem>
-
                         </Select>
                     </Column>
                 </Row>
@@ -95,7 +84,6 @@
                         Issue Type:
                     </Column>
                     <Column>
-
                         <RadioGroup TValue="IssueType" Name="test" Color="Color.Light" @bind-CheckedValue="@IssueType">
                             <Radio TValue="IssueType" Value="@(IssueType.Bug)" Style="color: red">
                                 <label><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>Bug</span></label>
@@ -103,7 +91,6 @@
                             <Radio TValue="IssueType" Value="@(IssueType.Feature)" Style="color: forestgreen">
                                 <label><Icon Name="IconName.PlusCircle" /> <span>Feature</span></label>
                             </Radio>
-
                         </RadioGroup>
                     </Column>
                 </Row>
@@ -129,18 +116,28 @@
             </CardBody>
         </Card>
 
-
         @*ISSUE HISTORY SECTION*@
-        @*<IssueHistory></IssueHistory>*@
-
-
+        <Card Margin="Margin.Is2.OnY">
+            <CardHeader>
+                Isue History
+            </CardHeader>
+            <CardBody>
+                <Table>
+                    <TableBody>
+                        <TableRow>
+                            <TableRowCell>Marek</TableRowCell>
+                            <TableRowCell>issue closed</TableRowCell>
+                            <TableRowCell>15/05/2021</TableRowCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </CardBody>
+        </Card>
     </Column>
 </Row>
 
 @code{
 
-
     bool descSectionVisible = true;
 
 }
-

@@ -47,17 +47,13 @@
 
                     <DisplayTemplate>
 
-
                         <Link To=@($"project/{ProjectId}/issue/{context.IssueId}")>
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
 
                             @context.Title
-
                         </Card>
                         </Link>
-
                     </DisplayTemplate>
-
                 </DataGridColumn>
 
                 <DataGridColumn TItem="Issue" Field="@nameof(Issue.AssignedTo)" Caption="Assigned To" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
@@ -67,16 +63,14 @@
                     <FilterTemplate>
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
                                 <SelectItem Value="@("michałek")">ME</SelectItem>
                                 <SelectItem Value="@("*")">All</SelectItem>
-
 
                                 @foreach (var item in issues.Select(p => p.AssignedTo).Distinct())
                                 {
                                     <SelectItem Value="@item">@item</SelectItem>
                                 }
-
                             </Select>
                         }
                     </FilterTemplate>
@@ -105,7 +99,7 @@
                     <FilterTemplate>
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
                                 <SelectItem Value="@("*")">All</SelectItem>
                                 @foreach (var item in Enum.GetValues(typeof(IssueType)))
                                 {
@@ -144,7 +138,7 @@
                     <FilterTemplate>
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
                                 <SelectItem Value="@("*")">All</SelectItem>
                                 @foreach (var item in Enum.GetValues(typeof(IssuePriority)))
                                 {
@@ -179,14 +173,12 @@
                             }
 
                         }
-
-
                     </DisplayTemplate>
 
                     <FilterTemplate>
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
                                 <SelectItem Value="@("*")">All</SelectItem>
                                 @foreach (var item in Enum.GetValues(typeof(IssueStatus)))
                                 {
@@ -195,7 +187,6 @@
                             </Select>
                         }
                     </FilterTemplate>
-
                 </DataGridColumn>
 
                 <DataGridCommandColumn TItem="Issue" Width="87px" TextAlignment="TextAlignment.Center">
@@ -216,12 +207,8 @@
                     <EditCommandTemplate>
                         <Button Color="Color.Primary" Clicked="@context.Clicked" Style="display:none">Edit</Button>
                     </EditCommandTemplate>
-
-
                 </DataGridCommandColumn>
-
             </DataGridColumns>
         </DataGrid>
-
     </CardBody>
 </Card>

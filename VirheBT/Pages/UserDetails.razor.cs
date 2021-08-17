@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Identity;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
@@ -17,7 +14,6 @@ namespace VirheBT.Pages
         [Parameter]
         public string UserId { get; set; }
 
-
         [Inject]
         public IApplicationUserService ApplicationUserService { get; set; }
 
@@ -27,7 +23,6 @@ namespace VirheBT.Pages
         private string PhoneNumber { get; set; }
 
         private List<Project> Projects = new List<Project>();
-
 
         protected override async Task OnInitializedAsync()
         {

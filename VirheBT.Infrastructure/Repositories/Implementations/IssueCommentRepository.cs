@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
+using VirheBT.Infrastructure.Data;
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Infrastructure.Repositories.Interfaces;
 
@@ -11,29 +13,40 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
 {
     public class IssueCommentRepository : IIssueCommentRepository
     {
-        public Task AddCommentAsync(int projectId, int issueId, IssueComment comment)
+        private ApplicationDbContext context;
+
+        public IssueCommentRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            this.context = context;
         }
 
-        public Task DeleteCommentAsync(int projectId, int issueId)
+        public async Task AddCommentAsync(IssueComment comment)
         {
-            throw new NotImplementedException();
+            context.IssueComments.Add(comment);
+            await context.SaveChangesAsync();
         }
 
-        public Task EditCommentAsync(int projectId, int issueId, IssueComment comment)
+        public async Task DeleteCommentAsync(IssueComment comment)
         {
-            throw new NotImplementedException();
+            context.IssueComments.Remove(comment);
+            await context.SaveChangesAsync();
         }
 
-        public Task<IssueComment> GetIssueCommentAsync(int projectId, int issueId, int commentId)
+        public async Task EditCommentAsync(IssueComment comment)
         {
-            throw new NotImplementedException();
+            context.IssueComments.Update(comment);
+            await context.SaveChangesAsync();
+
         }
 
-        public Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(int projectId, int issueId)
+        public async Task<IssueComment> GetIssueCommentAsync(int issueId, int commentId)
         {
-            throw new NotImplementedException();
+            return await context.IssueComments.Where(x => x.IssueId == issueId && x.CommentId == commentId).FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<IssueComment>> GetIssueCommentsAsync(int issueId)
+        {
+            return await context.IssueComments.Where(x => x.IssueId == issueId).ToListAsync();
         }
     }
 }

@@ -8,7 +8,6 @@
               ToolbarPosition="Placement.Bottom"
               Style="height: 280px">
     <Editor>
-
     </Editor>
     <Toolbar>
         <RichTextEditToolbarGroup>
@@ -32,17 +31,11 @@
         <!-- Custom toolbar content -->
         <RichTextEditToolbarGroup Float="Float.Right">
             <Button Clicked="@OnSave"><Icon Name="IconName.Save" /> </Button>
-
         </RichTextEditToolbarGroup>
     </Toolbar>
-
 </RichTextEdit>
 
-
-
-
 @code{
-
 
     private RichTextEdit richTextEditRef;
     private bool readOnly = false;
@@ -64,4 +57,3 @@
         await richTextEditRef.ClearAsync();
     }
 }
-

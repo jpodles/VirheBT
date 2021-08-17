@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VirheBT.Shared.Enums
+﻿namespace VirheBT.Shared.Enums
 {
-
     public enum UserRole
     {
         Admin,
@@ -20,6 +13,4 @@ namespace VirheBT.Shared.Enums
         Active,
         Inactive
     }
-
-
 }

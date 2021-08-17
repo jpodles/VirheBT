@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-using Blazorise.DataGrid;
+﻿using Blazorise.DataGrid;
 
 using Microsoft.AspNetCore.Components;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
@@ -17,25 +13,24 @@ namespace VirheBT.Pages
 {
     public partial class Issues
     {
-        bool editable = true;
-        bool sortable = true;
-        bool filterable = true;
-        bool showPager = true;
-        DataGridEditMode editMode = DataGridEditMode.Popup;
-        DataGridSortMode sortMode = DataGridSortMode.Single;
-        DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
-        DataGridCommandMode commandsMode = DataGridCommandMode.Default;
+        private bool editable = true;
+        private bool sortable = true;
+        private bool filterable = true;
+        private bool showPager = true;
+        private DataGridEditMode editMode = DataGridEditMode.Popup;
+        private DataGridSortMode sortMode = DataGridSortMode.Single;
+        private DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
+        private DataGridCommandMode commandsMode = DataGridCommandMode.Default;
         public DataGrid<Issue> dataGrid;
         public int currentPage { get; set; } = 1;
-
 
         [Parameter]
         public int ProjectId { get; set; }
 
         [Inject]
-        IIssueService IssueService { get; set; }
+        private IIssueService IssueService { get; set; }
 
-        List<Issue> issues = new List<Issue>();
+        private List<Issue> issues = new List<Issue>();
 
         protected async override Task OnInitializedAsync()
         {
@@ -316,21 +311,15 @@ namespace VirheBT.Pages
         //    }
         //};
 
-
-
         private async Task OnRowRemoved(Issue issue)
         {
             await IssueService.DeleteIssueAsync(ProjectId, issue.IssueId);
             issues = await IssueService.GetIssuesAsync(ProjectId);
         }
-
-
     }
-
 
     public class IssueShortDto
     {
-
         public int ID { get; set; }
         public string Title { get; set; }
         public IssueStatus Status { get; set; }
@@ -338,9 +327,5 @@ namespace VirheBT.Pages
         public IssueType Type { get; set; }
 
         public string AssignedTo { get; set; }
-
-
-
-
     }
 }

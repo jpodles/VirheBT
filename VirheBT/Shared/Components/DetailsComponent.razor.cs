@@ -13,15 +13,11 @@
 //{
 //    public partial class DetailsComponent
 //    {
-
-
 //        [Parameter]
 //        public Issue Issue { get; set; }
 
 //        protected override void OnInitialized()
 //        {
-
-
 //        }
 //        protected override void OnAfterRender(bool firstRender)
 //        {
