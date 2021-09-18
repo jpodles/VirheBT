@@ -1,19 +1,20 @@
 ﻿@inherits LayoutComponentBase
+<Layout>
+    <LayoutHeader Fixed="true">
+        <AppBarMenu></AppBarMenu>
+    </LayoutHeader>
 
-<Layout Sider="true">
-    <LayoutSider>
-        <LayoutSiderContent>
+    <Layout Sider="true">
+        <LayoutSider>
+            <LayoutSiderContent>
+                <NavMenu></NavMenu>
+            </LayoutSiderContent>
+        </LayoutSider>
+        <Layout>
 
-            <NavMenu></NavMenu>
-        </LayoutSiderContent>
-    </LayoutSider>
-    <Layout>
-        <LayoutHeader Fixed="true">
-
-            <AppBarMenu></AppBarMenu>
-        </LayoutHeader>
-        <LayoutContent Padding="Padding.Is4.OnX">
-            @Body
-        </LayoutContent>
+            <LayoutContent Padding="Padding.Is4.OnX">
+                @Body
+            </LayoutContent>
+        </Layout>
     </Layout>
 </Layout>

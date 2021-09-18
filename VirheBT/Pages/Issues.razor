@@ -2,7 +2,7 @@
 @using VirheBT.Shared.Enums
 @using VirheBT.Infrastructure.Data.Models
 
-<Card Margin="Margin.Is4.OnY" WhiteText="false">
+<Card Padding="Padding.Is4.OnY" WhiteText="false">
     <CardHeader>
         <CardTitle>Issues</CardTitle>
     </CardHeader>
@@ -64,7 +64,7 @@
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
                             <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
-                                <SelectItem Value="@("michałek")">ME</SelectItem>
+                                <SelectItem Value="@(HttpContext.User.Identity.Name)">ME</SelectItem>
                                 <SelectItem Value="@("*")">All</SelectItem>
 
                                 @foreach (var item in issues.Select(p => p.AssignedTo).Distinct())

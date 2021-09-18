@@ -1,44 +1,44 @@
-﻿<Collapse Visible="@commentSectionVisible">
-    <CollapseHeader Padding="Padding.Is0">
-        <Button Clicked="@(()=>commentSectionVisible = !commentSectionVisible)" Style="width:100%">
-            Comments
+﻿@*<Collapse Visible="@commentSectionVisible">
+        <CollapseHeader Padding="Padding.Is0">
+            <Button Clicked="@(()=>commentSectionVisible = !commentSectionVisible)" Style="width:100%">
+                Comments
 
-            @if (commentSectionVisible == true)
-            {
-                <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
-            }
-            @if (commentSectionVisible == false)
-            {
-                <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
-            }
-        </Button>
-    </CollapseHeader>
-    <CollapseBody>
-        <Button Margin="Margin.Is1.OnY" Color="Color.Info" @onclick="() => CommentModal.ShowModal()">Add Comment</Button>
-        <CommentModal @ref="CommentModal"></CommentModal>
-        <Card>
-            <CardBody Padding="Padding.Is2.OnY">
-                <CardTitle>
-                    Marek pietrzak
-                    <span style="float:right"> 15/05/2021</span>
-                </CardTitle>
-                <CardText>Komentarz 1</CardText>
-            </CardBody>
-        </Card>
-        <Card>
-            <CardBody Padding="Padding.Is2.OnY">
-                <CardTitle>Marek pietrzak </CardTitle>
-                <CardText>Komentarz 1</CardText>
-            </CardBody>
-        </Card>
+                @if (commentSectionVisible == true)
+                {
+                    <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
+                }
+                @if (commentSectionVisible == false)
+                {
+                    <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
+                }
+            </Button>
+        </CollapseHeader>
+        <CollapseBody>
+            <Button Margin="Margin.Is1.OnY" Color="Color.Info" @onclick="() => CommentModal.ShowModal()">Add Comment</Button>
+            <CommentModal @ref="CommentModal"></CommentModal>
+            <Card>
+                <CardBody Padding="Padding.Is2.OnY">
+                    <CardTitle>
+                        Marek pietrzak
+                        <span style="float:right"> 15/05/2021</span>
+                    </CardTitle>
+                    <CardText>Komentarz 1</CardText>
+                </CardBody>
+            </Card>
+            <Card>
+                <CardBody Padding="Padding.Is2.OnY">
+                    <CardTitle>Marek pietrzak </CardTitle>
+                    <CardText>Komentarz 1</CardText>
+                </CardBody>
+            </Card>
 
-    </CollapseBody>
-</Collapse>
+        </CollapseBody>
+    </Collapse>
 
-@code{
+    @code{
 
-    public CommentModal CommentModal { get; set; }
+        public CommentModal CommentModal { get; set; }
 
-    bool commentSectionVisible = false;
+        bool commentSectionVisible = false;
 
-}
+    }*@

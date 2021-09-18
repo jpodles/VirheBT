@@ -44,9 +44,11 @@ namespace VirheBT
              .AddFontAwesomeIcons()
              .AddBlazoriseRichTextEdit();
 
+            services.AddScoped<DbContext, ApplicationDbContext>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    x => x.MigrationsAssembly("VirheBT.Infrastructure")));
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 

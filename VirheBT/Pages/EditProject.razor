@@ -1,7 +1,7 @@
 ﻿@page "/projects/{ProjectId:int}/editproject"
 <AuthorizeView>
     <Authorized>
-        <Container Margin="Margin.Is5.OnY">
+        <Container Padding="Padding.Is5.OnY">
             <Row Margin="Margin.Is3.OnY">
                 <h2>Edit project</h2>
             </Row>
@@ -44,7 +44,8 @@
                 </Column>
             </Row>
             <Row Margin="Margin.Is3.OnY">
-                <Button Color="Color.Primary" Clicked="@OnEditAsync"> Edit project</Button>
+                <Button Color="Color.Primary" Clicked="@OnEditAsync" Margin="Margin.Is1.OnX"> Edit project</Button>
+
                 <Button Color="Color.Secondary" Type="ButtonType.Link" To="@($"projects/{ProjectId}")"> Cancel</Button>
             </Row>
         </Container>

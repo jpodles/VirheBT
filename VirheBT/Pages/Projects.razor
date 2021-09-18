@@ -1,142 +1,143 @@
 ﻿@page "/projects"
 @using VirheBT.Infrastructure.Data.Models
 @using VirheBT.Shared.Enums
+<Container Fluid="true" Margin="Margin.Is5.OnY" Padding="Padding.Is1.OnY" ElementId="dashboard">
+    <Card Margin="Margin.Is5.OnY" WhiteText="false">
+        <CardHeader>
+            <CardTitle>Projects</CardTitle>
+        </CardHeader>
+        <CardBody>
+            <DataGrid @ref="dataGrid"
+                      TItem="Project"
+                      Data="data"
+                      Editable="@editable"
+                      EditMode="@editMode"
+                      Sortable="@sortable"
+                      SortMode="@sortMode"
+                      Filterable="@filterable"
+                      ShowPager="@showPager"
+                      SelectionMode="@selectionMode"
+                      CommandMode="@commandsMode"
+                      PageSize="15"
+                      CurrentPage="currentPage"
+                      PageChanged="(e) => currentPage = e.Page"
+                      PagerPosition="DataGridPagerPosition.TopAndBottom"
+                      Striped="false"
+                      Bordered="true"
+                      Hoverable="true"
+                      Responsive="true"
+                      Narrow="true">
 
-<Card Margin="Margin.Is4.OnY" WhiteText="false">
-    <CardHeader>
-        <CardTitle>Projects</CardTitle>
-    </CardHeader>
-    <CardBody>
-        <DataGrid @ref="dataGrid"
-                  TItem="Project"
-                  Data="data"
-                  Editable="@editable"
-                  EditMode="@editMode"
-                  Sortable="@sortable"
-                  SortMode="@sortMode"
-                  Filterable="@filterable"
-                  ShowPager="@showPager"
-                  SelectionMode="@selectionMode"
-                  CommandMode="@commandsMode"
-                  PageSize="15"
-                  CurrentPage="currentPage"
-                  PageChanged="(e) => currentPage = e.Page"
-                  PagerPosition="DataGridPagerPosition.TopAndBottom"
-                  Striped="false"
-                  Bordered="true"
-                  Hoverable="true"
-                  Responsive="true"
-                  Narrow="true">
+                <DataGridColumns>
+                    <DataGridMultiSelectColumn TItem="Project" Width="15px">
 
-            <DataGridColumns>
-                <DataGridMultiSelectColumn TItem="Project" Width="15px">
+                        @*<MultiSelectTemplate>
+                                <Label @onclick:stopPropagation>
+                                    <Check TValue="bool" Checked="@context.IsSelected" Indeterminate="@context.IsIndeterminate" CheckedChanged="@context.SelectedChanged" @onclick:stopPropagation></Check>
+                                </Label>
+                            </MultiSelectTemplate>*@
+                    </DataGridMultiSelectColumn>
+                    <DataGridColumn TItem="Project" Field="@nameof(Project.ProjectId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
 
-                    @*<MultiSelectTemplate>
-                            <Label @onclick:stopPropagation>
-                                <Check TValue="bool" Checked="@context.IsSelected" Indeterminate="@context.IsIndeterminate" CheckedChanged="@context.SelectedChanged" @onclick:stopPropagation></Check>
-                            </Label>
-                        </MultiSelectTemplate>*@
-                </DataGridMultiSelectColumn>
-                <DataGridColumn TItem="Project" Field="@nameof(Project.ProjectId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
+                    <DataGridColumn TItem="Project" Field="@nameof(Project.Name)" Caption="Title" Editable="false" Width="500px">
+                        <CaptionTemplate>
+                            <Icon Name="IconName.Tag" /> @context.Caption
+                        </CaptionTemplate>
 
-                <DataGridColumn TItem="Project" Field="@nameof(Project.Name)" Caption="Title" Editable="false" Width="500px">
-                    <CaptionTemplate>
-                        <Icon Name="IconName.Tag" /> @context.Caption
-                    </CaptionTemplate>
+                        <DisplayTemplate>
 
-                    <DisplayTemplate>
+                            <Link To=@($"projects/{context.ProjectId}")>
+                            <Card Background="Background.Transparent" Style="height: 40px; border:none">
 
-                        <Link To=@($"projects/{context.ProjectId}")>
-                        <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                @context.Name
+                            </Card>
+                            </Link>
+                        </DisplayTemplate>
+                    </DataGridColumn>
 
-                            @context.Name
-                        </Card>
-                        </Link>
-                    </DisplayTemplate>
-                </DataGridColumn>
+                    <DataGridColumn TItem="Project"
+                                    Field="@nameof(Project.Maintainer)"
+                                    Caption="Maintainter" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
+                        <CaptionTemplate>
+                            <Icon Name="IconName.UserCheck" /> @context.Caption
+                        </CaptionTemplate>
+                        <FilterTemplate>
+                            @{
+                                var selectedValue = @context.SearchValue ?? "*";
+                                <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                                    <SelectItem Value="@("michałek")">ME</SelectItem>
+                                    <SelectItem Value="@("*")">All</SelectItem>
 
-                <DataGridColumn TItem="Project"
-                                Field="@nameof(Project.Maintainer)"
-                                Caption="Maintainter" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
-                    <CaptionTemplate>
-                        <Icon Name="IconName.UserCheck" /> @context.Caption
-                    </CaptionTemplate>
-                    <FilterTemplate>
-                        @{
-                            var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
-                                <SelectItem Value="@("michałek")">ME</SelectItem>
-                                <SelectItem Value="@("*")">All</SelectItem>
+                                    @foreach (var item in data.Select(p => p.Maintainer).Distinct())
+                                    {
+                                        <SelectItem Value="@item">@item</SelectItem>
+                                    }
+                                </Select>
+                            }
+                        </FilterTemplate>
+                    </DataGridColumn>
 
-                                @foreach (var item in data.Select(p => p.Maintainer).Distinct())
+                    <DataGridColumn TItem="Project" Field="@nameof(Project.Status)" Caption="Status" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                        <CaptionTemplate>
+                            <Icon Name="IconName.ExclamationTriangle" /> @context.Caption
+                        </CaptionTemplate>
+                        <DisplayTemplate>
+
+                            @{
+                                var item = (context as Project);
+                                if (item.Status == ProjectStatus.OnTrack)
                                 {
-                                    <SelectItem Value="@item">@item</SelectItem>
+                                    <label style="color:cornflowerblue"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Spinner" /> <span>@context.Status</span></label>
                                 }
-                            </Select>
-                        }
-                    </FilterTemplate>
-                </DataGridColumn>
-
-                <DataGridColumn TItem="Project" Field="@nameof(Project.Status)" Caption="Status" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
-                    <CaptionTemplate>
-                        <Icon Name="IconName.ExclamationTriangle" /> @context.Caption
-                    </CaptionTemplate>
-                    <DisplayTemplate>
-
-                        @{
-                            var item = (context as Project);
-                            if (item.Status == ProjectStatus.OnTrack)
-                            {
-                                <label style="color:cornflowerblue"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Spinner" /> <span>@context.Status</span></label>
-                            }
-                            if (item.Status == ProjectStatus.Canceled)
-                            {
-                                <label style="color:darkred"><Icon Name="IconName.ExclamationTriangle" /> <span>@context.Status</span></label>
-
-                            }
-                            if (item.Status == ProjectStatus.Finished)
-                            {
-                                <label style="color:green"><Icon Name="IconName.CheckCircle" /> <span>@context.Status</span></label>
-
-                            }
-
-                        }
-                    </DisplayTemplate>
-                    <FilterTemplate>
-                        @{
-                            var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
-                                <SelectItem Value="@("*")">All</SelectItem>
-                                @foreach (var item in Enum.GetValues(typeof(ProjectStatus)))
+                                if (item.Status == ProjectStatus.Canceled)
                                 {
-                                    <SelectItem Value="@item">@item</SelectItem>
+                                    <label style="color:darkred"><Icon Name="IconName.ExclamationTriangle" /> <span>@context.Status</span></label>
+
                                 }
-                            </Select>
-                        }
-                    </FilterTemplate>
-                </DataGridColumn>
+                                if (item.Status == ProjectStatus.Finished)
+                                {
+                                    <label style="color:green"><Icon Name="IconName.CheckCircle" /> <span>@context.Status</span></label>
 
-                <DataGridCommandColumn TItem="Project" Width="50px" TextAlignment="TextAlignment.Center">
-                    <ClearFilterCommandTemplate>
-                        <Button Color="Color.Warning" Clicked="@context.Clicked">
+                                }
 
-                            Clear filter
-                        </Button>
-                    </ClearFilterCommandTemplate>
-                    <DeleteCommandTemplate>
-                        <Button Clicked="@context.Clicked" Color="Color.Danger" Style="display:none">
-                            <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Trash" />
-                        </Button>
-                    </DeleteCommandTemplate>
+                            }
+                        </DisplayTemplate>
+                        <FilterTemplate>
+                            @{
+                                var selectedValue = @context.SearchValue ?? "*";
+                                <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                                    <SelectItem Value="@("*")">All</SelectItem>
+                                    @foreach (var item in Enum.GetValues(typeof(ProjectStatus)))
+                                    {
+                                        <SelectItem Value="@item">@item</SelectItem>
+                                    }
+                                </Select>
+                            }
+                        </FilterTemplate>
+                    </DataGridColumn>
 
-                    <NewCommandTemplate>
-                        <Button Color="Color.Success" Clicked="@context.Clicked" Style="display:none">New</Button>
-                    </NewCommandTemplate>
-                    <EditCommandTemplate>
-                        <Button Color="Color.Primary" Clicked="@context.Clicked" Style="display:none">Edit</Button>
-                    </EditCommandTemplate>
-                </DataGridCommandColumn>
-            </DataGridColumns>
-        </DataGrid>
-    </CardBody>
-</Card>
+                    <DataGridCommandColumn TItem="Project" Width="50px" TextAlignment="TextAlignment.Center">
+                        <ClearFilterCommandTemplate>
+                            <Button Color="Color.Warning" Clicked="@context.Clicked">
+
+                                Clear filter
+                            </Button>
+                        </ClearFilterCommandTemplate>
+                        <DeleteCommandTemplate>
+                            <Button Clicked="@context.Clicked" Color="Color.Danger" Style="display:none">
+                                <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Trash" />
+                            </Button>
+                        </DeleteCommandTemplate>
+
+                        <NewCommandTemplate>
+                            <Button Color="Color.Success" Clicked="@context.Clicked" Style="display:none">New</Button>
+                        </NewCommandTemplate>
+                        <EditCommandTemplate>
+                            <Button Color="Color.Primary" Clicked="@context.Clicked" Style="display:none">Edit</Button>
+                        </EditCommandTemplate>
+                    </DataGridCommandColumn>
+                </DataGridColumns>
+            </DataGrid>
+        </CardBody>
+    </Card>
+</Container>

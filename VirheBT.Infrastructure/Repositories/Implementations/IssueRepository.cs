@@ -63,7 +63,9 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
             issueEntity.Title = issue.Title;
             issueEntity.Description = issue.Description;
             issueEntity.Priority = issue.Priority;
+            issueEntity.AssignedTo = issue.AssignedTo;
             issueEntity.Type = issue.Type;
+            issueEntity.Modified = issue.Modified;
             issueEntity.Status = issue.Status;
 
             await _context.SaveChangesAsync();

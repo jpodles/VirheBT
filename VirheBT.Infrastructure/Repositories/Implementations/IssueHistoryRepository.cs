@@ -28,7 +28,7 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
 
         public async Task<IEnumerable<IssueHistory>> GetIssueHistory(int issueId)
         {
-            return await context.IssueHistories.Where(x => x.IssueId == issueId).ToListAsync();
+            return await context.IssueHistories.Include(x => x.User).Where(x => x.IssueId == issueId).ToListAsync();
         }
     }
 }

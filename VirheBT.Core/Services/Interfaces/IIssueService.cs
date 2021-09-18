@@ -2,11 +2,15 @@
 using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
+using VirheBT.Shared.DTOs;
+using VirheBT.Shared.Enums;
 
 namespace VirheBT.Services.Interfaces
 {
     public interface IIssueService
     {
+        Task AddHistoryEntry(ChangeType changeType, int projectId, int issueId, string userId);
+        Task<List<IssueHistoryDto>> GetIssueHistory(int issueId);
         Task<List<Issue>> GetIssuesAsync(int projecId);
 
         Task<Issue> GetIssueAsync(int projectId, int issueId);
@@ -17,7 +21,7 @@ namespace VirheBT.Services.Interfaces
 
         Task DeleteIssueAsync(int projectId, int issueId);
 
-        Task<List<IssueComment>> GetIssueCommentsAsync(int projectId, int issueId);
+        Task<List<IssueCommentDto>> GetIssueCommentsAsync(int projectId, int issueId);
 
         Task AddCommentAsync(IssueComment comment);
 

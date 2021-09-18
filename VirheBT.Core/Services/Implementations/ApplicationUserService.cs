@@ -30,7 +30,7 @@ namespace VirheBT.Services.Implementations
 
         public async Task<ApplicationUser> GetApplicationUserAsync(string userId)
         {
-            return await _userRepository.GetApplicationUserAsync(userId);
+            return  await _userRepository.GetApplicationUserAsync(userId);
         }
 
         public async Task<ApplicationUser> GetApplicationUserByEmailAsync(string userEmail)

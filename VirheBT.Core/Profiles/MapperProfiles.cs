@@ -11,7 +11,9 @@ namespace VirheBT.Core.Profiles
         {
             CreateMap<Project, ProjectShortDto>();
             CreateMap<Project, Project>().ReverseMap();
-            CreateMap<ApplicationUser, ApplicationUser>();
+            CreateMap<IssueHistory, IssueHistoryDto>();
+            CreateMap<IssueComment, IssueCommentDto>();
+            CreateMap<ApplicationUser, ApplicationUserDto>();
         }
     }
 }

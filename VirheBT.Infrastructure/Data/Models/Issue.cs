@@ -27,6 +27,9 @@ namespace VirheBT.Infrastructure.Data.Models
         public ApplicationUser AssignedTo { get; set; }
         public string AssignedToId { get; set; }
 
+        public ApplicationUser ModifiedBy { get; set; }
+        public string ModifiedById { get; set; }
+
         public Project Project { get; set; }
         public int ProjectId { get; set; }
 

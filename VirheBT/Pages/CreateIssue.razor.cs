@@ -33,7 +33,7 @@ namespace VirheBT.Pages
 
         private string SelectedUser { get; set; }
 
-        //private string selectedSearchValue;
+       
         private void AssignedUserHandler(string newValue)
         {
             SelectedUser = newValue;
@@ -55,19 +55,16 @@ namespace VirheBT.Pages
         protected async override Task OnInitializedAsync()
         {
             projectUsers = await ProjectService.GetProjectUsersAsync(ProjectId);
-            //Project = await ProjectService.GetProjectAsync(ProjectId)
+         
         }
 
-        //protected async Task OnAfterRenderAsync(bool firstRender)
-        //{
-        //    //projectUsers = await ProjectService.GetProjectUsersAsync(CurrentProjectId);
-        //}
+      
 
         private async Task OnAddIssue()
         {
             var authState = await AuthenticationStateProvider
                .GetAuthenticationStateAsync();
-            var user = authState.User.Identity.Name;
+            var user = authState.User.Identity?.Name;
 
             Issue issueToAdd = new Issue
             {
@@ -75,10 +72,10 @@ namespace VirheBT.Pages
                 Title = Title,
                 Description = Description,
                 Created = DateTime.Now,
-                CreatedBy = projectUsers.Where(x => x.Email == user).FirstOrDefault(),
+                CreatedBy = projectUsers.FirstOrDefault(x => x.Email == user),
                 Type = CheckedIssueType,
                 Priority = CheckedIssuePriority,
-                AssignedTo = projectUsers.Where(x => x.Email == SelectedUser).FirstOrDefault(),
+                AssignedTo = projectUsers.FirstOrDefault(x => x.Email == SelectedUser),
             };
 
             await IssueService.AddIssueAsync(ProjectId, issueToAdd);

@@ -2,7 +2,8 @@
 @using System.Collections.ObjectModel
 @using VirheBT.Shared.Components
 @using VirheBT.Shared.Enums
-<Row Margin="Margin.Is2.OnY" Style=" margin-bottom: 0px">
+@using VirheBT.Infrastructure.Data.Models
+<Row Padding="Padding.Is2.OnY" Style=" margin-bottom: 0px">
     <Column ColumnSize="ColumnSize.Is1">
 
         <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="@($"project/{ProjectId}/issues")">
@@ -43,7 +44,52 @@
                 </CollapseBody>
             </Collapse>
             @*COMMENT SECTION*@
-            <IssueComment></IssueComment>
+            <Collapse Visible="@commentSectionVisible">
+                <CollapseHeader Padding="Padding.Is0">
+                    <Button Clicked="@(()=>commentSectionVisible = !commentSectionVisible)" Style="width:100%">
+                        Comments
+
+                        @if (commentSectionVisible == true)
+                        {
+                            <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
+                        }
+                        @if (commentSectionVisible == false)
+                        {
+                            <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
+                        }
+                    </Button>
+                </CollapseHeader>
+                <CollapseBody>
+                    <Button Margin="Margin.Is1.OnY" Color="Color.Info" @onclick="() => ShowModal()">Add Comment</Button>
+                    @if (IssueComments != null)
+                    {
+                        @foreach (var comment in IssueComments)
+                        {
+                            <Card>
+                                <CardBody Padding="Padding.Is2.OnY">
+                                    <CardTitle>
+                                        @comment.User.Email
+                                        <span style="float:right">@comment.Created</span>
+                                    </CardTitle>
+                                    <CardText>
+                                        @comment.Text
+                                        <span style="float:right">
+                                            @if (comment.User.Email == httpContextAccessor.HttpContext.User.Identity.Name)
+                                            {
+                                                <Button Color="Color.Info" @onclick="() => OnEditCommentAync(comment.CommentId)">Edit</Button>
+                                                <Button Color="Color.Danger" @onclick="()=> OnDeleteCommentAsync(comment.CommentId)">Delete</Button>
+                                            }
+                                        </span>
+                                    </CardText>
+                                </CardBody>
+                            </Card>
+                        }
+                    }
+
+
+
+                </CollapseBody>
+            </Collapse>
         </Accordion>
     </Column>
     <Column ColumnSize="ColumnSize.Is5">
@@ -63,7 +109,13 @@
                         Assigned To:
                     </Column>
                     <Column ColumnSize="ColumnSize.Is8">
-                        @AssignedTo @*dodać możliwość zmiany przypisania*@
+                        <Autocomplete TItem="ApplicationUser" TValue="ApplicationUser" Class="w-75"
+                                      Data="@projectUsers"
+                                      TextField="@((item)=>item.Email)"
+                                      ValueField="@((item)=>item)"
+                                      SelectedText="@AssignedUser?.Email"
+                                      SelectedValue="@AssignedUser"
+                                      SelectedValueChanged="@AssignedUserHandler" />
                     </Column>
                 </Row>
                 <Divider></Divider>
@@ -124,11 +176,19 @@
             <CardBody>
                 <Table>
                     <TableBody>
-                        <TableRow>
-                            <TableRowCell>Marek</TableRowCell>
-                            <TableRowCell>issue closed</TableRowCell>
-                            <TableRowCell>15/05/2021</TableRowCell>
-                        </TableRow>
+                        @if (IssueHistory != null)
+                        {
+                            @foreach (var comment in IssueHistory)
+                            {
+                                <TableRow>
+                                    <TableRowCell>@comment.User.Email</TableRowCell>
+                                    <TableRowCell>@comment.ChangeType</TableRowCell>
+                                    <TableRowCell>@comment.ChangeDate</TableRowCell>
+                                </TableRow>
+
+                            }
+                        }
+
                     </TableBody>
                 </Table>
             </CardBody>
@@ -136,8 +196,53 @@
     </Column>
 </Row>
 
-@code{
 
+<Modal @ref="CommentModal">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Add Comment</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Your Comment:</FieldLabel>
+                <MemoEdit Rows="5" @bind-Text="@CommentModalText" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@OnAddCommentAync">Add</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+
+@code{
+    public Modal CommentModal { get; set; }
     bool descSectionVisible = true;
+    bool commentSectionVisible = true;
+
+
+    public void ShowModal()
+    {
+        CommentModal.Show();
+    }
+
+    private void HideModal()
+    {
+        CommentModal.Hide();
+    }
 
 }
+
+<Snackbar @ref="successAlert" Color="SnackbarColor.Success">
+    <SnackbarBody>
+        Zapisano zmiany!
+    </SnackbarBody>
+</Snackbar>
+
+<Snackbar @ref="failedAlert" Color="SnackbarColor.Danger">
+    <SnackbarBody>
+        Edycja nie powiodła się!
+    </SnackbarBody>
+</Snackbar>
