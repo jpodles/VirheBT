@@ -3,6 +3,7 @@
 @using VirheBT.Shared.Components
 @using VirheBT.Shared.Enums
 @using VirheBT.Infrastructure.Data.Models
+<Container  Fluid="true" Margin="Margin.Is5.OnY" Padding="Padding.Is4.OnY" ElementId="issueDetails">
 <Row Padding="Padding.Is2.OnY" Style=" margin-bottom: 0px">
     <Column ColumnSize="ColumnSize.Is1">
 
@@ -16,7 +17,7 @@
         </Card>
     </Column>
     <Column ColumnSize="ColumnSize.Is4">
-
+ 
         <Button Size="Size.Medium" Float="Float.Right" Color="Color.Info" Clicked="@OnEditAsync">Save Changes</Button>
     </Column>
 </Row>
@@ -25,42 +26,42 @@
     <Column ColumnSize="ColumnSize.Is7">
         <Accordion>
             @*DESCRIPTION TEXT EDIT*@
-            <Collapse Visible="@descSectionVisible">
+            <Collapse Visible="@_descSectionVisible">
                 <CollapseHeader Padding="Padding.Is0">
-                    <Button Clicked="@(()=>descSectionVisible = !descSectionVisible)" Style="width:100%">
+                    <Button Clicked="@(()=>_descSectionVisible = !_descSectionVisible)" Style="width:100%">
                         Description
-                        @if (descSectionVisible == true)
+                        @if (_descSectionVisible == true)
                         {
                             <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
                         }
-                        @if (descSectionVisible == false)
+                        @if (_descSectionVisible == false)
                         {
                             <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
                         }
                     </Button>
                 </CollapseHeader>
-                <CollapseBody Style="height: 400px">
-                    <MemoEdit Rows="10" @bind-Text="@Description"></MemoEdit>
+                <CollapseBody >
+                    <MemoEdit Rows="15" @bind-Text="@Description"></MemoEdit>
                 </CollapseBody>
             </Collapse>
             @*COMMENT SECTION*@
-            <Collapse Visible="@commentSectionVisible">
+            <Collapse Visible="@_commentSectionVisible">
                 <CollapseHeader Padding="Padding.Is0">
-                    <Button Clicked="@(()=>commentSectionVisible = !commentSectionVisible)" Style="width:100%">
+                    <Button Clicked="@(()=>_commentSectionVisible = !_commentSectionVisible)" Style="width:100%">
                         Comments
 
-                        @if (commentSectionVisible == true)
+                        @if (_commentSectionVisible == true)
                         {
                             <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
                         }
-                        @if (commentSectionVisible == false)
+                        @if (_commentSectionVisible == false)
                         {
                             <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
                         }
                     </Button>
                 </CollapseHeader>
                 <CollapseBody>
-                    <Button Margin="Margin.Is1.OnY" Color="Color.Info" @onclick="() => ShowModal()">Add Comment</Button>
+                    <Button Margin="Margin.Is1.OnY" Color="Color.Info" @onclick="() => ShowAddCommentModal()">Add Comment</Button>
                     @if (IssueComments != null)
                     {
                         @foreach (var comment in IssueComments)
@@ -74,9 +75,9 @@
                                     <CardText>
                                         @comment.Text
                                         <span style="float:right">
-                                            @if (comment.User.Email == httpContextAccessor.HttpContext.User.Identity.Name)
+                                            @if (comment.User.Email == httpContextAccessor.HttpContext?.User.Identity.Name)
                                             {
-                                                <Button Color="Color.Info" @onclick="() => OnEditCommentAync(comment.CommentId)">Edit</Button>
+                                                <Button Color="Color.Info" Clicked="@ShowEditCommentModal">Edit</Button>
                                                 <Button Color="Color.Danger" @onclick="()=> OnDeleteCommentAsync(comment.CommentId)">Delete</Button>
                                             }
                                         </span>
@@ -195,9 +196,9 @@
         </Card>
     </Column>
 </Row>
+</Container>
 
-
-<Modal @ref="CommentModal">
+<Modal @ref="AddCommentModal">
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Add Comment</ModalTitle>
@@ -210,7 +211,26 @@
             </Field>
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="@HideModal">Cancel</Button>
+            <Button Color="Color.Secondary" Clicked="@HideAddModal">Cancel</Button>
+            <Button Color="Color.Primary" Clicked="@OnAddCommentAync">Add</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="EditCommentModal">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Edit Comment</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Your Comment:</FieldLabel>
+                <MemoEdit Rows="5" @bind-Text="@CommentModalText" />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideEditModal">Cancel</Button>
             <Button Color="Color.Primary" Clicked="@OnAddCommentAync">Add</Button>
         </ModalFooter>
     </ModalContent>
@@ -218,19 +238,30 @@
 
 
 @code{
-    public Modal CommentModal { get; set; }
-    bool descSectionVisible = true;
-    bool commentSectionVisible = true;
+    public Modal AddCommentModal { get; set; }
+    public Modal EditCommentModal { get; set; }
+    bool _descSectionVisible = true;
+    bool _commentSectionVisible;
 
 
-    public void ShowModal()
+    public void ShowAddCommentModal()
     {
-        CommentModal.Show();
+        AddCommentModal.Show();
     }
 
-    private void HideModal()
+    private void HideAddModal()
     {
-        CommentModal.Hide();
+        AddCommentModal.Hide();
+    }
+    
+    public void ShowEditCommentModal()
+    {
+        EditCommentModal.Show();
+    }
+
+    private void HideEditModal()
+    {
+        AddCommentModal.Hide();
     }
 
 }

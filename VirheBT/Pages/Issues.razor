@@ -1,8 +1,8 @@
 ﻿@page "/project/{ProjectId:int}/issues"
 @using VirheBT.Shared.Enums
 @using VirheBT.Infrastructure.Data.Models
-
-<Card Padding="Padding.Is4.OnY" WhiteText="false">
+<Container  Fluid="true" Margin="Margin.Is5.OnY" Padding="Padding.Is4.OnY" ElementId="issues">
+<Card  WhiteText="false">
     <CardHeader>
         <CardTitle>Issues</CardTitle>
     </CardHeader>
@@ -212,3 +212,4 @@
         </DataGrid>
     </CardBody>
 </Card>
+</Container>

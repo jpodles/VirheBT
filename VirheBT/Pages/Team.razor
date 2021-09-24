@@ -1,9 +1,9 @@
-﻿Padding@page "/project/{ProjectId:int}/team"
+﻿@page "/project/{ProjectId:int}/team"
 
 @using VirheBT.Shared.Enums
 @using VirheBT.Infrastructure.Data.Models
-
-<Card Padding="Padding.Is4.OnY" WhiteText="false">
+ <Container Fluid="true" Margin="Margin.Is5.OnY" Padding="Padding.Is4.OnY" ElementId="team">
+<Card  WhiteText="false">
     <CardHeader>
         <CardTitle>MY TEAM</CardTitle>
     </CardHeader>
@@ -148,7 +148,4 @@
         </DataGrid>
     </CardBody>
 </Card>
-
-@code{
-
-}
+</Container>

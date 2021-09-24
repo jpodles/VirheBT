@@ -1,8 +1,8 @@
 ﻿@page "/projects/{ProjectId:int}"
 @using VirheBT.Shared.Enums
 @using VirheBT.Infrastructure.Data.Models
-
-<Row Padding="Padding.Is2.OnY" Style=" margin-bottom: 0px">
+<Container Fluid="true" Margin="Margin.Is5.OnY" ElementId="projectDetails">
+<Row  Margin="Margin.Is5.OnY" Padding="Padding.Is1.OnY"  Style=" margin-bottom: 0px">
     <Column ColumnSize="ColumnSize.Is1">
 
         <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/projects" Margin="Margin.Is3">
@@ -222,3 +222,5 @@
         </Card>
     </Column>
 </Row>
+
+</Container>

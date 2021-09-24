@@ -1,13 +1,10 @@
 ﻿using Blazorise;
 using Blazorise.Snackbar;
-
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
 using VirheBT.Shared.DTOs;
@@ -74,10 +71,12 @@ namespace VirheBT.Pages
 
             IssueHistory = await IssueService.GetIssueHistory(IssueId);
         }
+
         private void AssignedUserHandler(ApplicationUser newValue)
         {
             AssignedUser = newValue;
         }
+
         private async Task GetIssueAsync()
         {
 
@@ -118,16 +117,20 @@ namespace VirheBT.Pages
 
             issueEdit.Modified = DateTimeOffset.UtcNow.LocalDateTime;
 
-            var task = IssueService.EditIssueAsync(ProjectId, IssueId, issueEdit);
-            if (task.IsFaulted)
+
+
+            try
+            {
+                await IssueService.EditIssueAsync(ProjectId, IssueId, issueEdit);
+            }
+            catch (Exception e)
             {
                 failedAlert.Show();
-                return;
             }
+            
             successAlert.Show();
             IssueHistory = await IssueService.GetIssueHistory(IssueId);
             StateHasChanged();
-
         }
 
         private async Task OnAddCommentAync()
@@ -140,9 +143,11 @@ namespace VirheBT.Pages
                 Text = CommentModalText,
             };
 
+
             await IssueService.AddCommentAsync(comment);
+
             CommentModalText = "";
-            CommentModal.Hide();
+            AddCommentModal.Hide();
             IssueComments = await IssueService.GetIssueCommentsAsync(ProjectId, IssueId);
             StateHasChanged();
         }
@@ -157,9 +162,11 @@ namespace VirheBT.Pages
                 Text = CommentModalText,
             };
 
+
+
             await IssueService.AddCommentAsync(comment);
             CommentModalText = "";
-            CommentModal.Hide();
+            AddCommentModal.Hide();
             IssueComments = await IssueService.GetIssueCommentsAsync(ProjectId, IssueId);
             StateHasChanged();
         }
