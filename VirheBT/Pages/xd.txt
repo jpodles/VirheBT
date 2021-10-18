@@ -1,5 +1,0 @@
-﻿gowno=2020-02-02T20:20:20.000+0200
-18:20
-
-[HttpGEt]
-public gowno(Query quers)

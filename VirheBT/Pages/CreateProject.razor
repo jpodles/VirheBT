@@ -1,56 +1,70 @@
-﻿@page "/createproject"
-@inject NavigationManager NavigationManager
-<AuthorizeView>
-    <Authorized>
-        <Container Margin="Margin.Is5">
-            <Row Margin="Margin.Is3.OnY">
-                <Column>
-                    <h2>Create new project</h2>
-                </Column>
-            </Row>
-            <Divider></Divider>
+﻿@inject NavigationManager NavigationManager
+    <AuthorizeView>
+        <Authorized>
+            <Modal @ref="createProjectModal">
+                <ModalContent Size="ModalSize.Large">
+                        <ModalHeader>
+                            <ModalTitle>Create new project</ModalTitle>
+                            <CloseButton />
+                        </ModalHeader>
+     
 
-            <Row>
+                        <ModalBody>
+                            <Column ColumnSize="ColumnSize.Is12" Padding="Padding.Is0.OnX" Margin="Margin.Is0.OnX">
+                                <Field >
+                                    <FieldLabel>
+                                        Project Name:
+                                    </FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit @bind-Text="@title" Placeholder="Name..." />
+                                    </FieldBody>
+                                </Field>
+                            </Column>
+                            <Column ColumnSize="ColumnSize.Is6" Padding="Padding.Is0.OnX" Margin="Margin.Is0.OnX">
+                                <Field>
+                                    <FieldLabel>
+                                        Maintainer:
+                                    </FieldLabel>
+                                    <FieldBody>
 
-                <Column ColumnSize="ColumnSize.Is6">
-                    <Field>
-                        <FieldLabel>
-                            Project Name:
-                        </FieldLabel>
-                        <FieldBody>
-                            <TextEdit @bind-Text="@title" Placeholder="Name..." />
-                        </FieldBody>
-                    </Field>
-                </Column>
-                <Column ColumnSize="ColumnSize.Is6">
-                    <Field>
-                        <FieldLabel>
-                            Maintainer:
-                        </FieldLabel>
-                        <FieldBody>
+                                        <TextEdit Placeholder="@context.User.Identity.Name" Disabled="true" />
+                                    </FieldBody>
+                                </Field>
+                            </Column>
+                            <Row>
+                                <Column ColumnSize="ColumnSize.Is12" >
+                                    <Field>
+                                        <FieldLabel>
+                                            Description:
+                                        </FieldLabel>
+                                        <FieldBody>
+                                            <MemoEdit Rows="5" @bind-Text="@description" />
+                                        </FieldBody>
+                                    </Field>
+                                </Column>
+                            </Row>
+                            <Row Margin="Margin.Is3.OnY">
+                                <Column>
+                                    <Button Color="Color.Primary" Clicked="@OnCreateAsync" Float="Float.Right" Margin="Margin.Is2.OnX"> Create project</Button>
+                                    <Button Color="Color.Secondary" Clicked="@HideModal"  Float="Float.Right"> Cancel</Button>
+                                </Column>
+                            </Row>
+                        </ModalBody>
+                </ModalContent>
+            </Modal>
+        </Authorized>
+    </AuthorizeView>
+    @code{
+        // reference to the modal component
+        private Modal createProjectModal;
 
-                            <TextEdit Placeholder="@context.User.Identity.Name" Disabled="true" />
-                        </FieldBody>
-                    </Field>
-                </Column>
-            </Row>
-            <Row>
-                <Column ColumnSize="ColumnSize.Is12">
-                    <Field>
-                        <FieldLabel>
-                            Description:
-                        </FieldLabel>
-                        <FieldBody>
-                            <MemoEdit Rows="5" @bind-Text="@description" />
-                        </FieldBody>
-                    </Field>
-                </Column>
-            </Row>
-            <Row Margin="Margin.Is3.OnY">
-                <Column>
-                    <Button Color="Color.Primary" Clicked="@OnCreateAsync"> Create project</Button>
-                </Column>
-            </Row>
-        </Container>
-    </Authorized>
-</AuthorizeView>
+        public void ShowModal()
+        {
+            createProjectModal.Show();
+        }
+
+        private void HideModal()
+        {
+            createProjectModal.Hide();
+        }
+    }

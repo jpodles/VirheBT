@@ -50,53 +50,5 @@ namespace VirheBT.Pages
             data = await ApplicationUserService.GetApplicationUsersAsync();
             StateHasChanged();
         }
-
-        //{
-        //    new UserDto
-        //    {
-        //        ID = 1,
-        //        FirstName = "Michał",
-        //        LastName =" Nowak",
-        //        Email = "michał@virhe.com",
-        //        UserRole = UserRole.Tester,
-        //        UserStatus = UserStatus.Active
-        //    },
-        //    new UserDto
-        //    {
-        //        ID = 1,
-        //        FirstName = "Michał",
-        //        LastName =" Nowak",
-        //        Email = "michał@virhe.com",
-        //        UserRole = UserRole.Tester,
-        //        UserStatus = UserStatus.Active
-        //    },
-        //    new UserDto
-        //    {
-        //        ID = 1,
-        //        FirstName = "Michał",
-        //        LastName =" Nowak",
-        //        Email = "michał@virhe.com",
-        //        UserRole = UserRole.Tester,
-        //        UserStatus = UserStatus.Inactive
-        //    },
-        //    new UserDto
-        //    {
-        //        ID = 1,
-        //        FirstName = "Michał",
-        //        LastName =" Nowak",
-        //        Email = "michał@virhe.com",
-        //        UserRole = UserRole.Tester,
-        //        UserStatus = UserStatus.Active
-        //    },
-        //     new UserDto
-        //    {
-        //        ID = 1,
-        //        FirstName = "Michał",
-        //        LastName =" Nowak",
-        //        Email = "michał@virhe.com",
-        //        UserRole = UserRole.Tester,
-        //        UserStatus = UserStatus.Active
-        //    }
-        //};
     }
 }

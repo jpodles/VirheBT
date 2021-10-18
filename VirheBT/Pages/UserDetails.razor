@@ -1,89 +1,86 @@
 ﻿@page "/userdetails/{UserId}"
+    <Container Margin="Margin.Is5.OnY" Fluid="true">
+        <Row Padding="Padding.Is2.OnY" Style=" margin-bottom: 0px">
+            <Column ColumnSize="ColumnSize.Is3">
 
-<Row Padding="Padding.Is2.OnY" Style=" margin-bottom: 0px">
-    <Column ColumnSize="ColumnSize.Is3">
+                <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/users" >
+                    <Icon Name="IconName.ArrowLeft"> </Icon>
+                    Back
+                </Button>
+            </Column>
+        </Row>
+        <Row>
+            <Column ColumnSize="ColumnSize.Is4">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Employee details</CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <Row>
+                            <Column ColumnSize="ColumnSize.Is1">
+                                <Icon Name="IconName.UserCircle" />
+                            </Column>
+                            <Column>
+                                <CardText>@UserName</CardText>
+                            </Column>
+                        </Row>
+                        <Row Margin="Margin.Is2.OnY">
+                            <Column ColumnSize="ColumnSize.Is1">
+                                <Icon Name="IconName.UserTie" />
+                            </Column>
+                            <Column>
+                                @UserRole
+                            </Column>
+                        </Row>
+                        <Row Margin="Margin.Is2.OnY">
+                            <Column ColumnSize="ColumnSize.Is1">
+                                <Icon Name="IconName.Mail" />
+                            </Column>
+                            <Column>
+                                @Email
+                            </Column>
+                        </Row>
+                        <Row>
+                            <Column ColumnSize="ColumnSize.Is1">
+                                <Icon Name="IconName.Phone" />
+                            </Column>
+                            <Column>
+                                @PhoneNumber
+                            </Column>
+                        </Row>
+                    </CardBody>
+                </Card>
+            </Column>
 
-        <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/users" Margin="Margin.Is3">
-            <Icon Name="IconName.ArrowLeft"> </Icon>
-            Back
-        </Button>
-    </Column>
-</Row>
-<Row>
-    <Column ColumnSize="ColumnSize.Is4">
-        <Card>
-            <CardHeader>
-                <CardTitle>Employee details</CardTitle>
-            </CardHeader>
-            <CardBody>
-                <Row>
-                    <Column ColumnSize="ColumnSize.Is1">
-                        <Icon Name="IconName.UserCircle" />
-                    </Column>
-                    <Column>
-                        <CardText>@UserName</CardText>
-                    </Column>
-                </Row>
-                <Row Margin="Margin.Is2.OnY">
-                    <Column ColumnSize="ColumnSize.Is1">
-                        <Icon Name="IconName.UserTie" />
-                    </Column>
-                    <Column>
-                        @UserRole
-                    </Column>
-                </Row>
-                <Row Margin="Margin.Is2.OnY">
-                    <Column ColumnSize="ColumnSize.Is1">
-                        <Icon Name="IconName.Mail" />
-                    </Column>
-                    <Column>
-                        @Email
-                    </Column>
-                </Row>
-                <Row>
-                    <Column ColumnSize="ColumnSize.Is1">
-                        <Icon Name="IconName.Phone" />
-                    </Column>
-                    <Column>
-                        @PhoneNumber
-                    </Column>
-                </Row>
-            </CardBody>
-        </Card>
-    </Column>
+            <Column ColumnSize="ColumnSize.Is6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Working on:</CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <CardText>
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHeaderCell>#</TableHeaderCell>
+                                        <TableHeaderCell>Project Name</TableHeaderCell>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    @foreach (var project in Projects)
+                                    {
 
-    <Column ColumnSize="ColumnSize.Is6">
-        <Card>
-            <CardHeader>
-                <CardTitle>Working on:</CardTitle>
-            </CardHeader>
-            <CardBody>
-                <CardText>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHeaderCell>#</TableHeaderCell>
-                                <TableHeaderCell>Project Name</TableHeaderCell>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            @foreach (var project in Projects)
-                            {
-
-                                <TableRow>
-                                    <TableRowHeader>@project.ProjectId</TableRowHeader>
-                                    <TableRowCell>@project.Name</TableRowCell>
-                                </TableRow>
-                            }
-                        </TableBody>
-                    </Table>
-                </CardText>
-            </CardBody>
-        </Card>
-    </Column>
-    <Column ColumnSize="ColumnSize.Is2"></Column>
-</Row>
-
-@code {
-
-} 
+                                        <TableRow>
+                                            <TableRowHeader>@project.ProjectId</TableRowHeader>
+                                            <TableRowCell>@project.Name</TableRowCell>
+                                        </TableRow>
+                                    }
+                                </TableBody>
+                            </Table>
+                        </CardText>
+                    </CardBody>
+                </Card>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is2"></Column>
+        </Row>
+    </Container>

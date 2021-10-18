@@ -35,12 +35,12 @@ namespace VirheBT.Infrastructure.Data
             modelBuilder.Entity<IssueComment>()
                 .HasOne(e => e.Issue)
                 .WithMany(e => e.IssueComments)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<IssueHistory>()
                 .HasOne(e => e.Issue)
                 .WithMany(e => e.IssueHistory)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Project>()
                 .HasOne(p => p.Maintainer)

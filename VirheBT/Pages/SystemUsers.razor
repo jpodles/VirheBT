@@ -32,8 +32,6 @@
                       RowUpdated="@OnRowUpdated">
 
                 <DataGridColumns>
-                    @*<DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.ID)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />*@
-
                     <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.FirstName)" Caption="First Name" Editable="true" Width="100px">
                         <CaptionTemplate>
                             <Icon Name="IconName.User" /> @context.Caption
@@ -189,7 +187,9 @@
                         @($"{context.LocalizationString} Employee")
                     }
                 </PopupTitleTemplate>
+                
             </DataGrid>
         </CardBody>
     </Card>
 </Container>
+

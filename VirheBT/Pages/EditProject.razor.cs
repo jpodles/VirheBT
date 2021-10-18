@@ -38,7 +38,10 @@ namespace VirheBT.Pages
 
         protected async override Task OnInitializedAsync()
         {
-            await GetData();
+            if(ProjectId != 0)
+            {
+                await GetData();
+            }      
         }
 
         private async Task GetData()

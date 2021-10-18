@@ -1,7 +1,9 @@
 ﻿@using VirheBT.Shared.Components
+@using VirheBT.Pages
 
 @inject State.IAppState AppState
 @inject ProtectedSessionStorage ProtectedSessionStore
+
 
 <AuthorizeView>
     <Authorized>
@@ -62,7 +64,7 @@
                         </BarItem>
                     </BarItem>
                     <BarItem>
-                        <BarLink To="/createproject">
+                        <BarLink @onclick="createProjectRef.ShowModal">
                             <BarIcon IconName="IconName.FolderPlus" />
                             Create Project
                         </BarLink>
@@ -84,3 +86,10 @@
         </Bar>
     </Authorized>
 </AuthorizeView>
+
+
+<VirheBT.Pages.CreateProject @ref="createProjectRef"></VirheBT.Pages.CreateProject>
+@code {
+    CreateProject createProjectRef;
+
+}
