@@ -4,100 +4,112 @@
 @using VirheBT.Pages
 @page "/project/{ProjectId:int}/createissue"
 <AuthorizeView>
-
     <Authorized>
 
-        <Container Margin="Margin.Is5">
-            <Row Margin="Margin.Is3.OnY">
-                <Column>
-                    <h2>Create issue</h2>
-                </Column>
-                <Column>
-                    <h2>Project ID: @ProjectId</h2>
-                </Column>
-            </Row>
-            <Divider></Divider>
+        <Modal @ref="createIssueModal">
+            <ModalContent Size="ModalSize.Large">
+                <ModalHeader>
+                    <ModalTitle>Create new issue</ModalTitle>
+                    <CloseButton />
+                </ModalHeader>
 
-            <Row>
-                <Column>
-                    <Field>
-                        <FieldLabel>Issue Title</FieldLabel>
-                        <TextEdit Placeholder="Enter title..." @bind-Text="@Title" />
-                    </Field>
-                </Column>
-            </Row>
-            <Row>
-                <Column>
-                    <Field>
-                        <FieldLabel>Created By:</FieldLabel>
-                        <FieldBody>
-                            <TextEdit Disabled="true" Placeholder="@context.User.Identity.Name" />
-                        </FieldBody>
-                    </Field>
-                </Column>
-                <Column>
-                    <Field>
+                <ModalBody>
+                    <Row>
+                        <Column>
+                            <Field>
+                                <FieldLabel>Issue Title</FieldLabel>
+                                <TextEdit Placeholder="Enter title..." @bind-Text="@Title" />
+                            </Field>
+                        </Column>
+                    </Row>
+                    <Row>
+                        <Column>
+                            <Field>
+                                <FieldLabel>Created By:</FieldLabel>
+                                <FieldBody>
+                                    <TextEdit Disabled="true" Placeholder="@context.User.Identity.Name" />
+                                </FieldBody>
+                            </Field>
+                        </Column>
+                        <Column>
+                            <Field>
 
-                        <FieldLabel>Assigned To:</FieldLabel>
-                        <Autocomplete TItem="ApplicationUser" TValue="string"
-                                      Data="@projectUsers"
-                                      TextField="@((item)=>item.Email)"
-                                      ValueField="@((item)=>item.Email)"
-                                      SelectedValue="@SelectedUser"
-                                      SelectedValueChanged="@AssignedUserHandler"
-                                      Placeholder="Search..." />
-                    </Field>
-                </Column>
-            </Row>
+                                <FieldLabel>Assigned To:</FieldLabel>
+                                <Autocomplete TItem="ApplicationUser" TValue="string"
+                                              Data="@projectUsers"
+                                              TextField="@((item)=>item.Email)"
+                                              ValueField="@((item)=>item.Email)"
+                                              SelectedValue="@SelectedUser"
+                                              SelectedValueChanged="@AssignedUserHandler"
+                                              Placeholder="Search..." />
+                            </Field>
+                        </Column>
+                    </Row>
 
-            <Row Margin="Margin.Is2.OnY">
-                <Column ColumnSize="ColumnSize.Is2">
-                    Issue Type:
-                </Column>
-                <Column>
+                    <Row Margin="Margin.Is2.OnY">
+                        <Column ColumnSize="ColumnSize.Is2">
+                            Issue Type:
+                        </Column>
+                        <Column>
 
-                    <RadioGroup TValue="IssueType" Name="issueType" @bind-CheckedValue="@CheckedIssueType" Color="Color.Light">
-                        <Radio TValue="IssueType" Value="@(IssueType.Bug)" Style="color: red">
-                            <label><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>Bug</span></label>
-                        </Radio>
-                        <Radio TValue="IssueType" Value="@(IssueType.Feature)" Style="color: forestgreen">
-                            <label><Icon Name="IconName.PlusCircle" /> <span>Feature</span></label>
-                        </Radio>
-                    </RadioGroup>
-                </Column>
-            </Row>
-            <Row Margin="Margin.Is2.OnY">
-                <Column ColumnSize="ColumnSize.Is2">
-                    Issue Priority:
-                </Column>
-                <Column ColumnSize="ColumnSize.Is10">
+                            <RadioGroup TValue="IssueType" Name="issueType" @bind-CheckedValue="@CheckedIssueType" Color="Color.Light">
+                                <Radio TValue="IssueType" Value="@(IssueType.Bug)" Style="color: red">
+                                    <label><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>Bug</span></label>
+                                </Radio>
+                                <Radio TValue="IssueType" Value="@(IssueType.Feature)" Style="color: forestgreen">
+                                    <label><Icon Name="IconName.PlusCircle" /> <span>Feature</span></label>
+                                </Radio>
+                            </RadioGroup>
+                        </Column>
+                    </Row>
+                    <Row Margin="Margin.Is2.OnY">
+                        <Column ColumnSize="ColumnSize.Is2">
+                            Issue Priority:
+                        </Column>
+                        <Column ColumnSize="ColumnSize.Is10">
 
-                    <RadioGroup TValue="IssuePriority" Name="issuePriority" Color="Color.Light" @bind-CheckedValue="@CheckedIssuePriority">
-                        <Radio TValue="IssuePriority" Value="@(IssuePriority.Low)" Style="color: darkgreen">
-                            <label><Icon Name="IconName.ArrowUp" /> <span>Low</span></label>
-                        </Radio>
-                        <Radio TValue="IssuePriority" Value="@(IssuePriority.Normal)" Style="color: orange">
-                            <label><Icon Name="IconName.ArrowUp" /> <span>Medium</span></label>
-                        </Radio>
-                        <Radio TValue="IssuePriority" Value="@(IssuePriority.High)" Style="color: red">
-                            <label><Icon Name="IconName.ArrowUp" /> <span>High</span></label>
-                        </Radio>
-                    </RadioGroup>
-                </Column>
-            </Row>
-            <Row>
-                <Column>
-                    <Field>
-                        <FieldLabel>Description</FieldLabel>
-                        <MemoEdit Rows="5" @bind-Text="@Description" />
-                    </Field>
-                </Column>
-            </Row>
-            <Row Margin="Margin.Is3.OnY">
-                <Column>
+                            <RadioGroup TValue="IssuePriority" Name="issuePriority" Color="Color.Light" @bind-CheckedValue="@CheckedIssuePriority">
+                                <Radio TValue="IssuePriority" Value="@(IssuePriority.Low)" Style="color: darkgreen">
+                                    <label><Icon Name="IconName.ArrowUp" /> <span>Low</span></label>
+                                </Radio>
+                                <Radio TValue="IssuePriority" Value="@(IssuePriority.Normal)" Style="color: orange">
+                                    <label><Icon Name="IconName.ArrowUp" /> <span>Medium</span></label>
+                                </Radio>
+                                <Radio TValue="IssuePriority" Value="@(IssuePriority.High)" Style="color: red">
+                                    <label><Icon Name="IconName.ArrowUp" /> <span>High</span></label>
+                                </Radio>
+                            </RadioGroup>
+                        </Column>
+                    </Row>
+                    <Row>
+                        <Column>
+                            <Field>
+                                <FieldLabel>Description</FieldLabel>
+                                <MemoEdit Rows="5" @bind-Text="@Description" />
+                            </Field>
+                        </Column>
+                    </Row>
+                    </ModalBody>
+                <ModalFooter>
                     <Button Color="Color.Primary" Clicked="@OnAddIssue">Add Issue</Button>
-                </Column>
-            </Row>
-        </Container>
+                    <Button Color="Color.Secondary" Clicked="@HideModal">Cancel</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     </Authorized>
 </AuthorizeView>
+
+@code{
+  
+    private Modal createIssueModal;
+
+    public void ShowModal()
+    {
+        createIssueModal.Show();
+    }
+
+    private void HideModal()
+    {
+        createIssueModal.Hide();
+    }
+}

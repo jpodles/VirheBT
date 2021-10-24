@@ -47,12 +47,13 @@
                         </BarItem>
 
                         <BarItem>
-                            <BarLink To="@($"project/{currentProject}/createissue")">
+                            <BarLink @onclick="createIssueRef.ShowModal">
                                 <BarIcon IconName="IconName.Add" />
                                 Create Issue
                             </BarLink>
                         </BarItem>
                         <Divider></Divider>
+                        <CreateIssue @ref="createIssueRef" ProjectId="@currentProject"></CreateIssue>
                     }
 
                     <BarItem>
@@ -89,7 +90,9 @@
 
 
 <VirheBT.Pages.CreateProject @ref="createProjectRef"></VirheBT.Pages.CreateProject>
+
 @code {
     CreateProject createProjectRef;
+    CreateIssue createIssueRef;
 
 }

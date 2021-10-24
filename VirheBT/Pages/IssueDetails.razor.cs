@@ -79,7 +79,6 @@ namespace VirheBT.Pages
 
         private async Task GetIssueAsync()
         {
-
             Issue = await IssueService.GetIssueAsync(ProjectId, IssueId);
             Title = Issue.Title;
             CreatedBy = Issue.CreatedBy?.Email ?? " ";
@@ -117,8 +116,6 @@ namespace VirheBT.Pages
 
             issueEdit.Modified = DateTimeOffset.UtcNow.LocalDateTime;
 
-
-
             try
             {
                 await IssueService.EditIssueAsync(ProjectId, IssueId, issueEdit);
@@ -126,8 +123,7 @@ namespace VirheBT.Pages
             catch (Exception e)
             {
                 failedAlert.Show();
-            }
-            
+            } 
             successAlert.Show();
             IssueHistory = await IssueService.GetIssueHistory(IssueId);
             StateHasChanged();
@@ -161,8 +157,6 @@ namespace VirheBT.Pages
                 User = await ApplicationUserService.GetApplicationUserByEmailAsync(httpContextAccessor.HttpContext.User.Identity.Name),
                 Text = CommentModalText,
             };
-
-
 
             await IssueService.AddCommentAsync(comment);
             CommentModalText = "";

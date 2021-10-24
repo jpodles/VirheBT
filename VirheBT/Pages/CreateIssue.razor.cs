@@ -26,11 +26,6 @@ namespace VirheBT.Pages
         [Inject]
         private IApplicationUserService ApplicationUserService { get; set; }
 
-        //[Inject]
-        //ProtectedSessionStorage ProtectedSessionStorage { get; set; }
-
-        //private int CurrentProjectId { get; set; }
-
         private string SelectedUser { get; set; }
 
        
@@ -54,11 +49,12 @@ namespace VirheBT.Pages
 
         protected async override Task OnInitializedAsync()
         {
-            projectUsers = await ProjectService.GetProjectUsersAsync(ProjectId);
-         
+            if(ProjectId != 0)
+            {
+                projectUsers = await ProjectService.GetProjectUsersAsync(ProjectId);
+            }
         }
 
-      
 
         private async Task OnAddIssue()
         {
@@ -80,7 +76,8 @@ namespace VirheBT.Pages
 
             await IssueService.AddIssueAsync(ProjectId, issueToAdd);
 
-            NavigationManager.NavigateTo($"/project/{ProjectId}/issues");
+            createIssueModal.Hide();
+            NavigationManager.NavigateTo($"/project/{ProjectId}/issues", true);
 
             //StateHasChanged();
         }

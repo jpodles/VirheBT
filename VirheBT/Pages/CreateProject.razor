@@ -43,19 +43,20 @@
                                     </Field>
                                 </Column>
                             </Row>
-                            <Row Margin="Margin.Is3.OnY">
-                                <Column>
-                                    <Button Color="Color.Primary" Clicked="@OnCreateAsync" Float="Float.Right" Margin="Margin.Is2.OnX"> Create project</Button>
-                                    <Button Color="Color.Secondary" Clicked="@HideModal"  Float="Float.Right"> Cancel</Button>
-                                </Column>
-                            </Row>
+                           
                         </ModalBody>
+                        <ModalFooter>
+                         
+                                    <Button Color="Color.Primary" Clicked="@OnCreateAsync" Float="Float.Right" Margin="Margin.Is2.OnX"> Create project</Button>
+                                    <Button Color="Color.Secondary" Clicked="@HideModal" Float="Float.Right"> Cancel</Button>
+                              
+                        </ModalFooter>
                 </ModalContent>
             </Modal>
         </Authorized>
     </AuthorizeView>
     @code{
-        // reference to the modal component
+       
         private Modal createProjectModal;
 
         public void ShowModal()
