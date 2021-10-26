@@ -26,6 +26,10 @@ namespace VirheBT.Pages
 
         protected override async Task OnInitializedAsync()
         {
+        }
+
+        protected async Task GetUserData()
+        {
             var user = await ApplicationUserService.GetApplicationUserAsync(UserId);
             UserName = user.FirstName + " " + user.LastName;
             Email = user.Email;

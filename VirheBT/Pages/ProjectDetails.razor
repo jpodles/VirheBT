@@ -1,212 +1,215 @@
 ﻿@page "/projects/{ProjectId:int}"
 @using VirheBT.Shared.Enums
 @using VirheBT.Infrastructure.Data.Models
-<Container Fluid="true" Margin="Margin.Is5.OnY" ElementId="projectDetails">
-    <Row Margin="Margin.Is5.OnY" Padding="Padding.Is1.OnY" Style=" margin-bottom: 0px">
-        <Column ColumnSize="ColumnSize.Is1">
+<AuthorizeView>
+    <Container Fluid="true" Margin="Margin.Is5.OnY" ElementId="projectDetails">
+        <Row Margin="Margin.Is2.OnY" Padding="Padding.Is1.OnY" Style=" margin-bottom: 0px">
+            <Column ColumnSize="ColumnSize.Is1">
 
-            <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/projects" Margin="Margin.Is3">
-                <Icon Name="IconName.ArrowLeft">Back</Icon>
-            </Button>
-        </Column>
-        <Column ColumnSize="ColumnSize.Is4">
-            <Card Background="Background.Transparent" Style="border: none;">
-                <CardBody>
-                    <h3>
-                        @Name
-                    </h3>
-                </CardBody>
-            </Card>
-        </Column>
-        <Column ColumnSize="ColumnSize.Is3">
-            <Card Background="Background.Transparent" Style="border: none;">
-                <CardBody>
-                    <Addons>
-                        <Addon AddonType="AddonType.Start">
-                            <AddonLabel>Maintainer:</AddonLabel>
-                        </Addon>
-                        <Addon AddonType="AddonType.Body">
+                <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/projects" Margin="Margin.Is3">
+                    <Icon Name="IconName.ArrowLeft">Back</Icon>
+                </Button>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is4">
+                <Card Background="Background.Transparent" Style="border: none;">
+                    <CardBody>
+                        <h3>
+                            @Name
+                        </h3>
+                    </CardBody>
+                </Card>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is4">
+                <Card Background="Background.Transparent" Style="border: none;">
+                    <CardBody>
+                        <Addons>
+                            <Addon AddonType="AddonType.Start">
+                                <AddonLabel>Maintainer:</AddonLabel>
+                            </Addon>
+                            <Addon AddonType="AddonType.Body">
 
-                            <Card>
-                                <h4 style="margin: 3px 10px 0 10px;">@Maintainer</h4>
-                            </Card>
-                        </Addon>
-                    </Addons>
-                </CardBody>
-            </Card>
-        </Column>
-        <Column ColumnSize="ColumnSize.Is4" Margin="Margin.Is2.OnY">
-            <Button Color="Color.Info" Size="Size.Medium" Type="ButtonType.Button" Clicked="@SwitchToProject"
-                    Margin="Margin.Is1">
-                SWITCH TO PROJECT
-            </Button>
+                                <Card>
+                                    <h4 style="margin: 3px 10px 0 10px;">@Maintainer</h4>
+                                </Card>
+                            </Addon>
+                        </Addons>
+                    </CardBody>
+                </Card>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is3" Margin="Margin.Is3.OnY">
+                <Button Color="Color.Info" Type="ButtonType.Button" Clicked="@SwitchToProject"
+                        Margin="Margin.Is1">
+                    SELECT
+                </Button>
 
-            <Button Color="Color.Warning" Size="Size.Medium" Type="ButtonType.Link"
-                     Margin="Margin.Is1" Clicked="(() => editProjectRef.ShowModal())">
-                EDIT
-            </Button>
-            @*<Button Color="Color.Danger" Size="Size.Medium" Type="ButtonType.Link" Clicked="@OnDeleteProject"
-                Margin="Margin.Is1">
-                DELETE
-                </Button>*@
-        </Column>
-    </Row>
-    <Divider Style="margin-top: 0px" Padding="Padding.Is0" />
-    <Row>
-        <Column ColumnSize="ColumnSize.Is5">
+               
+                <Button Color="Color.Warning" Type="ButtonType.Link"
+                        Margin="Margin.Is1" Clicked="(() => editProjectRef.ShowModal())" Disabled="!CanChange()">
+                    EDIT
+                </Button>
+                <Button Color="Color.Danger" Type="ButtonType.Link" Clicked="@OnDeleteProject"
+                        Margin="Margin.Is1" Disabled="!CanChange()">
+                    DELETE
+                </Button>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>
-                        Description
-                    </CardTitle>
-                </CardHeader>
-                <CardBody>
-                    <CardText>
-                        @Description
-                    </CardText>
-                </CardBody>
-            </Card>
-            <Card Margin="Margin.Is3.OnY">
-                <CardHeader>
-                    <CardTitle>
-                        Start Date
-                    </CardTitle>
-                </CardHeader>
-                <CardBody>
-                    <CardText>
-                        @Created
-                    </CardText>
-                </CardBody>
-            </Card>
-            <Card Margin="Margin.Is3.OnY">
-                <CardHeader>
-                    <CardTitle>
-                        Tasks In Project
-                    </CardTitle>
-                </CardHeader>
-                <CardBody>
-                    <Row Class="alert-secondary">
-                        <Column>
-                            All Tasks:
-                        </Column>
-                        <Column>
-                            @AllTasks
-                        </Column>
-                    </Row>
-                    <Row Class="alert-danger">
-                        <Column>
-                            To Do:
-                        </Column>
-                        <Column>
-                            @ToDoCount
-                        </Column>
-                    </Row>
+            </Column>
+        </Row>
+        <Divider Style="margin-top: 0px" Padding="Padding.Is0" />
+        <Row>
+            <Column ColumnSize="ColumnSize.Is5">
 
-                    <Row Class="alert-info">
-                        <Column>
-                            In Progress:
-                        </Column>
-                        <Column>
-                            @InProgressCount
-                        </Column>
-                    </Row>
-                    <Row Class="alert-success">
-                        <Column>
-                            Done:
-                        </Column>
-                        <Column>
-                            @DoneCount
-                        </Column>
-                    </Row>
-                </CardBody>
-            </Card>
-        </Column>
-        <Column ColumnSize="ColumnSize.Is7">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Employees in current project</CardTitle>
-                </CardHeader>
-                <CardBody>
-                    <DataGrid @ref="dataGrid" TItem="ApplicationUser" Data="team" Editable="@editable" EditMode="@editMode"
-                              Sortable="@sortable" SortMode="@sortMode" Filterable="@filterable" ShowPager="@showPager"
-                              SelectionMode="@selectionMode" CommandMode="@commandsMode" PageSize="15" CurrentPage="currentPage"
-                              PageChanged="(e) => currentPage = e.Page" PagerPosition="DataGridPagerPosition.Bottom"
-                              Striped="false" Bordered="true" Hoverable="true" Responsive="true" Narrow="true">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            Description
+                        </CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <CardText>
+                            @Description
+                        </CardText>
+                    </CardBody>
+                </Card>
+                <Card Margin="Margin.Is3.OnY">
+                    <CardHeader>
+                        <CardTitle>
+                            Start Date
+                        </CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <CardText>
+                            @Created
+                        </CardText>
+                    </CardBody>
+                </Card>
+                <Card Margin="Margin.Is3.OnY">
+                    <CardHeader>
+                        <CardTitle>
+                            Tasks In Project
+                        </CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <Row Class="alert-secondary">
+                            <Column>
+                                All Tasks:
+                            </Column>
+                            <Column>
+                                @AllTasks
+                            </Column>
+                        </Row>
+                        <Row Class="alert-danger">
+                            <Column>
+                                To Do:
+                            </Column>
+                            <Column>
+                                @ToDoCount
+                            </Column>
+                        </Row>
 
-                        <DataGridColumns>
-                            <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Email"
-                                            Editable="false" TextAlignment="TextAlignment.Center"
-                                            HeaderTextAlignment="TextAlignment.Center" Sortable="true">
-                                <CaptionTemplate>
-                                    <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Envelope" /> @context.Caption
-                                </CaptionTemplate>
-                            </DataGridColumn>
+                        <Row Class="alert-info">
+                            <Column>
+                                In Progress:
+                            </Column>
+                            <Column>
+                                @InProgressCount
+                            </Column>
+                        </Row>
+                        <Row Class="alert-success">
+                            <Column>
+                                Done:
+                            </Column>
+                            <Column>
+                                @DoneCount
+                            </Column>
+                        </Row>
+                    </CardBody>
+                </Card>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is7">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Employees in current project</CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <DataGrid @ref="dataGrid" TItem="ApplicationUser" Data="team" Editable="@editable" EditMode="@editMode"
+                                  Sortable="@sortable" SortMode="@sortMode" Filterable="@filterable" ShowPager="@showPager"
+                                  SelectionMode="@selectionMode" CommandMode="@commandsMode" PageSize="15" CurrentPage="currentPage"
+                                  PageChanged="(e) => currentPage = e.Page" PagerPosition="DataGridPagerPosition.Bottom"
+                                  Striped="false" Bordered="true" Hoverable="true" Responsive="true" Narrow="true">
 
-                            <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="Role"
-                                            Editable="false" Sortable="false" HeaderTextAlignment="TextAlignment.Center"
-                                            TextAlignment="TextAlignment.Center">
-                                <CaptionTemplate>
-                                    <Icon Name="IconName.UserTie" /> @context.Caption
-                                </CaptionTemplate>
-                                <DisplayTemplate>
+                            <DataGridColumns>
+                                <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Email"
+                                                Editable="false" TextAlignment="TextAlignment.Center"
+                                                HeaderTextAlignment="TextAlignment.Center" Sortable="true">
+                                    <CaptionTemplate Context="dataGridContext">
+                                        <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Envelope" /> @dataGridContext.Caption
+                                    </CaptionTemplate>
+                                </DataGridColumn>
 
-                                    @{
-                                        var item = (context as ApplicationUser);
-                                        if (item.UserRole == UserRole.Admin)
-                                        {
-                                            <label style="color: darkred">
-                                                <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" />
-                                                <span>@context.UserRole</span>
-                                            </label>
-                                        }
-                                        if (item.UserRole == UserRole.Programmer)
-                                        {
-                                            <label style="color:green">
-                                                <Icon Name="IconName.User" /> <span>@context.UserRole</span>
-                                            </label>
+                                <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="Role"
+                                                Editable="false" Sortable="false" HeaderTextAlignment="TextAlignment.Center"
+                                                TextAlignment="TextAlignment.Center">
+                                    <CaptionTemplate Context="dataGridContext">
+                                        <Icon Name="IconName.UserTie" /> @dataGridContext.Caption
+                                    </CaptionTemplate>
+                                    <DisplayTemplate Context="dataGridContext">
 
-                                        }
-                                        if (item.UserRole == UserRole.Tester)
-                                        {
-                                            <label style="color: cornflowerblue">
-                                                <Icon Name="IconName.User" /> <span>@context.UserRole</span>
-                                            </label>
-
-                                        }
-                                        if (item.UserRole == UserRole.ProjectManager)
-                                        {
-                                            <label style="color:darkorange">
-                                                <Icon Name="IconName.UserTie" /> <span>@context.UserRole</span>
-                                            </label>
-
-                                        }
-
-                                    }
-                                </DisplayTemplate>
-                                <FilterTemplate>
-                                    @{
-                                        var selectedValue = @context.SearchValue ?? "*";
-                                        <Select TValue="string" SelectedValue="@selectedValue.ToString()"
-                                                SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
-                                            <SelectItem Value="@("*")">All</SelectItem>
-                                            @foreach (var item in Enum.GetValues(typeof(UserRole)))
+                                        @{
+                                            var item = (dataGridContext as ApplicationUser);
+                                            if (item.UserRole == UserRole.Admin)
                                             {
-                                                <SelectItem Value="@item">@item</SelectItem>
+                                                <label style="color: darkred">
+                                                    <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" />
+                                                    <span>@dataGridContext.UserRole</span>
+                                                </label>
                                             }
-                                        </Select>
-                                    }
-                                </FilterTemplate>
-                            </DataGridColumn>
-                        </DataGridColumns>
-                    </DataGrid>
-                </CardBody>
-            </Card>
-        </Column>
-    </Row>
+                                            if (item.UserRole == UserRole.Programmer)
+                                            {
+                                                <label style="color:green">
+                                                    <Icon Name="IconName.User" /> <span>@dataGridContext.UserRole</span>
+                                                </label>
 
-</Container>
+                                            }
+                                            if (item.UserRole == UserRole.Tester)
+                                            {
+                                                <label style="color: cornflowerblue">
+                                                    <Icon Name="IconName.User" /> <span>@dataGridContext.UserRole</span>
+                                                </label>
 
+                                            }
+                                            if (item.UserRole == UserRole.ProjectManager)
+                                            {
+                                                <label style="color:darkorange">
+                                                    <Icon Name="IconName.UserTie" /> <span>@dataGridContext.UserRole</span>
+                                                </label>
+
+                                            }
+
+                                        }
+                                    </DisplayTemplate>
+                                    <FilterTemplate Context="filterContext">
+                                        @{
+                                            var selectedValue = filterContext.SearchValue ?? "*";
+                                            <Select TValue="string" SelectedValue="@selectedValue.ToString()"
+                                                    SelectedValueChanged="@(e => filterContext.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                                                <SelectItem Value="@("*")">All</SelectItem>
+                                                @foreach (var item in Enum.GetValues(typeof(UserRole)))
+                                                {
+                                                    <SelectItem Value="@item">@item</SelectItem>
+                                                }
+                                            </Select>
+                                        }
+                                    </FilterTemplate>
+                                </DataGridColumn>
+                            </DataGridColumns>
+                        </DataGrid>
+                    </CardBody>
+                </Card>
+            </Column>
+        </Row>
+
+    </Container>
+</AuthorizeView>
 
 <EditProject @ref="editProjectRef" ProjectId="ProjectId"></EditProject>
 

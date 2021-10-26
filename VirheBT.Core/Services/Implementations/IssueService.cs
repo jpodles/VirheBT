@@ -69,6 +69,15 @@ namespace VirheBT.Services.Implementations
         {
             var issues = await GetIssuesAsync(projectId);
             await issueRepo.AddIsssueAsync(issues, issue);
+
+            var historyEntry = new IssueHistory
+            {
+                ChangeType = ChangeType.Created,
+                ChangeDate = issue.Created,
+                Issue = issue,
+                User = issue.CreatedBy
+            };
+            await issueHistoryRepo.AddIssueHistoryAsync(historyEntry);
         }
 
         public async Task DeleteCommentAsync(int issueId, int commentId)
@@ -85,7 +94,14 @@ namespace VirheBT.Services.Implementations
 
         public async Task EditCommentAsync(IssueComment comment)
         {
+           
             await issueCommentRepo.EditCommentAsync(comment);
+        }
+
+        public async Task<IssueComment> GetIssueCommentAsync(int issueId,int commentId)
+        {
+            return await issueCommentRepo.GetIssueCommentAsync(issueId, commentId);
+
         }
 
         public async Task EditIssueAsync(int projectId, int issueId, Issue issue)

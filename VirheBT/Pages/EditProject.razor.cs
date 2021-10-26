@@ -33,7 +33,7 @@ namespace VirheBT.Pages
             };
 
             await ProjectService.UpdateProjectAsync(ProjectId, editModel);
-            NavigationManager.NavigateTo($"/projects/{ProjectId}");
+            NavigationManager.NavigateTo($"/projects/{ProjectId}", true);
         }
 
         protected async override Task OnInitializedAsync()
@@ -41,7 +41,7 @@ namespace VirheBT.Pages
             if(ProjectId != 0)
             {
                 await GetData();
-            }      
+            }
         }
 
         private async Task GetData()

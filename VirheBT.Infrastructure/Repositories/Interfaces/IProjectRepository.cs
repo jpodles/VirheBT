@@ -13,7 +13,7 @@ namespace VirheBT.Infrastructure.Repositories.Interfaces
 
         Task<IEnumerable<ApplicationUser>> GetProjectUsersAsync(int projectId);
 
-        void CreateProjectAsync(Project project);
+        Task CreateProjectAsync(Project project);
 
         Task UpdateProjectAsync(int projectId, Project project);
 
@@ -21,5 +21,7 @@ namespace VirheBT.Infrastructure.Repositories.Interfaces
 
         //void DeactivateProjectAsync(int projectId);
         Task AddUserToProjectAsync(ApplicationUser user, int projectId);
+
+        Task DeleteProject(Project project);
     }
 }

@@ -7,7 +7,6 @@
 
 <AuthorizeView>
     <Authorized>
-
         <Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet"
              Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small"
              Style="background-color: #ECECEC">
@@ -56,6 +55,7 @@
                         <CreateIssue @ref="createIssueRef" ProjectId="@currentProject"></CreateIssue>
                     }
 
+
                     <BarItem>
                         <BarItem>
                             <BarLink To="/projects">
@@ -64,23 +64,31 @@
                             </BarLink>
                         </BarItem>
                     </BarItem>
-                    <BarItem>
-                        <BarLink @onclick="createProjectRef.ShowModal">
-                            <BarIcon IconName="IconName.FolderPlus" />
-                            Create Project
-                        </BarLink>
-                    </BarItem>
-                    <Divider></Divider>
-                    <BarItem>
+
+                    @if (context.User.IsInRole("Admin") || context.User.IsInRole("ProjectManager"))
+                    {
                         <BarItem>
-                            <BarLink To="/users">
-                                <BarIcon IconName="IconName.UserFriends" />
-                                System Users
+                            <BarLink @onclick="createProjectRef.ShowModal">
+                                <BarIcon IconName="IconName.FolderPlus" />
+                                Create Project
                             </BarLink>
                         </BarItem>
-                    </BarItem>
-
+                    }
                     <Divider></Divider>
+
+                    @if (context.User.IsInRole("Admin"))
+                    {
+                        <BarItem>
+                            <BarItem>
+                                <BarLink To="/users">
+                                    <BarIcon IconName="IconName.UserFriends" />
+                                    System Users
+                                </BarLink>
+                            </BarItem>
+                        </BarItem>
+                        <Divider></Divider>
+                    }
+
                 </BarStart>
             </BarMenu>
             <BarToggler />

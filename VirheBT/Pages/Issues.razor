@@ -29,15 +29,13 @@
                   Narrow="true"
                   RowRemoved="@OnRowRemoved">
 
-            <DataGridColumns>
-                <DataGridMultiSelectColumn TItem="Issue" Width="15px">
+            <EmptyTemplate>
+                <div class="text-center">
+                    No issues are found!
+                </div>
+            </EmptyTemplate>
 
-                    @*<MultiSelectTemplate>
-                            <Label @onclick:stopPropagation>
-                                <Check TValue="bool" Checked="@context.IsSelected" Indeterminate="@context.IsIndeterminate" CheckedChanged="@context.SelectedChanged" @onclick:stopPropagation></Check>
-                            </Label>
-                        </MultiSelectTemplate>*@
-                </DataGridMultiSelectColumn>
+            <DataGridColumns>
                 <DataGridColumn TItem="Issue" Field="@nameof(Issue.IssueId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
 
                 <DataGridColumn TItem="Issue" Field="@nameof(Issue.Title)" Caption="Title" Editable="false" Width="500px">
@@ -47,7 +45,7 @@
 
                     <DisplayTemplate>
 
-                        <Link To=@($"project/{ProjectId}/issue/{context.IssueId}")>
+                        <Link To=@($"project/{ProjectId}/issue/{context.IssueId}") Style="text-decoration: none">
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
 
                             @context.Title
@@ -60,6 +58,14 @@
                     <CaptionTemplate>
                         <Icon Name="IconName.UserCheck" /> @context.Caption
                     </CaptionTemplate>
+                    <DisplayTemplate>
+
+                        <Link To=@($"project/{ProjectId}/issue/{context.IssueId}") Style="text-decoration: none">
+                        <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                            @context.AssignedTo.FirstName @context.AssignedTo.LastName
+                        </Card>
+                        </Link>
+                    </DisplayTemplate>
                     <FilterTemplate>
                         @{
                             var selectedValue = @context.SearchValue ?? "*";
@@ -69,7 +75,11 @@
 
                                 @foreach (var item in issues.Select(p => p.AssignedTo).Distinct())
                                 {
-                                    <SelectItem Value="@item">@item</SelectItem>
+                                    if (item != null)
+                                    {
+
+                                        <SelectItem Value="@item">@item</SelectItem>
+                                    }
                                 }
                             </Select>
                         }
@@ -80,21 +90,24 @@
                         <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Robot" /> @context.Caption
                     </CaptionTemplate>
                     <DisplayTemplate>
+                        <Link To=@($"project/{ProjectId}/issue/{context.IssueId}") Style="text-decoration: none">
+                        <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                            @{
+                                var issueItem = (context as Issue);
+                                if (issueItem.Type == IssueType.Feature)
+                                {
+                                    <label style="color:forestgreen"><Icon Name="IconName.PlusCircle" /> <span>@context.Type</span></label>
 
-                        @{
-                            var issueItem = (context as Issue);
-                            if (issueItem.Type == IssueType.Feature)
-                            {
-                                <label style="color:forestgreen"><Icon Name="IconName.PlusCircle" /> <span>@context.Type</span></label>
+                                }
+                                else
+                                {
+                                    <label style="color:red"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>@context.Type</span></label>
+
+                                }
 
                             }
-                            else
-                            {
-                                <label style="color:red"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>@context.Type</span></label>
-
-                            }
-
-                        }
+                        </Card>
+                        </Link>
                     </DisplayTemplate>
                     <FilterTemplate>
                         @{
@@ -114,26 +127,29 @@
                         <Icon Name="IconName.ExclamationTriangle" /> @context.Caption
                     </CaptionTemplate>
                     <DisplayTemplate>
+                        <Link To=@($"project/{ProjectId}/issue/{context.IssueId}") Style="text-decoration: none">
+                        <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                            @{
+                                var issueItem = (context as Issue);
+                                if (issueItem.Priority == IssuePriority.Low)
+                                {
+                                    <label style="color:darkgreen"><Icon Name="IconName.ArrowUp" /> <span>@context.Priority</span></label>
 
-                        @{
-                            var issueItem = (context as Issue);
-                            if (issueItem.Priority == IssuePriority.Low)
-                            {
-                                <label style="color:darkgreen"><Icon Name="IconName.ArrowUp" /> <span>@context.Priority</span></label>
+                                }
+                                if (issueItem.Priority == IssuePriority.Normal)
+                                {
+                                    <label style="color:orange"><Icon Name="IconName.ArrowUp" /> <span>@context.Priority</span></label>
+
+                                }
+                                if (issueItem.Priority == IssuePriority.High)
+                                {
+                                    <label style="color:red"><Icon Name="IconName.ArrowUp" /> <span>@context.Priority</span></label>
+
+                                }
 
                             }
-                            if (issueItem.Priority == IssuePriority.Normal)
-                            {
-                                <label style="color:orange"><Icon Name="IconName.ArrowUp" /> <span>@context.Priority</span></label>
-
-                            }
-                            if (issueItem.Priority == IssuePriority.High)
-                            {
-                                <label style="color:red"><Icon Name="IconName.ArrowUp" /> <span>@context.Priority</span></label>
-
-                            }
-
-                        }
+                        </Card>
+                        </Link>
                     </DisplayTemplate>
                     <FilterTemplate>
                         @{
@@ -153,26 +169,29 @@
                         <Icon Name="IconName.Compass" /> @context.Caption
                     </CaptionTemplate>
                     <DisplayTemplate>
+                        <Link To=@($"project/{ProjectId}/issue/{context.IssueId}") Style="text-decoration: none">
+                        <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                            @{
+                                var issueItem = (context as Issue);
+                                if (issueItem.Status == IssueStatus.ToDo)
+                                {
+                                    <label style="color:darkred"><Icon Name="IconName.ExclamationTriangle" /> <span>@context.Status</span></label>
 
-                        @{
-                            var issueItem = (context as Issue);
-                            if (issueItem.Status == IssueStatus.ToDo)
-                            {
-                                <label style="color:darkred"><Icon Name="IconName.ExclamationTriangle" /> <span>@context.Status</span></label>
+                                }
+                                if (issueItem.Status == IssueStatus.InProgress)
+                                {
+                                    <label style="color:cornflowerblue"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Spinner" /> <span>@context.Status</span></label>
+
+                                }
+                                if (issueItem.Status == IssueStatus.Done)
+                                {
+                                    <label style="color:green"><Icon Name="IconName.CheckCircle" /> <span>@context.Status</span></label>
+
+                                }
 
                             }
-                            if (issueItem.Status == IssueStatus.InProgress)
-                            {
-                                <label style="color:cornflowerblue"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Spinner" /> <span>@context.Status</span></label>
-
-                            }
-                            if (issueItem.Status == IssueStatus.Done)
-                            {
-                                <label style="color:green"><Icon Name="IconName.CheckCircle" /> <span>@context.Status</span></label>
-
-                            }
-
-                        }
+                        </Card>
+                        </Link>
                     </DisplayTemplate>
 
                     <FilterTemplate>
@@ -189,14 +208,14 @@
                     </FilterTemplate>
                 </DataGridColumn>
 
-                <DataGridCommandColumn TItem="Issue" Width="87px" TextAlignment="TextAlignment.Center">
+                <DataGridCommandColumn TItem="Issue" Width="40px">
                     <ClearFilterCommandTemplate>
                         <Button Color="Color.Warning" Clicked="@context.Clicked">
-                            Clear filter
+                            <Icon Name="IconName.Brush" />
                         </Button>
                     </ClearFilterCommandTemplate>
                     <DeleteCommandTemplate>
-                        <Button Clicked="@context.Clicked" Color="Color.Danger">
+                        <Button Clicked="@context.Clicked" Color="Color.Danger" Style="display: none">
                             <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Trash" />
                         </Button>
                     </DeleteCommandTemplate>
@@ -205,10 +224,19 @@
                         <Button Color="Color.Success" Clicked="@context.Clicked" Style="display:none">New</Button>
                     </NewCommandTemplate>
                     <EditCommandTemplate>
-                        <Button Color="Color.Primary" Clicked="@context.Clicked" Style="display:none">Edit</Button>
+                        <Link To=@($"project/{ProjectId}/issue/{context.Item.IssueId}")>
+                        <Button Color="Color.Primary">
+                            <Icon Name="IconName.ArrowRight" />
+                        </Button>
+                        </Link>
                     </EditCommandTemplate>
                 </DataGridCommandColumn>
             </DataGridColumns>
+            <LoadingTemplate>
+                <div class="box">
+                    <progress class="progress is-small is-primary" max="100" />
+                </div>
+            </LoadingTemplate>
         </DataGrid>
     </CardBody>
 </Card>

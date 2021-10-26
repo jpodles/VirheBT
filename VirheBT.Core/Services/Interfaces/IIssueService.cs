@@ -23,6 +23,8 @@ namespace VirheBT.Services.Interfaces
 
         Task<List<IssueCommentDto>> GetIssueCommentsAsync(int projectId, int issueId);
 
+        Task<IssueComment> GetIssueCommentAsync(int issueId, int commentId);
+
         Task AddCommentAsync(IssueComment comment);
 
         Task EditCommentAsync(IssueComment comment);

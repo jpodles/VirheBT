@@ -30,7 +30,7 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
             Save();
         }
 
-        public async void CreateProjectAsync(Project project)
+        public async Task CreateProjectAsync(Project project)
         {
             await _context.Projects.AddAsync(project);
             await _context.SaveChangesAsync();
@@ -40,8 +40,6 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
         {
             return await _context.Projects
                 .Where(p => p.ProjectId == projectId).FirstOrDefaultAsync();
-
-
         }
 
         public async Task<IEnumerable<Project>> GetProjectsAsync()
@@ -81,6 +79,12 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
         public bool Save()
         {
             return _context.SaveChanges() >= 0;
+        }
+
+        public async Task DeleteProject(Project project)
+        {
+            _context.Projects.Remove(project);
+            await _context.SaveChangesAsync();
         }
     }
 }

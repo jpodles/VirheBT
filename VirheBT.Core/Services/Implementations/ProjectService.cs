@@ -34,7 +34,7 @@ namespace VirheBT.Services.Implementations
             await _projectRepository.AddUserToProjectAsync(user, projectId);
         }
 
-        public async void CreateProject(string projectName, string description, string maintainerEmail)
+        public async Task CreateProjectAsync(string projectName, string description, string maintainerEmail)
         {
             var maintainer = await _userService.GetApplicationUserByEmailAsync(maintainerEmail);
 
@@ -47,11 +47,8 @@ namespace VirheBT.Services.Implementations
                 Created = DateTime.Now,
             };
 
-            if (maintainer.ProjectMaintained == null)
-            {
-                project.ApplicationUsers.Add(maintainer);
-                _projectRepository.CreateProjectAsync(project);
-            }
+            project.ApplicationUsers.Add(maintainer);
+            await _projectRepository.CreateProjectAsync(project);
         }
 
         public async Task<Project> GetProjectAsync(int projectId)
@@ -79,17 +76,18 @@ namespace VirheBT.Services.Implementations
             await _projectRepository.RemoveUserFromProjectAsync(userEntity, projectId);
         }
 
+        public async Task DeleteProject(Project project)
+        {
+            await _projectRepository.DeleteProject(project);
+        }
+
         public async Task UpdateProjectAsync(int projectId, Project project)
         {
             if (projectId == 0)
-            {
                 throw new ArgumentException("Parameter cannot has zero value", nameof(projectId));
-            }
 
             if (project == null)
-            {
                 throw new ArgumentNullException("Object cannot be null", nameof(project));
-            }
 
             await _projectRepository.UpdateProjectAsync(projectId, project);
         }

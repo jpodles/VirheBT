@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,10 +14,12 @@ namespace VirheBT.Services.Implementations
     public class ApplicationUserService : IApplicationUserService
     {
         private readonly IApplicationUserRepository _userRepository;
+        
 
         public ApplicationUserService(IApplicationUserRepository userRepository)
         {
             _userRepository = userRepository;
+           
         }
 
         public void DeactivateUserAsync(string userId)
@@ -24,7 +28,7 @@ namespace VirheBT.Services.Implementations
         }
 
         public async Task UpdateUserAsync(ApplicationUser applicationUser, string userId)
-        {
+        { 
             await _userRepository.UpdateUserAsync(applicationUser, userId);
         }
 

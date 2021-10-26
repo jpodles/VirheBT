@@ -1,7 +1,9 @@
-﻿using Blazorise.DataGrid;
+﻿using Blazorise;
+using Blazorise.DataGrid;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.AspNetCore.Http;
 
 using System;
 using System.Collections.Generic;
@@ -11,12 +13,13 @@ using System.Threading.Tasks;
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
 using VirheBT.Shared.Enums;
-using VirheBT.State;
+
 
 namespace VirheBT.Pages
 {
     public partial class ProjectDetails
     {
+        [Inject] IMessageService MessageService { get; set; }
         private bool editable = true;
         private bool sortable = true;
         private bool filterable = true;
@@ -60,6 +63,9 @@ namespace VirheBT.Pages
         [Inject]
         private IIssueService IssueService { get; set; }
 
+        [Inject]
+        IHttpContextAccessor httpAccessor { get; set; }
+
         protected async override Task OnInitializedAsync()
         {
             CurrentProject = await ProjectService.GetProjectAsync(ProjectId);
@@ -83,10 +89,10 @@ namespace VirheBT.Pages
                 .Count(x => x.Status == IssueStatus.Done);
         }
 
-        protected override void OnAfterRender(bool firstRender)
+        public bool CanChange()
         {
+            return httpAccessor.HttpContext.User.IsInRole("Admin") || httpAccessor.HttpContext.User.IsInRole("ProjectManager");
         }
-
         private async void SwitchToProject()
         {
             await ProtectedSessionStore.SetAsync("currentProject", ProjectId);
@@ -95,7 +101,17 @@ namespace VirheBT.Pages
 
         private async void OnDeleteProject()
         {
-            throw new NotImplementedException();
+            if (!await MessageService.Confirm("Are you sure you want to delete this project?", $"Delete issue #{CurrentProject.ProjectId}?",
+               x =>
+               {
+                   x.CancelButtonText = "Delete";
+                   x.ConfirmButtonText = "Cancel";
+                   x.ShowMessageIcon = false;
+               }))
+            {
+                await ProjectService.DeleteProject(CurrentProject);
+                NavigationManager.NavigateTo($"/projects");
+            }
         }
     }
 }

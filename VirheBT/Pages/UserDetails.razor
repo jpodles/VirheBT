@@ -1,86 +1,119 @@
-﻿@page "/userdetails/{UserId}"
-    <Container Margin="Margin.Is5.OnY" Fluid="true">
-        <Row Padding="Padding.Is2.OnY" Style=" margin-bottom: 0px">
-            <Column ColumnSize="ColumnSize.Is3">
+﻿@*@page "/userdetails/{UserId}"*@
+<Modal @ref="userDetailsModal">
+    <ModalContent Size="ModalSize.Large">
+        <ModalHeader>
+            <ModalTitle>
+                @UserName details
+            </ModalTitle>
 
-                <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="/users" >
-                    <Icon Name="IconName.ArrowLeft"> </Icon>
-                    Back
-                </Button>
-            </Column>
-        </Row>
-        <Row>
-            <Column ColumnSize="ColumnSize.Is4">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Employee details</CardTitle>
-                    </CardHeader>
-                    <CardBody>
-                        <Row>
-                            <Column ColumnSize="ColumnSize.Is1">
-                                <Icon Name="IconName.UserCircle" />
-                            </Column>
-                            <Column>
-                                <CardText>@UserName</CardText>
-                            </Column>
-                        </Row>
-                        <Row Margin="Margin.Is2.OnY">
-                            <Column ColumnSize="ColumnSize.Is1">
-                                <Icon Name="IconName.UserTie" />
-                            </Column>
-                            <Column>
-                                @UserRole
-                            </Column>
-                        </Row>
-                        <Row Margin="Margin.Is2.OnY">
-                            <Column ColumnSize="ColumnSize.Is1">
-                                <Icon Name="IconName.Mail" />
-                            </Column>
-                            <Column>
-                                @Email
-                            </Column>
-                        </Row>
-                        <Row>
-                            <Column ColumnSize="ColumnSize.Is1">
-                                <Icon Name="IconName.Phone" />
-                            </Column>
-                            <Column>
-                                @PhoneNumber
-                            </Column>
-                        </Row>
-                    </CardBody>
-                </Card>
-            </Column>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Row>
+                <Column ColumnSize="ColumnSize.Is12">
+                    <Card>
 
-            <Column ColumnSize="ColumnSize.Is6">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Working on:</CardTitle>
-                    </CardHeader>
-                    <CardBody>
-                        <CardText>
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHeaderCell>#</TableHeaderCell>
-                                        <TableHeaderCell>Project Name</TableHeaderCell>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    @foreach (var project in Projects)
-                                    {
+                        <CardBody>
+                            <Row>
+                                <Column ColumnSize="ColumnSize.Is2">
+                                    <Icon Name="IconName.UserCircle" />
+                                    Name:
+                                </Column>
+                                <Column>
+                                    <CardText>@UserName</CardText>
+                                </Column>
+                            </Row>
+                            <Row Margin="Margin.Is2.OnY">
+                                <Column ColumnSize="ColumnSize.Is2">
+                                    <Icon Name="IconName.UserTie" />
+                                    Role:
+                                </Column>
+                                <Column>
+                                    @UserRole
+                                </Column>
+                            </Row>
+                            <Row Margin="Margin.Is2.OnY">
+                                <Column ColumnSize="ColumnSize.Is2">
+                                    <Icon Name="IconName.Mail" />
+                                    Email:
+                                </Column>
+                                <Column>
+                                    @Email
+                                </Column>
+                            </Row>
+                            <Row>
+                                <Column ColumnSize="ColumnSize.Is2">
+                                    <Icon Name="IconName.Phone" />
+                                    Phone:
+                                </Column>
+                                <Column>
+                                    @PhoneNumber
+                                </Column>
+                            </Row>
+                        </CardBody>
+                    </Card>
+                </Column>
+            </Row>
+            <Row Padding="Padding.Is1.OnY">
+                <Column ColumnSize="ColumnSize.Is12">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Working on:</CardTitle>
+                        </CardHeader>
+                        <CardBody Padding="Padding.Is0">
+
+                                <Table Striped="true">
+                                    <TableHeader FixedHeader="true" FixedHeaderTableHeight="100px" ThemeContrast="ThemeContrast.Light">
+                                        <TableRow>
+                                            <TableHeaderCell>#</TableHeaderCell>
+                                            <TableHeaderCell>Project Name</TableHeaderCell>
+                                            <TableHeaderCell>Project Status</TableHeaderCell>
+                                            <TableHeaderCell>Started</TableHeaderCell>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        @foreach (var project in Projects)
+                                        {
 
                                         <TableRow>
                                             <TableRowHeader>@project.ProjectId</TableRowHeader>
                                             <TableRowCell>@project.Name</TableRowCell>
+                                            <TableRowCell>@project.Status</TableRowCell>
+                                            <TableRowCell>@project.Created</TableRowCell>
                                         </TableRow>
-                                    }
-                                </TableBody>
-                            </Table>
-                        </CardText>
-                    </CardBody>
-                </Card>
-            </Column>
-            <Column ColumnSize="ColumnSize.Is2"></Column>
-        </Row>
-    </Container>
+                                        }
+                                    </TableBody>
+                                </Table>
+
+                        </CardBody>
+                    </Card>
+                </Column>
+            </Row>
+
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+@code{
+
+    private Modal userDetailsModal;
+    private Table tableRef;
+
+    public async void ShowModal(string userId)
+    {
+        UserId = userId;
+        await GetUserData();
+        userDetailsModal.Show();
+    }
+
+    private void HideModal()
+    {
+        userDetailsModal.Hide();
+    }
+
+
+
+
+}

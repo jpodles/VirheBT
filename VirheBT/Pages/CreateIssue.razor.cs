@@ -75,9 +75,10 @@ namespace VirheBT.Pages
             };
 
             await IssueService.AddIssueAsync(ProjectId, issueToAdd);
-
+            var issues = await IssueService.GetIssuesAsync(ProjectId);
+            var issue = issues.OrderByDescending(x => x.Created).First();
             createIssueModal.Hide();
-            NavigationManager.NavigateTo($"/project/{ProjectId}/issues", true);
+            NavigationManager.NavigateTo($"/project/{ProjectId}/issue/{issue.IssueId}", true);
 
             //StateHasChanged();
         }

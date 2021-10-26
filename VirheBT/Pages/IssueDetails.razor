@@ -3,269 +3,283 @@
 @using VirheBT.Shared.Components
 @using VirheBT.Shared.Enums
 @using VirheBT.Infrastructure.Data.Models
-<Container  Fluid="true" Margin="Margin.Is5.OnY" Padding="Padding.Is4.OnY" ElementId="issueDetails">
-<Row Padding="Padding.Is2.OnY" Style=" margin-bottom: 0px">
-    <Column ColumnSize="ColumnSize.Is1">
 
-        <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="@($"project/{ProjectId}/issues")">
-            <Icon Name="IconName.ArrowLeft"></Icon>
-            Back
-        </Button>
-    </Column>
-    <Column ColumnSize="ColumnSize.Is7">
-        <Card Background="Background.Transparent" Style="border: none;">
-            <TextEdit Size="Size.Large" @bind-Text="@Title" />
-        </Card>
-    </Column>
-    <Column ColumnSize="ColumnSize.Is4">
- 
-        <Button Size="Size.Medium" Float="Float.Right" Color="Color.Info" Clicked="@OnEditAsync">Save Changes</Button>
-    </Column>
-</Row>
-<Divider Style="margin-top: 0px" Padding="Padding.Is0" />
-<Row>
-    <Column ColumnSize="ColumnSize.Is7">
-        <Accordion>
-            @*DESCRIPTION TEXT EDIT*@
-            <Collapse Visible="@_descSectionVisible">
-                <CollapseHeader Padding="Padding.Is0">
-                    <Button Clicked="@(()=>_descSectionVisible = !_descSectionVisible)" Style="width:100%">
-                        Description
-                        @if (_descSectionVisible == true)
-                        {
-                            <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
-                        }
-                        @if (_descSectionVisible == false)
-                        {
-                            <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
-                        }
-                    </Button>
-                </CollapseHeader>
-                <CollapseBody >
-                    <MemoEdit Rows="15" @bind-Text="@Description"></MemoEdit>
-                </CollapseBody>
-            </Collapse>
-            @*COMMENT SECTION*@
-            <Collapse Visible="@_commentSectionVisible">
-                <CollapseHeader Padding="Padding.Is0">
-                    <Button Clicked="@(()=>_commentSectionVisible = !_commentSectionVisible)" Style="width:100%">
-                        Comments
+<AuthorizeView>
+    <Container Fluid="true" Margin="Margin.Is5.OnY" Padding="Padding.Is4.OnY" ElementId="issueDetails">
+        <Row Padding="Padding.Is2.OnY" Style=" margin-bottom: 0px">
+            <Column ColumnSize="ColumnSize.Is1">
 
-                        @if (_commentSectionVisible == true)
-                        {
-                            <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
-                        }
-                        @if (_commentSectionVisible == false)
-                        {
-                            <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
-                        }
-                    </Button>
-                </CollapseHeader>
-                <CollapseBody>
-                    <Button Margin="Margin.Is1.OnY" Color="Color.Info" @onclick="() => ShowAddCommentModal()">Add Comment</Button>
-                    @if (IssueComments != null)
-                    {
-                        @foreach (var comment in IssueComments)
-                        {
-                            <Card>
-                                <CardBody Padding="Padding.Is2.OnY">
-                                    <CardTitle>
-                                        @comment.User.Email
-                                        <span style="float:right">@comment.Created</span>
-                                    </CardTitle>
-                                    <CardText>
-                                        @comment.Text
-                                        <span style="float:right">
-                                            @if (comment.User.Email == httpContextAccessor.HttpContext?.User.Identity.Name)
-                                            {
-                                                <Button Color="Color.Info" Clicked="@ShowEditCommentModal">Edit</Button>
-                                                <Button Color="Color.Danger" @onclick="()=> OnDeleteCommentAsync(comment.CommentId)">Delete</Button>
-                                            }
-                                        </span>
-                                    </CardText>
-                                </CardBody>
-                            </Card>
-                        }
-                    }
+                <Button Color="Color.Light" Size="Size.Large" Type="ButtonType.Link" To="@($"project/{ProjectId}/issues")">
+                    <Icon Name="IconName.ArrowLeft"></Icon>
+                    Back
+                </Button>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is7">
+                <Card Background="Background.Transparent" Style="border: none;">
+                    <TextEdit Size="Size.Large" @bind-Text="@Title"  Disabled="!CanChange()"/>
+                </Card>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is4">
 
+                @if (CanChange())
+                {
+                    <Button Size="Size.Medium" Float="Float.Right" Color="Color.Danger" Clicked="@OnDeleteTaskAsync" Margin="Margin.Is2.OnX">Delete Issue</Button>
 
+                    <Button Size="Size.Medium" Float="Float.Right" Color="Color.Info" Clicked="@OnEditAsync">Save Changes</Button>
+                }
+            </Column>
+        </Row>
+        <Divider Style="margin-top: 0px" Padding="Padding.Is0" />
+        <Row>
+            <Column ColumnSize="ColumnSize.Is7">
+                <Accordion>
+                    @*DESCRIPTION TEXT EDIT*@
+                    <Collapse Visible="@_descSectionVisible">
+                        <CollapseHeader Padding="Padding.Is0">
+                            <Button Clicked="@(() => _descSectionVisible = !_descSectionVisible)" Style="width:100%">
+                                Description
+                                @if (_descSectionVisible == true)
+                                {
+                                    <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
+                                }
+                                @if (_descSectionVisible == false)
+                                {
+                                    <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
+                                }
+                            </Button>
+                        </CollapseHeader>
+                        <CollapseBody>
+                            <MemoEdit Rows="15" @bind-Text="@Description" Disabled="!CanChange()"></MemoEdit>
+                        </CollapseBody>
+                    </Collapse>
+                    @*COMMENT SECTION*@
+                    <Collapse Visible="@_commentSectionVisible">
+                        <CollapseHeader Padding="Padding.Is0">
+                            <Button Clicked="@(() => _commentSectionVisible = !_commentSectionVisible)" Style="width:100%">
+                                Comments
 
-                </CollapseBody>
-            </Collapse>
-        </Accordion>
-    </Column>
-    <Column ColumnSize="ColumnSize.Is5">
-        @*ISSUE DEATILS SECTION*@
-        <Card>
-            <CardBody>
-                <Row>
-                    <Column ColumnSize="ColumnSize.Is3">
-                        Created By:
-                    </Column>
-                    <Column ColumnSize="ColumnSize.Is8">
-                        @CreatedBy
-                    </Column>
-                </Row>
-                <Row>
-                    <Column ColumnSize="ColumnSize.Is3">
-                        Assigned To:
-                    </Column>
-                    <Column ColumnSize="ColumnSize.Is8">
-                        <Autocomplete TItem="ApplicationUser" TValue="ApplicationUser" Class="w-75"
-                                      Data="@projectUsers"
-                                      TextField="@((item)=>item.Email)"
-                                      ValueField="@((item)=>item)"
-                                      SelectedText="@AssignedUser?.Email"
-                                      SelectedValue="@AssignedUser"
-                                      SelectedValueChanged="@AssignedUserHandler" />
-                    </Column>
-                </Row>
-                <Divider></Divider>
-                <Row>
-                    <Column ColumnSize="ColumnSize.Is3">
-                        Issue Status:
-                    </Column>
-                    <Column>
-                        <Select TValue="@IssueStatus" Style="width: 65%" @bind-SelectedValue="@IssueStatus">
-                            <SelectItem Value="@IssueStatus.ToDo">To Do</SelectItem>
-                            <SelectItem Value="@IssueStatus.InProgress">In Progress</SelectItem>
-                            <SelectItem Value="@IssueStatus.Done">Done</SelectItem>
-                        </Select>
-                    </Column>
-                </Row>
-                <Row Margin="Margin.Is2.OnY">
-                    <Column ColumnSize="ColumnSize.Is3">
-                        Issue Type:
-                    </Column>
-                    <Column>
-                        <RadioGroup TValue="IssueType" Name="test" Color="Color.Light" @bind-CheckedValue="@IssueType">
-                            <Radio TValue="IssueType" Value="@(IssueType.Bug)" Style="color: red">
-                                <label><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>Bug</span></label>
-                            </Radio>
-                            <Radio TValue="IssueType" Value="@(IssueType.Feature)" Style="color: forestgreen">
-                                <label><Icon Name="IconName.PlusCircle" /> <span>Feature</span></label>
-                            </Radio>
-                        </RadioGroup>
-                    </Column>
-                </Row>
-                <Row Margin="Margin.Is2.OnY">
-                    <Column ColumnSize="ColumnSize.Is3">
-                        Issue Priority:
-                    </Column>
-                    <Column>
-
-                        <RadioGroup TValue="IssuePriority" Name="colors" Color="Color.Light" @bind-CheckedValue="@IssuePriority">
-                            <Radio TValue="IssuePriority" Value="@(IssuePriority.Low)" Style="color: darkgreen">
-                                <label><Icon Name="IconName.ArrowUp" /> <span>Low</span></label>
-                            </Radio>
-                            <Radio TValue="IssuePriority" Value="(IssuePriority.Normal)" Style="color: orange">
-                                <label><Icon Name="IconName.ArrowUp" /> <span>Normal</span></label>
-                            </Radio>
-                            <Radio TValue="IssuePriority" Value="@(IssuePriority.High)" Style="color: red">
-                                <label><Icon Name="IconName.ArrowUp" /> <span>High</span></label>
-                            </Radio>
-                        </RadioGroup>
-                    </Column>
-                </Row>
-            </CardBody>
-        </Card>
-
-        @*ISSUE HISTORY SECTION*@
-        <Card Margin="Margin.Is2.OnY">
-            <CardHeader>
-                Isue History
-            </CardHeader>
-            <CardBody>
-                <Table>
-                    <TableBody>
-                        @if (IssueHistory != null)
-                        {
-                            @foreach (var comment in IssueHistory)
+                                @if (_commentSectionVisible == true)
+                                {
+                                    <Icon Float="Float.Right" Name="IconName.ArrowUp"></Icon>
+                                }
+                                @if (_commentSectionVisible == false)
+                                {
+                                    <Icon Float="Float.Right" Name="IconName.ArrowDown"></Icon>
+                                }
+                            </Button>
+                        </CollapseHeader>
+                        <CollapseBody>
+                            <Button Margin="Margin.Is1.OnY" Color="Color.Info" @onclick="() => ShowAddCommentModal()">Add Comment</Button>
+                            @if (IssueComments != null)
                             {
-                                <TableRow>
-                                    <TableRowCell>@comment.User.Email</TableRowCell>
-                                    <TableRowCell>@comment.ChangeType</TableRowCell>
-                                    <TableRowCell>@comment.ChangeDate</TableRowCell>
-                                </TableRow>
+                                @foreach (var comment in IssueComments)
+                                {
+                                    <Card>
+                                        <CardBody Padding="Padding.Is2.OnY">
+                                            <CardTitle>
+                                                @comment.User.Email
+                                                <span style="float:right">@comment.Created</span>
+                                            </CardTitle>
+                                            <CardText>
+                                                @comment.Text
+                                                <span style="float:right">
+                                                    @if (comment.User.Email == httpContextAccessor.HttpContext?.User.Identity.Name)
+                                                    {
+                                                        <Button Color="Color.Info" @onclick="() => ShowEditCommentModal(comment)">Edit</Button>
+                                                        <Button Color="Color.Danger" @onclick="() => OnDeleteCommentAsync(comment.CommentId)">Delete</Button>
+                                                    }
+                                                </span>
+                                            </CardText>
+                                        </CardBody>
+                                    </Card>
 
+
+                                }
                             }
-                        }
+                        </CollapseBody>
+                    </Collapse>
+                </Accordion>
+            </Column>
+            <Column ColumnSize="ColumnSize.Is5">
+                @*ISSUE DETAILS SECTION*@
+                <Card>
+                    <CardBody>
+                        <Row>
+                            <Column ColumnSize="ColumnSize.Is3">
+                                Created By:
+                            </Column>
+                            <Column ColumnSize="ColumnSize.Is8">
+                                <Field Class="w-75">
+                                    <TextEdit Placeholder="@CreatedBy" Disabled="true" />
+                                </Field>
 
-                    </TableBody>
-                </Table>
-            </CardBody>
-        </Card>
-    </Column>
-</Row>
-</Container>
+                            </Column>
+                        </Row>
+                        <Row>
+                            <Column ColumnSize="ColumnSize.Is3">
+                                Assigned To:
+                            </Column>
+                            <Column ColumnSize="ColumnSize.Is8">
+                                <Autocomplete TItem="ApplicationUser" TValue="ApplicationUser" Class="w-75"
+                                              Data="@projectUsers"
+                                              TextField="@((item) => item.Email)"
+                                              ValueField="@((item) => item)"
+                                              SelectedText="@AssignedUser?.Email"
+                                              SelectedValue="@AssignedUser"
+                                              SelectedValueChanged="@AssignedUserHandler" Disabled="!CanChange()"/>
+                            </Column>
+                        </Row>
+                        <Divider></Divider>
+                        <Row>
+                            <Column ColumnSize="ColumnSize.Is3">
+                                Issue Status:
+                            </Column>
+                            <Column>
+                                <Select TValue="@IssueStatus" Style="width: 65%" @bind-SelectedValue="@IssueStatus"  Disabled="!CanChange()">
+                                    <SelectItem Value="@IssueStatus.ToDo">To Do</SelectItem>
+                                    <SelectItem Value="@IssueStatus.InProgress">In Progress</SelectItem>
+                                    <SelectItem Value="@IssueStatus.Done">Done</SelectItem>
+                                </Select>
+                            </Column>
+                        </Row>
+                        <Row Margin="Margin.Is2.OnY">
+                            <Column ColumnSize="ColumnSize.Is3">
+                                Issue Type:
+                            </Column>
+                            <Column>
+                                <RadioGroup TValue="IssueType" Name="test" Color="Color.Light" @bind-CheckedValue="@IssueType">
+                                    <Radio TValue="IssueType" Value="@(IssueType.Bug)" Style="color: red"  Disabled="!CanChange()">
+                                        <label><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>Bug</span></label>
+                                    </Radio>
+                                    <Radio TValue="IssueType" Value="@(IssueType.Feature)" Style="color: forestgreen"  Disabled="!CanChange()">
+                                        <label><Icon Name="IconName.PlusCircle" /> <span>Feature</span></label>
+                                    </Radio>
+                                </RadioGroup>
+                            </Column>
+                        </Row>
+                        <Row Margin="Margin.Is2.OnY">
+                            <Column ColumnSize="ColumnSize.Is3">
+                                Issue Priority:
+                            </Column>
+                            <Column>
 
-<Modal @ref="AddCommentModal">
-    <ModalContent Centered="true">
-        <ModalHeader>
-            <ModalTitle>Add Comment</ModalTitle>
-            <CloseButton />
-        </ModalHeader>
-        <ModalBody>
-            <Field>
-                <FieldLabel>Your Comment:</FieldLabel>
-                <MemoEdit Rows="5" @bind-Text="@CommentModalText" />
-            </Field>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="@HideAddModal">Cancel</Button>
-            <Button Color="Color.Primary" Clicked="@OnAddCommentAync">Add</Button>
-        </ModalFooter>
-    </ModalContent>
-</Modal>
+                                <RadioGroup TValue="IssuePriority" Name="colors" Color="Color.Light" @bind-CheckedValue="@IssuePriority">
+                                    <Radio TValue="IssuePriority" Value="@(IssuePriority.Low)" Style="color: darkgreen"  Disabled="!CanChange()">
+                                        <label><Icon Name="IconName.ArrowUp" /> <span>Low</span></label>
+                                    </Radio>
+                                    <Radio TValue="IssuePriority" Value="(IssuePriority.Normal)" Style="color: orange"  Disabled="!CanChange()">
+                                        <label><Icon Name="IconName.ArrowUp" /> <span>Normal</span></label>
+                                    </Radio>
+                                    <Radio TValue="IssuePriority" Value="@(IssuePriority.High)" Style="color: red"  Disabled="!CanChange()">
+                                        <label><Icon Name="IconName.ArrowUp" /> <span>High</span></label>
+                                    </Radio>
+                                </RadioGroup>
+                            </Column>
+                        </Row>
+                    </CardBody>
+                </Card>
 
-<Modal @ref="EditCommentModal">
-    <ModalContent Centered="true">
-        <ModalHeader>
-            <ModalTitle>Edit Comment</ModalTitle>
-            <CloseButton />
-        </ModalHeader>
-        <ModalBody>
-            <Field>
-                <FieldLabel>Your Comment:</FieldLabel>
-                <MemoEdit Rows="5" @bind-Text="@CommentModalText" />
-            </Field>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="@HideEditModal">Cancel</Button>
-            <Button Color="Color.Primary" Clicked="@OnAddCommentAync">Add</Button>
-        </ModalFooter>
-    </ModalContent>
-</Modal>
+                @*ISSUE HISTORY SECTION*@
+                <Card Margin="Margin.Is2.OnY">
+                    <CardHeader>
+                        Isue History
+                    </CardHeader>
+                    <CardBody>
+                        <Table>
+                            <TableBody>
+                                @if (IssueHistory != null)
+                                {
+                                    @foreach (var comment in IssueHistory.OrderByDescending(x => x.ChangeDate))
+                                    {
+                                        <TableRow>
+                                            <TableRowCell>@comment.User.Email</TableRowCell>
+                                            <TableRowCell>@comment.ChangeType</TableRowCell>
+                                            <TableRowCell>@comment.ChangeDate</TableRowCell>
+                                        </TableRow>
+
+                                    }
+                                }
+
+                            </TableBody>
+                        </Table>
+                    </CardBody>
+                </Card>
+            </Column>
+        </Row>
+    </Container>
+</AuthorizeView>
+
+    <Modal @ref="AddCommentModal">
+        <ModalContent Centered="true">
+            <ModalHeader>
+                <ModalTitle>Add Comment</ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>Your Comment:</FieldLabel>
+                    <MemoEdit Rows="5" @bind-Text="@CommentModalText" />
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="@HideAddModal">Cancel</Button>
+                <Button Color="Color.Primary" Clicked="@OnAddCommentAync">Add</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+
+    <Modal @ref="EditCommentModal">
+        <ModalContent Centered="true">
+            <ModalHeader>
+                <ModalTitle>Edit Comment</ModalTitle>
+                <CloseButton />
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>Your Comment:</FieldLabel>
+                    <MemoEdit Rows="5" @bind-Text="@CommentModalText" />
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="@HideEditModal">Cancel</Button>
+                <Button Color="Color.Primary" Clicked="@OnEditCommentAync">Edit</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
 
 
-@code{
-    public Modal AddCommentModal { get; set; }
-    public Modal EditCommentModal { get; set; }
-    bool _descSectionVisible = true;
-    bool _commentSectionVisible;
+    @code{
+        public Modal AddCommentModal { get; set; }
+        public Modal EditCommentModal { get; set; }
+        bool _descSectionVisible = true;
+        bool _commentSectionVisible = true;
 
 
-    public void ShowAddCommentModal()
-    {
-        AddCommentModal.Show();
+        public void ShowAddCommentModal()
+        {
+            AddCommentModal.Show();
+        }
+
+        private void HideAddModal()
+        {
+            AddCommentModal.Hide();
+        }
+
+        public void ShowEditCommentModal(VirheBT.Shared.DTOs.IssueCommentDto comment)
+        {
+            Comment = comment;
+            CommentModalText = comment.Text;
+            EditCommentModal.Show();
+        }
+
+        private void HideEditModal()
+        {
+            EditCommentModal.Hide();
+        }
+
+
     }
 
-    private void HideAddModal()
-    {
-        AddCommentModal.Hide();
-    }
-    
-    public void ShowEditCommentModal()
-    {
-        EditCommentModal.Show();
-    }
-
-    private void HideEditModal()
-    {
-        AddCommentModal.Hide();
-    }
-
-}
 
 <Snackbar @ref="successAlert" Color="SnackbarColor.Success">
     <SnackbarBody>
@@ -278,3 +292,4 @@
         Edycja nie powiodła się!
     </SnackbarBody>
 </Snackbar>
+

@@ -14,6 +14,7 @@ namespace VirheBT.Pages
 {
     public partial class IssueDetails
     {
+        [Inject] IMessageService MessageService { get; set; }
         [Parameter]
         public int ProjectId { get; set; }
 
@@ -54,6 +55,8 @@ namespace VirheBT.Pages
 
         private ApplicationUser LoggedUser { get; set; }
 
+        public IssueCommentDto Comment { get; set; }
+
         Snackbar successAlert { get; set; }
         Snackbar failedAlert { get; set; }
 
@@ -89,6 +92,16 @@ namespace VirheBT.Pages
             IssuePriority = Issue.Priority;
         }
 
+        public bool CanChange()
+        {
+            if(HttpContext.User.IsInRole("Admin") || HttpContext.User.IsInRole("ProjectManager") || HttpContext.User.Identity.Name == CreatedBy)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
         private async Task OnEditAsync()
         {
             var issueEdit = new Issue
@@ -123,7 +136,7 @@ namespace VirheBT.Pages
             catch (Exception e)
             {
                 failedAlert.Show();
-            } 
+            }
             successAlert.Show();
             IssueHistory = await IssueService.GetIssueHistory(IssueId);
             StateHasChanged();
@@ -148,26 +161,49 @@ namespace VirheBT.Pages
             StateHasChanged();
         }
 
-        private async Task OnEditCommentAync(int commentId)
+        private async Task OnEditCommentAync()
         {
-            var comment = new IssueComment
-            {
-                Created = DateTimeOffset.UtcNow.LocalDateTime,
-                Issue = Issue,
-                User = await ApplicationUserService.GetApplicationUserByEmailAsync(httpContextAccessor.HttpContext.User.Identity.Name),
-                Text = CommentModalText,
-            };
+            var comment = await IssueService.GetIssueCommentAsync(IssueId, Comment.CommentId);
+            comment.Text = CommentModalText;
 
-            await IssueService.AddCommentAsync(comment);
+            await IssueService.EditCommentAsync(comment);
             CommentModalText = "";
             AddCommentModal.Hide();
             IssueComments = await IssueService.GetIssueCommentsAsync(ProjectId, IssueId);
             StateHasChanged();
+            EditCommentModal.Hide();
+        }
+
+        private async Task OnDeleteTaskAsync()
+        {
+            if (!await MessageService.Confirm("Are you sure you want to delete this issue?", $"Delete issue #{Issue.IssueId}?",
+               x =>
+               {
+                   x.CancelButtonText = "Delete";
+                   x.ConfirmButtonText = "Cancel";
+                   x.ShowMessageIcon = false;
+               }))
+            {
+                await IssueService.DeleteIssueAsync(ProjectId, IssueId);
+                NavigationManager.NavigateTo($"/project/{ProjectId}/issues");
+            }
         }
 
         private async Task OnDeleteCommentAsync(int commentId)
         {
+            if (!await MessageService.Confirm("Are you sure you want to delete this comment?", $"Delete comment #{commentId}?",
+               x =>
+               {
+                   x.CancelButtonText = "Delete";
+                   x.ConfirmButtonText = "Cancel";
+                   x.ShowMessageIcon = false;
+               }))
+            {
 
+                await IssueService.DeleteCommentAsync(IssueId, commentId);
+                IssueComments = await IssueService.GetIssueCommentsAsync(ProjectId, IssueId);
+                StateHasChanged();
+            }
         }
     }
 }

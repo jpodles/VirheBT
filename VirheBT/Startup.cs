@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using System;
+using System.Threading.Tasks;
 
 using VirheBT.Areas.Identity;
 using VirheBT.Infrastructure.Data;
@@ -44,14 +45,15 @@ namespace VirheBT
              .AddFontAwesomeIcons()
              .AddBlazoriseRichTextEdit();
 
-            services.AddScoped<DbContext, ApplicationDbContext>();
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"),
-                    x => x.MigrationsAssembly("VirheBT.Infrastructure")));
-            services.AddDefaultIdentity<ApplicationUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+                    x => x.MigrationsAssembly("VirheBT.Infrastructure")).EnableSensitiveDataLogging());
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders().AddDefaultUI();
 
+            services.AddScoped<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
@@ -74,7 +76,7 @@ namespace VirheBT
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -102,6 +104,51 @@ namespace VirheBT
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            CreateRoles(serviceProvider);
+        }
+
+        private void CreateRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            Task<IdentityResult> roleResult;
+            string email = "test@test.com";
+
+            string[] roles = { "Admin", "Programmer", "Tester", "ProjectManager" };
+
+            foreach (var item in roles)
+            {
+                Task<bool> hasRole = roleManager.RoleExistsAsync(item);
+                hasRole.Wait();
+
+                if (!hasRole.Result)
+                {
+                    roleResult = roleManager.CreateAsync(new IdentityRole(item));
+                    roleResult.Wait();
+                }
+            }
+
+            Task<ApplicationUser> testUser = userManager.FindByEmailAsync(email);
+            testUser.Wait();
+
+            if (testUser.Result == null)
+            {
+                ApplicationUser administrator = new ApplicationUser();
+                administrator.Email = email;
+                administrator.UserName = email;
+
+                Task<IdentityResult> newUser = userManager.CreateAsync(administrator, "Qazwsx1.");
+                newUser.Wait();
+
+                if (newUser.Result.Succeeded)
+                {
+                    Task<IdentityResult> newUserRole = userManager.AddToRoleAsync(administrator, "Admin");
+
+                    newUserRole.Wait();
+                }
+            }
+
         }
     }
 }

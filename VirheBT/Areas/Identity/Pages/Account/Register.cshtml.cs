@@ -89,8 +89,10 @@ namespace VirheBT.Areas.Identity.Pages.Account
             {
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, UserStatus = Input.UserStatus, FirstName = Input.FirstName, LastName = Input.LastName, EmailConfirmed = true };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "Programmer");
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

@@ -5,7 +5,7 @@
 <Container Fluid="true" Margin="Margin.Is5.OnY" Padding="Padding.Is4.OnY" ElementId="systemUsers">
     <Card WhiteText="false">
         <CardHeader>
-            <CardTitle>SYTEM USERS</CardTitle>
+            <CardTitle>SYSTEM USERS</CardTitle>
         </CardHeader>
         <CardBody>
 
@@ -31,27 +31,33 @@
                       Narrow="true"
                       RowUpdated="@OnRowUpdated">
 
+                <EmptyTemplate>
+                    <div class="text-center">
+                        No users are found!
+                    </div>
+                </EmptyTemplate>
+
                 <DataGridColumns>
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.FirstName)" Caption="First Name" Editable="true" Width="100px">
+                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.FirstName)" Caption="First Name" Editable="true" Width="350px">
                         <CaptionTemplate>
                             <Icon Name="IconName.User" /> @context.Caption
                         </CaptionTemplate>
 
                         <DisplayTemplate>
-                            <Link To=@($"userdetails/{context.Id}")>
+                            <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
                             <Card Background="Background.Transparent" Style="height: 40px; border:none">
                                 @context.FirstName
                             </Card>
                             </Link>
                         </DisplayTemplate>
                     </DataGridColumn>
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.LastName)" Caption="Last Name" Editable="true" Width="100px">
+                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.LastName)" Caption="Last Name" Editable="true" Width="350px">
                         <CaptionTemplate>
                             <Icon Name="IconName.User" /> @context.Caption
                         </CaptionTemplate>
 
                         <DisplayTemplate>
-                            <Link To=@($"userdetails/{context.Id}")>
+                            <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
                             <Card Background="Background.Transparent" Style="height: 40px; border:none">
                                 @context.LastName
                             </Card>
@@ -63,6 +69,14 @@
                         <CaptionTemplate>
                             <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Envelope" /> @context.Caption
                         </CaptionTemplate>
+                        <DisplayTemplate>
+                            <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
+                            <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                @context.Email
+                            </Card>
+                            </Link>
+                        </DisplayTemplate>
+
                     </DataGridColumn>
 
                     <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="User Role" Editable="true" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
@@ -70,30 +84,33 @@
                             <Icon Name="IconName.UserTie" /> @context.Caption
                         </CaptionTemplate>
                         <DisplayTemplate>
+                            <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
+                            <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                @{
+                                    var item = (context as ApplicationUser);
+                                    if (item.UserRole == UserRole.Admin)
+                                    {
+                                        <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" /> <span>@context.UserRole</span></label>
+                                    }
+                                    if (item.UserRole == UserRole.Programmer)
+                                    {
+                                        <label style="color:green"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
 
-                            @{
-                                var item = (context as ApplicationUser);
-                                if (item.UserRole == UserRole.Admin)
-                                {
-                                    <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" /> <span>@context.UserRole</span></label>
+                                    }
+                                    if (item.UserRole == UserRole.Tester)
+                                    {
+                                        <label style="color: cornflowerblue"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
+
+                                    }
+                                    if (item.UserRole == UserRole.ProjectManager)
+                                    {
+                                        <label style="color:darkorange"><Icon Name="IconName.UserTie" /> <span>@context.UserRole</span></label>
+
+                                    }
+
                                 }
-                                if (item.UserRole == UserRole.Programmer)
-                                {
-                                    <label style="color:green"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
-
-                                }
-                                if (item.UserRole == UserRole.Tester)
-                                {
-                                    <label style="color: cornflowerblue"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
-
-                                }
-                                if (item.UserRole == UserRole.ProjectManager)
-                                {
-                                    <label style="color:darkorange"><Icon Name="IconName.UserTie" /> <span>@context.UserRole</span></label>
-
-                                }
-
-                            }
+                            </Card>
+                            </Link>
                         </DisplayTemplate>
                         <EditTemplate>
                             <Select TValue=@UserRole SelectedValue="@((UserRole)( context.CellValue ))" SelectedValueChanged="@(( v ) => context.CellValue = v)">
@@ -104,6 +121,7 @@
                             </Select>
                         </EditTemplate>
                         <FilterTemplate>
+
                             @{
                                 var selectedValue = @context.SearchValue ?? "*";
                                 <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
@@ -121,20 +139,23 @@
                             <Icon Name="IconName.UserTie" /> @context.Caption
                         </CaptionTemplate>
                         <DisplayTemplate>
+                            <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
+                            <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                @{
+                                    var item = (context as ApplicationUser);
+                                    if (item.UserStatus == UserStatus.Inactive)
+                                    {
+                                        <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserSlash" /> <span>@context.UserStatus</span></label>
+                                    }
+                                    if (item.UserStatus == UserStatus.Active)
+                                    {
+                                        <label style="color:green"><Icon Name="IconName.UserPlus" /> <span>@context.UserStatus</span></label>
 
-                            @{
-                                var item = (context as ApplicationUser);
-                                if (item.UserStatus == UserStatus.Inactive)
-                                {
-                                    <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserSlash" /> <span>@context.UserStatus</span></label>
+                                    }
+
                                 }
-                                if (item.UserStatus == UserStatus.Active)
-                                {
-                                    <label style="color:green"><Icon Name="IconName.UserPlus" /> <span>@context.UserStatus</span></label>
-
-                                }
-
-                            }
+                            </Card>
+                            </Link>
                         </DisplayTemplate>
                         <EditTemplate>
                             <Select TValue=@UserStatus SelectedValue="@((UserStatus)( context.CellValue ))" SelectedValueChanged="@(( v ) => context.CellValue = v)">
@@ -156,15 +177,14 @@
                             }
                         </FilterTemplate>
                     </DataGridColumn>
-                    <DataGridCommandColumn TItem="ApplicationUser" Width="50px" TextAlignment="TextAlignment.Center">
+                    <DataGridCommandColumn TItem="ApplicationUser" Width="40px">
                         <ClearFilterCommandTemplate>
                             <Button Color="Color.Warning" Clicked="@context.Clicked">
-
-                                Clear filter
+                                <Icon Name="IconName.Brush" />
                             </Button>
                         </ClearFilterCommandTemplate>
                         <DeleteCommandTemplate>
-                            <Button Clicked="@context.Clicked" Color="Color.Danger">
+                            <Button Clicked="@context.Clicked" Color="Color.Danger" Style="display:none">
                                 <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Trash" />
                             </Button>
                         </DeleteCommandTemplate>
@@ -173,7 +193,9 @@
                             <Button Color="Color.Success" Clicked="@context.Clicked" Style="display:none">New</Button>
                         </NewCommandTemplate>
                         <EditCommandTemplate>
-                            <Button Color="Color.Primary" Clicked="@context.Clicked">Edit</Button>
+                            <Button Color="Color.Primary" Clicked="@context.Clicked">
+                                <Icon Name="IconName.Edit"></Icon>
+                            </Button>
                         </EditCommandTemplate>
                     </DataGridCommandColumn>
                 </DataGridColumns>
@@ -187,9 +209,26 @@
                         @($"{context.LocalizationString} Employee")
                     }
                 </PopupTitleTemplate>
-                
+
             </DataGrid>
         </CardBody>
     </Card>
 </Container>
 
+
+
+<UserDetails @ref="userDetailsRef" UserId="@userDetailsId"></UserDetails>
+
+@code {
+    UserDetails userDetailsRef;
+
+    public string userDetailsId;
+    public void ShowUserDeatilsModal(string userId)
+    {
+        userDetailsId = userId;
+        userDetailsRef.ShowModal(userId);
+
+    }
+
+
+}

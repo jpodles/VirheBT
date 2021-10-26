@@ -20,7 +20,6 @@ namespace VirheBT.Infrastructure.Data.Models
 
         public UserRole UserRole { get; set; }
 
-        public Project ProjectMaintained { get; set; }
-        public int? ProjectMaintainedId { get; }
+        public ICollection<Project> ProjectsMaintained { get; set; }
     }
 }

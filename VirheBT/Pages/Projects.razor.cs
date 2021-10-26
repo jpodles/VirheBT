@@ -1,17 +1,23 @@
-﻿using Blazorise.DataGrid;
+﻿using Blazorise;
+using Blazorise.DataGrid;
+using Blazorise.Snackbar;
 
 using Microsoft.AspNetCore.Components;
 
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace VirheBT.Pages
 {
     public partial class Projects
     {
+        [Inject] IMessageService MessageService { get; set; }
+
         private bool editable = true;
         private bool sortable = true;
         private bool filterable = true;
@@ -27,15 +33,41 @@ namespace VirheBT.Pages
         [Inject]
         private IProjectService ProjectService { get; set; }
 
+        [Inject]
+        private NavigationManager NavigationManager { get; set; }
+
+        [Inject]
+        IHttpContextAccessor httpContextAccessor { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            data = await ProjectService.GetProjectsAsync();
+            if (httpContextAccessor.HttpContext.User.IsInRole("Admmin"))
+            {
+                data = await ProjectService.GetProjectsAsync();
+            }
+            else
+            {
+                var projects = await ProjectService.GetProjectsAsync();
+                data = projects
+                        .Where(x => x.ApplicationUsers
+                        .Any(x => x.Email == httpContextAccessor.HttpContext.User.Identity.Name))
+                        .ToList();
+            }
+           
         }
 
-        //protected override async Task OnAfterRenderAsync(bool firstRender)
-        //{
-        //    data = await ProjectService.GetProjectsAsync();
+        private async Task OnRowRemoved(Project project)
+        {
 
-        //}
+            if (!await MessageService.Confirm("Are you sure you want to delete this project?", $"Delete {project.Name}?",
+                x => {
+                    x.CancelButtonText = "Delete";
+                    x.ConfirmButtonText = "Cancel";
+                    x.ShowMessageIcon = false;
+                }))
+            {
+                await ProjectService.DeleteProject(project);
+                NavigationManager.NavigateTo("/projects", true);
+            }
+        }
     }
 }

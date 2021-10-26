@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
+using System.Threading.Tasks;
+
 using VirheBT.Services.Interfaces;
 
 namespace VirheBT.Pages
@@ -16,15 +18,17 @@ namespace VirheBT.Pages
         [Inject]
         private IProjectService ProjectService { get; set; }
 
-        public async void OnCreateAsync()
+        public async Task OnCreateAsync()
         {
             var authState = await AuthenticationStateProvider
                 .GetAuthenticationStateAsync();
             var user = authState.User.Identity.Name;
 
-            ProjectService.CreateProject(title, description, user);
+            await ProjectService.CreateProjectAsync(title, description, user);
+            title = "";
+            description = "";
 
-            NavigationManager.NavigateTo("/projects");
+            NavigationManager.NavigateTo("/projects", true);
         }
     }
 }

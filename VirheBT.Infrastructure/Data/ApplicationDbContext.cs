@@ -15,8 +15,12 @@ namespace VirheBT.Infrastructure.Data
         public DbSet<IssueHistory> IssueHistories { get; set; }
         public DbSet<Project> Projects { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ApplicationDbContext(DbContextOptions options)
             : base(options)
+        {
+        }
+
+        public ApplicationDbContext()
         {
         }
 
@@ -44,14 +48,13 @@ namespace VirheBT.Infrastructure.Data
 
             modelBuilder.Entity<Project>()
                 .HasOne(p => p.Maintainer)
-                .WithOne(p => p.ProjectMaintained)
-                .HasForeignKey<ApplicationUser>(a => a.ProjectMaintainedId);
+                .WithMany(p => p.ProjectsMaintained)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Project>().HasData(
                  new Project
                  {
                      ProjectId = 1,
-                     MaintainerId = "xxxd",
                      Name = "TestProject",
                      Description = "This is test project",
                      Created = DateTime.Now,

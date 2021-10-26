@@ -5,14 +5,12 @@
 @page "/project/{ProjectId:int}/createissue"
 <AuthorizeView>
     <Authorized>
-
         <Modal @ref="createIssueModal">
             <ModalContent Size="ModalSize.Large">
                 <ModalHeader>
                     <ModalTitle>Create new issue</ModalTitle>
                     <CloseButton />
                 </ModalHeader>
-
                 <ModalBody>
                     <Row>
                         <Column>
@@ -33,7 +31,6 @@
                         </Column>
                         <Column>
                             <Field>
-
                                 <FieldLabel>Assigned To:</FieldLabel>
                                 <Autocomplete TItem="ApplicationUser" TValue="string"
                                               Data="@projectUsers"
@@ -51,7 +48,6 @@
                             Issue Type:
                         </Column>
                         <Column>
-
                             <RadioGroup TValue="IssueType" Name="issueType" @bind-CheckedValue="@CheckedIssueType" Color="Color.Light">
                                 <Radio TValue="IssueType" Value="@(IssueType.Bug)" Style="color: red">
                                     <label><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>Bug</span></label>
@@ -67,7 +63,6 @@
                             Issue Priority:
                         </Column>
                         <Column ColumnSize="ColumnSize.Is10">
-
                             <RadioGroup TValue="IssuePriority" Name="issuePriority" Color="Color.Light" @bind-CheckedValue="@CheckedIssuePriority">
                                 <Radio TValue="IssuePriority" Value="@(IssuePriority.Low)" Style="color: darkgreen">
                                     <label><Icon Name="IconName.ArrowUp" /> <span>Low</span></label>
