@@ -1,6 +1,7 @@
 ﻿using Blazorise.DataGrid;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,9 @@ namespace VirheBT.Pages
         [Inject]
         private IApplicationUserService ApplicationUserService { get; set; }
 
+        [Inject]
+        private IHttpContextAccessor httpAccessor { get; set; }
+
         private bool editable = true;
         private bool sortable = true;
         private bool filterable = true;
@@ -54,17 +58,21 @@ namespace VirheBT.Pages
 
         private string selectedSearchValue { get; set; }
 
-        private void MySearchHandler(string newValue)
+        private void MySearchHandler(string newValue) => selectedSearchValue = newValue;
+
+        public bool CanAddUser()
         {
-            selectedSearchValue = newValue;
-            Console.WriteLine("search value =" + selectedSearchValue);
+            return httpAccessor.HttpContext.User.IsInRole("Admin") || httpAccessor.HttpContext.User.IsInRole("ProjectManager");
         }
 
         private async Task OnAddUserToProject()
         {
-            await ProjectService.AddUserToProjectAsync(selectedSearchValue, ProjectId);
-            data = await ProjectService.GetProjectUsersAsync(ProjectId);
-            StateHasChanged();
+            if (!string.IsNullOrEmpty(selectedSearchValue))
+            {
+                await ProjectService.AddUserToProjectAsync(selectedSearchValue, ProjectId);
+                data = await ProjectService.GetProjectUsersAsync(ProjectId);
+                StateHasChanged();
+            }
         }
 
         private async Task OnRowRemoved(ApplicationUser applicationUser)
@@ -73,51 +81,5 @@ namespace VirheBT.Pages
             data = await ProjectService.GetProjectUsersAsync(ProjectId);
             StateHasChanged();
         }
-
-        //List<UserShortDto> data = new List<UserShortDto>
-        //{
-        //    new UserShortDto
-        //    {
-        //        ID = 1,
-        //        Name = "Michał Nowak",
-        //        Email = "michał@virhe.com",
-        //        UserRole = UserRole.Tester
-        //    },
-        //    new UserShortDto
-        //    {
-        //        ID = 2,
-        //        Name = "Jan Kowalski",
-        //        Email = "jan@virhe.com",
-        //        UserRole = UserRole.Programmer
-        //    },
-        //    new UserShortDto
-        //    {
-        //        ID = 3,
-        //        Name = "Tomasz Kowalski",
-        //        Email = "tomek@virhe.com",
-        //        UserRole = UserRole.ProjectManager
-        //    },
-        //    new UserShortDto
-        //    {
-        //        ID = 4,
-        //        Name = "Jakub Podleś",
-        //        Email = "jakub@virhe.com",
-        //        UserRole = UserRole.Programmer
-        //    },
-        //    new UserShortDto
-        //    {
-        //        ID = 5,
-        //        Name = "Adam Nowak",
-        //        Email = "adam@virhe.com",
-        //        UserRole = UserRole.Tester
-        //    },
-        //    new UserShortDto
-        //    {
-        //        ID = 5,
-        //        Name = "Adam Nowak",
-        //        Email = "adam@virhe.com",
-        //        UserRole = UserRole.Admin
-        //    }
-        //};
     }
 }

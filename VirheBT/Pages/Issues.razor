@@ -62,7 +62,17 @@
 
                         <Link To=@($"project/{ProjectId}/issue/{context.IssueId}") Style="text-decoration: none">
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
-                            @context.AssignedTo.FirstName @context.AssignedTo.LastName
+                       
+
+                            @if(context.AssignedTo == null )
+                            {
+                            <span>Not assigned</span>
+                            }
+                            else
+                            {
+                                @context.AssignedTo.FirstName @context.AssignedTo.LastName
+                            }
+                            
                         </Card>
                         </Link>
                     </DisplayTemplate>

@@ -20,35 +20,21 @@
                 </Card>
             </Column>
             <Column ColumnSize="ColumnSize.Is4">
-                <Card Background="Background.Transparent" Style="border: none;">
-                    <CardBody>
-                        <Addons>
-                            <Addon AddonType="AddonType.Start">
-                                <AddonLabel>Maintainer:</AddonLabel>
-                            </Addon>
-                            <Addon AddonType="AddonType.Body">
 
-                                <Card>
-                                    <h4 style="margin: 3px 10px 0 10px;">@Maintainer</h4>
-                                </Card>
-                            </Addon>
-                        </Addons>
-                    </CardBody>
-                </Card>
             </Column>
             <Column ColumnSize="ColumnSize.Is3" Margin="Margin.Is3.OnY">
-                <Button Color="Color.Info" Type="ButtonType.Button" Clicked="@SwitchToProject"
+                <Button Color="Color.Info" Type="ButtonType.Button" Clicked="@SwitchToProject" Disabled="IsProjectDisabled()"
                         Margin="Margin.Is1">
                     SELECT
                 </Button>
 
-               
+
                 <Button Color="Color.Warning" Type="ButtonType.Link"
-                        Margin="Margin.Is1" Clicked="(() => editProjectRef.ShowModal())" Disabled="!CanChange()">
+                        Margin="Margin.Is1" Clicked="(() => editProjectRef.ShowModal())" Disabled="!CanChange() || IsProjectDisabled()">
                     EDIT
                 </Button>
                 <Button Color="Color.Danger" Type="ButtonType.Link" Clicked="@OnDeleteProject"
-                        Margin="Margin.Is1" Disabled="!CanChange()">
+                        Margin="Margin.Is1" Disabled="!CanChange() || IsProjectDisabled()">
                     DELETE
                 </Button>
 
@@ -57,6 +43,36 @@
         <Divider Style="margin-top: 0px" Padding="Padding.Is0" />
         <Row>
             <Column ColumnSize="ColumnSize.Is5">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            About
+                        </CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <Row>
+                            <Column ColumnSize="ColumnSize.Is3">
+                                <Icon Name="IconName.UserTie"></Icon>
+                                Maintainer:
+                            </Column>
+                            <Column>
+                                <Link @onclick="@(() => ShowUserDeatilsModal(MaintainerId))" To="#">
+                                @Maintainer
+                                </Link>
+                            </Column>
+                        </Row>
+                        <Row>
+                            <Column ColumnSize="ColumnSize.Is3">
+                                <Icon Name="IconName.CalendarDay"></Icon>
+                                Start date:
+                            </Column>
+                            <Column>
+                                @Created
+                            </Column>
+
+                        </Row>
+                    </CardBody>
+                </Card>
 
                 <Card>
                     <CardHeader>
@@ -70,18 +86,7 @@
                         </CardText>
                     </CardBody>
                 </Card>
-                <Card Margin="Margin.Is3.OnY">
-                    <CardHeader>
-                        <CardTitle>
-                            Start Date
-                        </CardTitle>
-                    </CardHeader>
-                    <CardBody>
-                        <CardText>
-                            @Created
-                        </CardText>
-                    </CardBody>
-                </Card>
+
                 <Card Margin="Margin.Is3.OnY">
                     <CardHeader>
                         <CardTitle>
@@ -131,7 +136,7 @@
                         <CardTitle>Employees in current project</CardTitle>
                     </CardHeader>
                     <CardBody>
-                        <DataGrid @ref="dataGrid" TItem="ApplicationUser" Data="team" Editable="@editable" EditMode="@editMode"
+                        <DataGrid @ref="dataGrid" TItem="ApplicationUser" Data="Team" Editable="@editable" EditMode="@editMode"
                                   Sortable="@sortable" SortMode="@sortMode" Filterable="@filterable" ShowPager="@showPager"
                                   SelectionMode="@selectionMode" CommandMode="@commandsMode" PageSize="15" CurrentPage="currentPage"
                                   PageChanged="(e) => currentPage = e.Page" PagerPosition="DataGridPagerPosition.Bottom"
@@ -144,6 +149,13 @@
                                     <CaptionTemplate Context="dataGridContext">
                                         <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Envelope" /> @dataGridContext.Caption
                                     </CaptionTemplate>
+                                    <DisplayTemplate Context="user">
+                                        <Link To="#" @onclick="@(() => ShowUserDeatilsModal(user.Id))" Style="text-decoration: none">
+                                        <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                            @user.FirstName @user.LastName
+                                        </Card>
+                                        </Link>
+                                    </DisplayTemplate>
                                 </DataGridColumn>
 
                                 <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="Role"
@@ -153,39 +165,42 @@
                                         <Icon Name="IconName.UserTie" /> @dataGridContext.Caption
                                     </CaptionTemplate>
                                     <DisplayTemplate Context="dataGridContext">
+                                        <Link To="#" @onclick="@(() => ShowUserDeatilsModal(dataGridContext.Id))" Style="text-decoration: none">
+                                        <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                            @{
+                                                var item = (dataGridContext as ApplicationUser);
+                                                if (item.UserRole == UserRole.Admin)
+                                                {
+                                                    <label style="color: darkred">
+                                                        <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" />
+                                                        <span>@dataGridContext.UserRole</span>
+                                                    </label>
+                                                }
+                                                if (item.UserRole == UserRole.Programmer)
+                                                {
+                                                    <label style="color:green">
+                                                        <Icon Name="IconName.User" /> <span>@dataGridContext.UserRole</span>
+                                                    </label>
 
-                                        @{
-                                            var item = (dataGridContext as ApplicationUser);
-                                            if (item.UserRole == UserRole.Admin)
-                                            {
-                                                <label style="color: darkred">
-                                                    <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" />
-                                                    <span>@dataGridContext.UserRole</span>
-                                                </label>
+                                                }
+                                                if (item.UserRole == UserRole.Tester)
+                                                {
+                                                    <label style="color: cornflowerblue">
+                                                        <Icon Name="IconName.User" /> <span>@dataGridContext.UserRole</span>
+                                                    </label>
+
+                                                }
+                                                if (item.UserRole == UserRole.ProjectManager)
+                                                {
+                                                    <label style="color:darkorange">
+                                                        <Icon Name="IconName.UserTie" /> <span>@dataGridContext.UserRole</span>
+                                                    </label>
+
+                                                }
+
                                             }
-                                            if (item.UserRole == UserRole.Programmer)
-                                            {
-                                                <label style="color:green">
-                                                    <Icon Name="IconName.User" /> <span>@dataGridContext.UserRole</span>
-                                                </label>
-
-                                            }
-                                            if (item.UserRole == UserRole.Tester)
-                                            {
-                                                <label style="color: cornflowerblue">
-                                                    <Icon Name="IconName.User" /> <span>@dataGridContext.UserRole</span>
-                                                </label>
-
-                                            }
-                                            if (item.UserRole == UserRole.ProjectManager)
-                                            {
-                                                <label style="color:darkorange">
-                                                    <Icon Name="IconName.UserTie" /> <span>@dataGridContext.UserRole</span>
-                                                </label>
-
-                                            }
-
-                                        }
+                                        </Card>
+                                            </Link>
                                     </DisplayTemplate>
                                     <FilterTemplate Context="filterContext">
                                         @{
@@ -212,8 +227,21 @@
 </AuthorizeView>
 
 <EditProject @ref="editProjectRef" ProjectId="ProjectId"></EditProject>
+<UserDetails @ref="userDetailsRef" UserId="@userDetailsId"></UserDetails>
 
 @code {
     EditProject editProjectRef;
+    UserDetails userDetailsRef;
+
+    public string userDetailsId;
+    public void ShowUserDeatilsModal(string userId)
+    {
+        userDetailsId = userId;
+        userDetailsRef.ShowModal(userId);
+
+    }
 
 }
+
+
+

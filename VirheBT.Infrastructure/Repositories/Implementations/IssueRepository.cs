@@ -22,6 +22,7 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
 
         public async Task AddIsssueAsync(List<Issue> issues, Issue issue)
         {
+
             _context.Issues.Add(issue);
             await _context.SaveChangesAsync();
         }

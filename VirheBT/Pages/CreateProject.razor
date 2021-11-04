@@ -1,70 +1,74 @@
 ﻿@inject NavigationManager NavigationManager
-    <AuthorizeView>
-        <Authorized>
-            <Modal @ref="createProjectModal">
-                <ModalContent Size="ModalSize.Large">
-                        <ModalHeader>
-                            <ModalTitle>Create new project</ModalTitle>
-                            <CloseButton />
-                        </ModalHeader>
-     
+@using VirheBT.Infrastructure.Data.Models
+<AuthorizeView>
+    <Authorized>
+        <Modal @ref="createProjectModal">
+            <ModalContent Size="ModalSize.Large">
+                <ModalHeader>
+                    <ModalTitle>Create new project</ModalTitle>
+                    <CloseButton />
+                </ModalHeader>
 
-                        <ModalBody>
-                            <Column ColumnSize="ColumnSize.Is12" Padding="Padding.Is0.OnX" Margin="Margin.Is0.OnX">
-                                <Field >
-                                    <FieldLabel>
-                                        Project Name:
-                                    </FieldLabel>
-                                    <FieldBody>
-                                        <TextEdit @bind-Text="@title" Placeholder="Name..." />
-                                    </FieldBody>
-                                </Field>
-                            </Column>
-                            <Column ColumnSize="ColumnSize.Is6" Padding="Padding.Is0.OnX" Margin="Margin.Is0.OnX">
-                                <Field>
-                                    <FieldLabel>
-                                        Maintainer:
-                                    </FieldLabel>
-                                    <FieldBody>
-                                        <TextEdit Placeholder="@context.User.Identity.Name" Disabled="true" />
-                                    </FieldBody>
-                                </Field>
-                            </Column>
-                            <Row>
-                                <Column ColumnSize="ColumnSize.Is12" >
-                                    <Field>
-                                        <FieldLabel>
-                                            Description:
-                                        </FieldLabel>
-                                        <FieldBody>
-                                            <MemoEdit Rows="5" @bind-Text="@description" />
-                                        </FieldBody>
-                                    </Field>
-                                </Column>
-                            </Row>
-                           
-                        </ModalBody>
-                        <ModalFooter>
-                         
-                                    <Button Color="Color.Primary" Clicked="@OnCreateAsync" Float="Float.Right" Margin="Margin.Is2.OnX"> Create project</Button>
-                                    <Button Color="Color.Secondary" Clicked="@HideModal" Float="Float.Right"> Cancel</Button>
-                              
-                        </ModalFooter>
-                </ModalContent>
-            </Modal>
-        </Authorized>
-    </AuthorizeView>
-    @code{
-       
-        private Modal createProjectModal;
 
-        public void ShowModal()
-        {
-            createProjectModal.Show();
-        }
+                <ModalBody>
+                    <Column ColumnSize="ColumnSize.Is12" Padding="Padding.Is0.OnX" Margin="Margin.Is0.OnX">
+                        <Field>
+                            <FieldLabel>
+                                Project Name:
+                            </FieldLabel>
+                            <FieldBody>
+                                <Validation Validator="@ProjectTitleValidator">
+                                    <TextEdit @bind-Text="@title" Placeholder="Name...">
+                                        <Feedback>
+                                            <ValidationNone>Please enter project title.</ValidationNone>
+                                            <ValidationSuccess>Ok</ValidationSuccess>
+                                        </Feedback>
+                                    </TextEdit>
 
-        private void HideModal()
-        {
-            createProjectModal.Hide();
-        }
-    }
+                                </Validation>
+                            </FieldBody>
+                        </Field>
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is6" Padding="Padding.Is0.OnX" Margin="Margin.Is0.OnX">
+                        <Field>
+                            <FieldLabel>
+                                Maintainer:
+                            </FieldLabel>
+                            <FieldBody>
+                                <Autocomplete TItem="ApplicationUser" TValue="string"
+                                              Data="@allowedUsers"
+                                              TextField="@((item)=>item.Email)"
+                                              ValueField="@((item)=>item.Email)"
+                                              SelectedValue="@selectedSearchValue"
+                                              SelectedValueChanged="@MySearchHandler"
+                                              Placeholder="Search...">
+                                    <NotFoundContent Context="ctx"> Not found </NotFoundContent>
+                                </Autocomplete>
+                            </FieldBody>
+                        </Field>
+                       
+                    </Column>
+                    <Row>
+                        <Column ColumnSize="ColumnSize.Is12">
+                            <Field>
+                                <FieldLabel>
+                                    Description:
+                                </FieldLabel>
+                                <FieldBody>
+                                    <MemoEdit Rows="5" @bind-Text="@description" />
+                                </FieldBody>
+                            </Field>
+                        </Column>
+                    </Row>
+
+                </ModalBody>
+                <ModalFooter>
+
+                    <Button Color="Color.Primary" Clicked="@OnCreateAsync" Float="Float.Right" Margin="Margin.Is2.OnX" Disabled="!CanAdd()"> Create project</Button>
+                    <Button Color="Color.Secondary" Clicked="@HideModal" Float="Float.Right"> Cancel</Button>
+
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    </Authorized>
+</AuthorizeView>

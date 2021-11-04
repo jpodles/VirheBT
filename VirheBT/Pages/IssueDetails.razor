@@ -14,19 +14,18 @@
                     Back
                 </Button>
             </Column>
-            <Column ColumnSize="ColumnSize.Is7">
+            <Column ColumnSize="ColumnSize.Is8">
                 <Card Background="Background.Transparent" Style="border: none;">
-                    <TextEdit Size="Size.Large" @bind-Text="@Title"  Disabled="!CanChange()"/>
+                    <TextEdit Size="Size.Large" @bind-Text="@Title"  />
                 </Card>
             </Column>
-            <Column ColumnSize="ColumnSize.Is4">
+            <Column ColumnSize="ColumnSize.Is3">
 
-                @if (CanChange())
-                {
-                    <Button Size="Size.Medium" Float="Float.Right" Color="Color.Danger" Clicked="@OnDeleteTaskAsync" Margin="Margin.Is2.OnX">Delete Issue</Button>
 
-                    <Button Size="Size.Medium" Float="Float.Right" Color="Color.Info" Clicked="@OnEditAsync">Save Changes</Button>
-                }
+                    <Button Size="Size.Medium" Float="Float.Right" Color="Color.Danger" Clicked="@OnDeleteTaskAsync" Margin="Margin.Is2.OnX" Disabled="!CanChange()">Delete Issue</Button>
+
+                    <Button Size="Size.Medium" Float="Float.Right" Color="Color.Info" Clicked="@OnEditAsync" Disabled="!CanChange()">Save Changes</Button>
+
             </Column>
         </Row>
         <Divider Style="margin-top: 0px" Padding="Padding.Is0" />
@@ -49,7 +48,7 @@
                             </Button>
                         </CollapseHeader>
                         <CollapseBody>
-                            <MemoEdit Rows="15" @bind-Text="@Description" Disabled="!CanChange()"></MemoEdit>
+                            <MemoEdit Rows="15" @bind-Text="@Description"></MemoEdit>
                         </CollapseBody>
                     </Collapse>
                     @*COMMENT SECTION*@
@@ -126,7 +125,7 @@
                                               ValueField="@((item) => item)"
                                               SelectedText="@AssignedUser?.Email"
                                               SelectedValue="@AssignedUser"
-                                              SelectedValueChanged="@AssignedUserHandler" Disabled="!CanChange()"/>
+                                              SelectedValueChanged="@AssignedUserHandler"/>
                             </Column>
                         </Row>
                         <Divider></Divider>
@@ -135,7 +134,7 @@
                                 Issue Status:
                             </Column>
                             <Column>
-                                <Select TValue="@IssueStatus" Style="width: 65%" @bind-SelectedValue="@IssueStatus"  Disabled="!CanChange()">
+                                <Select TValue="@IssueStatus" Style="width: 65%" @bind-SelectedValue="@IssueStatus" >
                                     <SelectItem Value="@IssueStatus.ToDo">To Do</SelectItem>
                                     <SelectItem Value="@IssueStatus.InProgress">In Progress</SelectItem>
                                     <SelectItem Value="@IssueStatus.Done">Done</SelectItem>
@@ -148,10 +147,10 @@
                             </Column>
                             <Column>
                                 <RadioGroup TValue="IssueType" Name="test" Color="Color.Light" @bind-CheckedValue="@IssueType">
-                                    <Radio TValue="IssueType" Value="@(IssueType.Bug)" Style="color: red"  Disabled="!CanChange()">
+                                    <Radio TValue="IssueType" Value="@(IssueType.Bug)" Style="color: red"  >
                                         <label><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Bug" /> <span>Bug</span></label>
                                     </Radio>
-                                    <Radio TValue="IssueType" Value="@(IssueType.Feature)" Style="color: forestgreen"  Disabled="!CanChange()">
+                                    <Radio TValue="IssueType" Value="@(IssueType.Feature)" Style="color: forestgreen" >
                                         <label><Icon Name="IconName.PlusCircle" /> <span>Feature</span></label>
                                     </Radio>
                                 </RadioGroup>
@@ -164,13 +163,13 @@
                             <Column>
 
                                 <RadioGroup TValue="IssuePriority" Name="colors" Color="Color.Light" @bind-CheckedValue="@IssuePriority">
-                                    <Radio TValue="IssuePriority" Value="@(IssuePriority.Low)" Style="color: darkgreen"  Disabled="!CanChange()">
+                                    <Radio TValue="IssuePriority" Value="@(IssuePriority.Low)" Style="color: darkgreen" >
                                         <label><Icon Name="IconName.ArrowUp" /> <span>Low</span></label>
                                     </Radio>
-                                    <Radio TValue="IssuePriority" Value="(IssuePriority.Normal)" Style="color: orange"  Disabled="!CanChange()">
+                                    <Radio TValue="IssuePriority" Value="(IssuePriority.Normal)" Style="color: orange" >
                                         <label><Icon Name="IconName.ArrowUp" /> <span>Normal</span></label>
                                     </Radio>
-                                    <Radio TValue="IssuePriority" Value="@(IssuePriority.High)" Style="color: red"  Disabled="!CanChange()">
+                                    <Radio TValue="IssuePriority" Value="@(IssuePriority.High)" Style="color: red" >
                                         <label><Icon Name="IconName.ArrowUp" /> <span>High</span></label>
                                     </Radio>
                                 </RadioGroup>

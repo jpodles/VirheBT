@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazorise;
+
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
 using System;
@@ -27,8 +29,8 @@ namespace VirheBT.Pages
         private IApplicationUserService ApplicationUserService { get; set; }
 
         private string SelectedUser { get; set; }
+        private Modal createIssueModal;
 
-       
         private void AssignedUserHandler(string newValue)
         {
             SelectedUser = newValue;
@@ -45,16 +47,10 @@ namespace VirheBT.Pages
 
         private List<ApplicationUser> projectUsers = new List<ApplicationUser>();
 
-        private Project Project { get; set; }
-
         protected async override Task OnInitializedAsync()
         {
-            if(ProjectId != 0)
-            {
-                projectUsers = await ProjectService.GetProjectUsersAsync(ProjectId);
-            }
+           
         }
-
 
         private async Task OnAddIssue()
         {
@@ -77,10 +73,27 @@ namespace VirheBT.Pages
             await IssueService.AddIssueAsync(ProjectId, issueToAdd);
             var issues = await IssueService.GetIssuesAsync(ProjectId);
             var issue = issues.OrderByDescending(x => x.Created).First();
-            createIssueModal.Hide();
-            NavigationManager.NavigateTo($"/project/{ProjectId}/issue/{issue.IssueId}", true);
 
-            //StateHasChanged();
+            HideModal();
+            NavigationManager.NavigateTo($"/project/{ProjectId}/issue/{issue.IssueId}", true);
+        }
+
+        public async Task ShowModal()
+        {
+            projectUsers = await ProjectService.GetProjectUsersAsync(ProjectId);
+            createIssueModal.Show();
+        }
+
+        private void HideModal()
+        {
+            projectUsers = new List<ApplicationUser>();
+            Title = string.Empty;
+            Description = string.Empty;
+            CheckedIssueType = default;
+            CheckedIssuePriority = default;
+      
+            StateHasChanged();
+            createIssueModal.Hide();
         }
     }
 }

@@ -38,7 +38,9 @@
                                               ValueField="@((item)=>item.Email)"
                                               SelectedValue="@SelectedUser"
                                               SelectedValueChanged="@AssignedUserHandler"
-                                              Placeholder="Search..." />
+                                              Placeholder="Search...">
+                                    <NotFoundContent Context="ctx"> Not found </NotFoundContent>
+                                </Autocomplete>
                             </Field>
                         </Column>
                     </Row>
@@ -96,15 +98,5 @@
 
 @code{
   
-    private Modal createIssueModal;
 
-    public void ShowModal()
-    {
-        createIssueModal.Show();
-    }
-
-    private void HideModal()
-    {
-        createIssueModal.Hide();
-    }
 }

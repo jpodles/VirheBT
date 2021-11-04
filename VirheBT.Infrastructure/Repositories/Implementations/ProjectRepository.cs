@@ -39,7 +39,9 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
         public async Task<Project> GetProjectAsync(int projectId)
         {
             return await _context.Projects
-                .Where(p => p.ProjectId == projectId).FirstOrDefaultAsync();
+                .Where(p => p.ProjectId == projectId)
+                .Include(x => x.ApplicationUsers)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Project>> GetProjectsAsync()
@@ -68,11 +70,13 @@ namespace VirheBT.Infrastructure.Repositories.Implementations
         public async Task RemoveUserFromProjectAsync(ApplicationUser user, int projectId)
         {
             var project = await GetProjectAsync(projectId);
-
+            var item = project.ApplicationUsers.SingleOrDefault(x => x.Id == user.Id);
             if (user != project.Maintainer)
             {
-                project.ApplicationUsers.Remove(user);
-                Save();
+                project.ApplicationUsers.Remove(item);
+
+                _context.Projects.Update(project);
+                await _context.SaveChangesAsync();
             }
         }
 

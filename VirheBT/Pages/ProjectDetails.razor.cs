@@ -37,14 +37,15 @@ namespace VirheBT.Pages
         public DateTime Created { get; set; }
         public ProjectStatus Status { get; set; }
 
-        public List<ApplicationUser> team = new List<ApplicationUser>();
-        public List<Issue> issues = new List<Issue>();
+        public List<ApplicationUser> Team = new List<ApplicationUser>();
+        public List<Issue> Issues = new List<Issue>();
 
         public int ToDoCount { get; set; }
         public int InProgressCount { get; set; }
         public int DoneCount { get; set; }
         public int AllTasks { get; set; }
         public string Maintainer { get; set; }
+        public string MaintainerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
@@ -69,29 +70,40 @@ namespace VirheBT.Pages
         protected async override Task OnInitializedAsync()
         {
             CurrentProject = await ProjectService.GetProjectAsync(ProjectId);
-            issues = await IssueService.GetIssuesAsync(ProjectId);
+            Issues = await IssueService.GetIssuesAsync(ProjectId);
             Name = CurrentProject.Name;
             Description = CurrentProject.Description;
             FirstName = CurrentProject.Maintainer?.FirstName;
             LastName = CurrentProject.Maintainer?.LastName;
+            MaintainerId = CurrentProject.Maintainer?.Id;
             Status = CurrentProject.Status;
             Created = CurrentProject.Created;
-            team = CurrentProject.ApplicationUsers.ToList();
+            Team = CurrentProject.ApplicationUsers.ToList();
 
             Maintainer = FirstName + " " + LastName;
 
-            AllTasks = issues.Count;
-            ToDoCount = issues
+            CountTasks();
+        }
+
+        private void CountTasks()
+        {
+            AllTasks = Issues.Count;
+            ToDoCount = Issues
              .Count(x => x.Status == IssueStatus.ToDo);
-            InProgressCount = issues
+            InProgressCount = Issues
                 .Count(x => x.Status == IssueStatus.InProgress);
-            DoneCount = issues
+            DoneCount = Issues
                 .Count(x => x.Status == IssueStatus.Done);
         }
 
         public bool CanChange()
         {
             return httpAccessor.HttpContext.User.IsInRole("Admin") || httpAccessor.HttpContext.User.IsInRole("ProjectManager");
+        }
+
+        public bool IsProjectDisabled()
+        {
+            return CurrentProject?.Status is ProjectStatus.Canceled or ProjectStatus.Finished;
         }
         private async void SwitchToProject()
         {

@@ -53,8 +53,6 @@ namespace VirheBT.Pages
 
         private ApplicationUser AssignedUser { get; set; }
 
-        private ApplicationUser LoggedUser { get; set; }
-
         public IssueCommentDto Comment { get; set; }
 
         Snackbar successAlert { get; set; }

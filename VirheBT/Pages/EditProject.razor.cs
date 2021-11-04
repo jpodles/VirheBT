@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
+﻿using Blazorise;
 
+using Microsoft.AspNetCore.Components;
+
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
+using VirheBT.Shared.Enums;
 
 namespace VirheBT.Pages
 {
@@ -19,11 +22,23 @@ namespace VirheBT.Pages
         [Inject]
         private IProjectService ProjectService { get; set; }
 
+        [Inject]
+        private IApplicationUserService ApplicationUserService { get; set; }
+
         private string Name { get; set; }
         private string Description { get; set; }
 
         private Project CurrentProject { get; set; }
 
+        private List<ApplicationUser> appUsers = new List<ApplicationUser>();
+        private List<ApplicationUser> allowedUsers = new List<ApplicationUser>();
+        private string selectedSearchValue { get; set; } = "XD";
+
+        private Modal editProjectModal;
+
+        private void SearchHandler(string newValue) => selectedSearchValue = newValue;
+
+        private string selectedAutoCompleteText;
         public async void OnEditAsync()
         {
             Project editModel = new Project
@@ -36,19 +51,25 @@ namespace VirheBT.Pages
             NavigationManager.NavigateTo($"/projects/{ProjectId}", true);
         }
 
-        protected async override Task OnInitializedAsync()
-        {
-            if(ProjectId != 0)
-            {
-                await GetData();
-            }
-        }
-
         private async Task GetData()
         {
+            appUsers = await ApplicationUserService.GetApplicationUsersAsync();
             CurrentProject = await ProjectService.GetProjectAsync(ProjectId);
             Name = CurrentProject.Name;
             Description = CurrentProject.Description;
+        }
+
+        public async Task ShowModal()
+        { 
+            await GetData();
+            selectedAutoCompleteText = CurrentProject.Maintainer.Email;
+            allowedUsers = appUsers.FindAll(x => x.UserRole is UserRole.ProjectManager or UserRole.Admin);
+            editProjectModal.Show();
+        }
+
+        private void HideModal()
+        {
+            editProjectModal.Hide();
         }
     }
 }

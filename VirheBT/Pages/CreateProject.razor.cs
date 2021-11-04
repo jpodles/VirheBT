@@ -1,9 +1,15 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Blazorise;
+
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using VirheBT.Infrastructure.Data.Models;
 using VirheBT.Services.Interfaces;
+using VirheBT.Shared.Enums;
 
 namespace VirheBT.Pages
 {
@@ -18,6 +24,17 @@ namespace VirheBT.Pages
         [Inject]
         private IProjectService ProjectService { get; set; }
 
+        [Inject]
+        private IApplicationUserService ApplicationUserService { get; set; }
+        
+
+        private Modal createProjectModal;
+        private List<ApplicationUser> appUsers = new List<ApplicationUser>();
+        private List<ApplicationUser> allowedUsers = new List<ApplicationUser>();
+        private string selectedSearchValue { get; set; }
+
+        private void MySearchHandler(string newValue) => selectedSearchValue = newValue;
+
         public async Task OnCreateAsync()
         {
             var authState = await AuthenticationStateProvider
@@ -30,5 +47,24 @@ namespace VirheBT.Pages
 
             NavigationManager.NavigateTo("/projects", true);
         }
+
+        public void ProjectTitleValidator(ValidatorEventArgs e)
+        {
+            var title = Convert.ToString(e.Value);
+            e.Status = string.IsNullOrEmpty(title) ? ValidationStatus.None : ValidationStatus.Success;
+        }
+
+        public bool CanAdd() => !string.IsNullOrEmpty(title);
+
+
+
+        public async Task ShowModal()
+        {
+            appUsers = await ApplicationUserService.GetApplicationUsersAsync();
+            allowedUsers = appUsers.FindAll(x => x.UserRole is UserRole.ProjectManager or UserRole.Admin);
+            createProjectModal.Show();
+        }
+
+        private void HideModal() => createProjectModal.Hide();
     }
 }

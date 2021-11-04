@@ -2,182 +2,186 @@
 
 @using VirheBT.Shared.Enums
 @using VirheBT.Infrastructure.Data.Models
-<Container Fluid="true" Margin="Margin.Is5.OnY" Padding="Padding.Is4.OnY" ElementId="team">
-    <Card WhiteText="false">
-        <CardHeader>
-            <CardTitle>MY TEAM</CardTitle>
-        </CardHeader>
-        <CardBody>
-            <Card Margin="Margin.Is0.OnY" Padding="Padding.Is0.OnY" Style="border: none">
-                <CardBody Padding="Padding.Is0">
-                    <Row>
+<AuthorizeView>
+    <Container Fluid="true" Margin="Margin.Is5.OnY" Padding="Padding.Is4.OnY" ElementId="team">
+        <Card WhiteText="false">
+            <CardHeader>
+                <CardTitle>MY TEAM</CardTitle>
+            </CardHeader>
+            <CardBody>
+                @if(CanAddUser()) {
+                <Card Margin="Margin.Is0.OnY" Padding="Padding.Is0.OnY" Style="border: none">
+                    <CardBody Padding="Padding.Is0">
+                        <Row>
 
-                        <Column ColumnSize="ColumnSize.Is1" Padding="Padding.Is2">
-                            <CardTitle Alignment="TextAlignment.Right" Size="6">Add employee:</CardTitle>
-                        </Column>
+                            <Column ColumnSize="ColumnSize.Is1" Padding="Padding.Is2">
+                                <CardTitle Alignment="TextAlignment.Right" Size="6">Add employee:</CardTitle>
+                            </Column>
 
-                        <Column ColumnSize="ColumnSize.Is4">
-                            <Autocomplete TItem="ApplicationUser" TValue="string"
-                                          Data="@appUsers"
-                                          TextField="@((item)=>item.Email)"
-                                          ValueField="@((item)=>item.Email)"
-                                          SelectedValue="@selectedSearchValue"
-                                          SelectedValueChanged="@MySearchHandler"
-                                          Placeholder="Search..." />
-                        </Column>
-                        <Column ColumnSize="ColumnSize.Is6">
-                            <Button Color="Color.Success" Clicked="@OnAddUserToProject">
-                                <Icon Name="IconName.PlusSquare"></Icon>
-                                ADD EMPLOYEE
-                            </Button>
-                        </Column>
-                    </Row>
-                </CardBody>
-            </Card>
+                            <Column ColumnSize="ColumnSize.Is4">
 
-            <DataGrid @ref="dataGrid"
-                      TItem="ApplicationUser"
-                      Data="data"
-                      Editable="@editable"
-                      EditMode="@editMode"
-                      Sortable="@sortable"
-                      SortMode="@sortMode"
-                      Filterable="@filterable"
-                      ShowPager="@showPager"
-                      SelectionMode="@selectionMode"
-                      CommandMode="@commandsMode"
-                      PageSize="15"
-                      CurrentPage="currentPage"
-                      PageChanged="(e) => currentPage = e.Page"
-                      PagerPosition="DataGridPagerPosition.TopAndBottom"
-                      Striped="false"
-                      Bordered="true"
-                      Hoverable="true"
-                      Responsive="true"
-                      Narrow="true"
-                      RowRemoved="@OnRowRemoved">
 
-                <EmptyTemplate>
-                    <div class="text-center">
-                        No users are found!
-                    </div>
-                </EmptyTemplate>
+                                <Autocomplete TItem="ApplicationUser" TValue="string"
+                                              Data="@appUsers"
+                                              TextField="@((item)=>item.Email)"
+                                              ValueField="@((item)=>item.Email)"
+                                              SelectedValue="@selectedSearchValue"
+                                              SelectedValueChanged="@MySearchHandler"
+                                              Placeholder="Search..." />
+                            </Column>
+                            <Column ColumnSize="ColumnSize.Is6">
+                                <Button Color="Color.Success" Clicked="@OnAddUserToProject">
+                                    <Icon Name="IconName.PlusSquare"></Icon>
+                                    ADD EMPLOYEE
+                                </Button>
+                            </Column>
+                        </Row>
+                    </CardBody>
+                </Card>
+                }
+                <DataGrid @ref="dataGrid"
+                          TItem="ApplicationUser"
+                          Data="data"
+                          Editable="@editable"
+                          EditMode="@editMode"
+                          Sortable="@sortable"
+                          SortMode="@sortMode"
+                          Filterable="@filterable"
+                          ShowPager="@showPager"
+                          SelectionMode="@selectionMode"
+                          CommandMode="@commandsMode"
+                          PageSize="15"
+                          CurrentPage="currentPage"
+                          PageChanged="(e) => currentPage = e.Page"
+                          PagerPosition="DataGridPagerPosition.TopAndBottom"
+                          Striped="false"
+                          Bordered="true"
+                          Hoverable="true"
+                          Responsive="true"
+                          Narrow="true"
+                          RowRemoved="@OnRowRemoved">
 
-                <DataGridColumns>
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Name" Editable="false" Width="350px">
-                        <CaptionTemplate>
-                            <Icon Name="IconName.User" /> @context.Caption
-                        </CaptionTemplate>
+                    <EmptyTemplate>
+                        <div class="text-center">
+                            No users are found!
+                        </div>
+                    </EmptyTemplate>
 
-                        <DisplayTemplate>
-                            <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
-                            <Card Background="Background.Transparent" Style="height: 40px; border:none">
-                                @context.FirstName
-                            </Card>
-                            </Link>
-                        </DisplayTemplate>
-                    </DataGridColumn>
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Name" Editable="false" Width="350px">
-                        <CaptionTemplate>
-                            <Icon Name="IconName.User" /> @context.Caption
-                        </CaptionTemplate>
+                    <DataGridColumns>
+                        <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Name" Editable="false" Width="350px" Context="dataGridContext">
+                            <CaptionTemplate>
+                                <Icon Name="IconName.User" /> @dataGridContext.Caption
+                            </CaptionTemplate>
 
-                        <DisplayTemplate>
-                            <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
-                            <Card Background="Background.Transparent" Style="height: 40px; border:none">
-                                @context.LastName
-                            </Card>
-                            </Link>
-                        </DisplayTemplate>
-                    </DataGridColumn>
+                            <DisplayTemplate>
+                                <Link To="#" @onclick="@(() => ShowUserDeatilsModal(dataGridContext.Id))" Style="text-decoration: none">
+                                <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                    @dataGridContext.FirstName
+                                </Card>
+                                </Link>
+                            </DisplayTemplate>
+                        </DataGridColumn>
+                        <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Name" Editable="false" Width="350px" Context="dataGridContext">
+                            <CaptionTemplate>
+                                <Icon Name="IconName.User" /> @dataGridContext.Caption
+                            </CaptionTemplate>
 
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Email" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
-                        <CaptionTemplate>
-                            <Icon Name="IconName.Mail" /> @context.Caption
-                        </CaptionTemplate>
-                        <DisplayTemplate>
-                            <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
-                            <Card Background="Background.Transparent" Style="height: 40px; border:none">
-                                @context.Email
-                            </Card>
-                            </Link>
-                        </DisplayTemplate>
-                    </DataGridColumn>
+                            <DisplayTemplate>
+                                <Link To="#" @onclick="@(() => ShowUserDeatilsModal(dataGridContext.Id))" Style="text-decoration: none">
+                                <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                    @dataGridContext.LastName
+                                </Card>
+                                </Link>
+                            </DisplayTemplate>
+                        </DataGridColumn>
 
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="Role" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
-                        <CaptionTemplate>
-                            <Icon Name="IconName.UserTie" /> @context.Caption
-                        </CaptionTemplate>
-                        <DisplayTemplate>
+                        <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Email" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true" Context="dataGridContext">
+                            <CaptionTemplate>
+                                <Icon Name="IconName.Mail" /> @dataGridContext.Caption
+                            </CaptionTemplate>
+                            <DisplayTemplate>
+                                <Link To="#" @onclick="@(() => ShowUserDeatilsModal(dataGridContext.Id))" Style="text-decoration: none">
+                                <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                    @dataGridContext.Email
+                                </Card>
+                                </Link>
+                            </DisplayTemplate>
+                        </DataGridColumn>
 
-                            <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
-                            <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                        <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="Role" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center" Context="dataGridContext">
+                            <CaptionTemplate>
+                                <Icon Name="IconName.UserTie" /> @dataGridContext.Caption
+                            </CaptionTemplate>
+                            <DisplayTemplate>
+
+                                <Link To="#" @onclick="@(() => ShowUserDeatilsModal(dataGridContext.Id))" Style="text-decoration: none">
+                                <Card Background="Background.Transparent" Style="height: 40px; border:none">
+                                    @{
+                                        var item = (dataGridContext as ApplicationUser);
+                                        if (item.UserRole == UserRole.Admin)
+                                        {
+                                            <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" /> <span>@dataGridContext.UserRole</span></label>
+                                        }
+                                        if (item.UserRole == UserRole.Programmer)
+                                        {
+                                            <label style="color:green"><Icon Name="IconName.User" /> <span>@dataGridContext.UserRole</span></label>
+
+                                        }
+                                        if (item.UserRole == UserRole.Tester)
+                                        {
+                                            <label style="color: cornflowerblue"><Icon Name="IconName.User" /> <span>@dataGridContext.UserRole</span></label>
+
+                                        }
+                                        if (item.UserRole == UserRole.ProjectManager)
+                                        {
+                                            <label style="color:darkorange"><Icon Name="IconName.UserTie" /> <span>@dataGridContext.UserRole</span></label>
+
+                                        }
+
+                                    }
+                                </Card>
+                                </Link>
+                            </DisplayTemplate>
+                            <FilterTemplate>
                                 @{
-                                    var item = (context as ApplicationUser);
-                                    if (item.UserRole == UserRole.Admin)
-                                    {
-                                        <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" /> <span>@context.UserRole</span></label>
-                                    }
-                                    if (item.UserRole == UserRole.Programmer)
-                                    {
-                                        <label style="color:green"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
-
-                                    }
-                                    if (item.UserRole == UserRole.Tester)
-                                    {
-                                        <label style="color: cornflowerblue"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
-
-                                    }
-                                    if (item.UserRole == UserRole.ProjectManager)
-                                    {
-                                        <label style="color:darkorange"><Icon Name="IconName.UserTie" /> <span>@context.UserRole</span></label>
-
-                                    }
-
+                                    var selectedValue = @dataGridContext.SearchValue ?? "*";
+                                    <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => dataGridContext.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
+                                        <SelectItem Value="@("*")">All</SelectItem>
+                                        @foreach (var item in Enum.GetValues(typeof(UserRole)))
+                                        {
+                                            <SelectItem Value="@item">@item</SelectItem>
+                                        }
+                                    </Select>
                                 }
-                            </Card>
-                            </Link>
-                        </DisplayTemplate>
-                        <FilterTemplate>
-                            @{
-                                var selectedValue = @context.SearchValue ?? "*";
-                                <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
-                                    <SelectItem Value="@("*")">All</SelectItem>
-                                    @foreach (var item in Enum.GetValues(typeof(UserRole)))
-                                    {
-                                        <SelectItem Value="@item">@item</SelectItem>
-                                    }
-                                </Select>
-                            }
-                        </FilterTemplate>
-                    </DataGridColumn>
+                            </FilterTemplate>
+                        </DataGridColumn>
 
-                    <DataGridCommandColumn TItem="ApplicationUser" Width="70px" TextAlignment="TextAlignment.Center">
-                        <ClearFilterCommandTemplate>
-                            <Button Color="Color.Warning" Clicked="@context.Clicked">
+                        <DataGridCommandColumn TItem="ApplicationUser" Width="70px" TextAlignment="TextAlignment.Center">
+                            <ClearFilterCommandTemplate Context="dataGridContext">
+                                <Button Color="Color.Warning" Clicked="@dataGridContext.Clicked">
 
-                                Clear
-                            </Button>
-                        </ClearFilterCommandTemplate>
-                        <DeleteCommandTemplate>
-                            <Button Clicked="@context.Clicked" Color="Color.Danger">
-                                <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Trash" />
-                            </Button>
-                        </DeleteCommandTemplate>
+                                    Clear
+                                </Button>
+                            </ClearFilterCommandTemplate>
+                            <DeleteCommandTemplate Context="dataGridContext">
+                                <Button Clicked="@dataGridContext.Clicked" Color="Color.Danger">
+                                    <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Trash" />
+                                </Button>
+                            </DeleteCommandTemplate>
 
-                        <NewCommandTemplate>
-                            <Button Color="Color.Success" Clicked="@context.Clicked" Style="display:none">New</Button>
-                        </NewCommandTemplate>
-                        <EditCommandTemplate>
-                            <Button Color="Color.Primary" Clicked="@context.Clicked" Style="display:none">Edit</Button>
-                        </EditCommandTemplate>
-                    </DataGridCommandColumn>
-                </DataGridColumns>
-            </DataGrid>
-        </CardBody>
-    </Card>
-</Container>
-
+                            <NewCommandTemplate Context="dataGridContext">
+                                <Button Color="Color.Success" Clicked="@dataGridContext.Clicked" Style="display:none">New</Button>
+                            </NewCommandTemplate>
+                            <EditCommandTemplate Context="dataGridContext">
+                                <Button Color="Color.Primary" Clicked="@dataGridContext.Clicked" Style="display:none">Edit</Button>
+                            </EditCommandTemplate>
+                        </DataGridCommandColumn>
+                    </DataGridColumns>
+                </DataGrid>
+            </CardBody>
+        </Card>
+    </Container>
+</AuthorizeView>
 <UserDetails @ref="userDetailsRef" UserId="@userDetailsId"></UserDetails>
 
 @code {
