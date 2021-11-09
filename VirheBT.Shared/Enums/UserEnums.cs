@@ -1,16 +1,15 @@
-﻿namespace VirheBT.Shared.Enums
-{
-    public enum UserRole
-    {
-        Admin,
-        Tester,
-        Programmer,
-        ProjectManager
-    }
+﻿namespace VirheBT.Shared.Enums;
 
-    public enum UserStatus
-    {
-        Active,
-        Inactive
-    }
+public enum UserRole
+{
+    Admin,
+    Tester,
+    Programmer,
+    ProjectManager
+}
+
+public enum UserStatus
+{
+    Active,
+    Inactive
 }

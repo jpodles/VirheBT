@@ -1,34 +1,28 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace VirheBT.Services.Interfaces;
 
-using VirheBT.Infrastructure.Data.Models;
-using VirheBT.Shared.DTOs;
-using VirheBT.Shared.Enums;
-
-namespace VirheBT.Services.Interfaces
+public interface IIssueService
 {
-    public interface IIssueService
-    {
-        Task AddHistoryEntry(ChangeType changeType, int projectId, int issueId, string userId);
-        Task<List<IssueHistoryDto>> GetIssueHistory(int issueId);
-        Task<List<Issue>> GetIssuesAsync(int projecId);
+    Task AddHistoryEntry(ChangeType changeType, int projectId, int issueId, string userId);
 
-        Task<Issue> GetIssueAsync(int projectId, int issueId);
+    Task<List<IssueHistoryDto>> GetIssueHistory(int issueId);
 
-        Task AddIssueAsync(int projectId, Issue issue);
+    Task<List<Issue>> GetIssuesAsync(int projecId);
 
-        Task EditIssueAsync(int projectId, int issueId, Issue issue);
+    Task<Issue> GetIssueAsync(int projectId, int issueId);
 
-        Task DeleteIssueAsync(int projectId, int issueId);
+    Task AddIssueAsync(int projectId, Issue issue);
 
-        Task<List<IssueCommentDto>> GetIssueCommentsAsync(int projectId, int issueId);
+    Task EditIssueAsync(int projectId, int issueId, Issue issue);
 
-        Task<IssueComment> GetIssueCommentAsync(int issueId, int commentId);
+    Task DeleteIssueAsync(int projectId, int issueId);
 
-        Task AddCommentAsync(IssueComment comment);
+    Task<List<IssueCommentDto>> GetIssueCommentsAsync(int projectId, int issueId);
 
-        Task EditCommentAsync(IssueComment comment);
+    Task<IssueComment> GetIssueCommentAsync(int issueId, int commentId);
 
-        Task DeleteCommentAsync(int issueId, int commentId);
-    }
+    Task AddCommentAsync(IssueComment comment);
+
+    Task EditCommentAsync(IssueComment comment);
+
+    Task DeleteCommentAsync(int issueId, int commentId);
 }

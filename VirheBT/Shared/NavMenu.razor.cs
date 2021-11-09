@@ -1,27 +1,16 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿namespace VirheBT.Shared;
 
-using System.Threading.Tasks;
-
-namespace VirheBT.Shared
+public partial class NavMenu
 {
-    public partial class NavMenu
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
+    private int currentProject;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        [Inject]
-        private NavigationManager NavigationManager { get; set; }
+        var result = await ProtectedSessionStore.GetAsync<int>("currentProject");
 
-        private int currentProject;
-
-        protected async override Task OnInitializedAsync()
-        {
-            // currentUrl = NavigationManager.BaseUri + "/" + AppState.CurrentProjectId;
-        }
-
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            var result = await ProtectedSessionStore.GetAsync<int>("currentProject");
-
-            currentProject = result.Value;
-            StateHasChanged();
-        }
+        currentProject = result.Value;
+        StateHasChanged();
     }
 }

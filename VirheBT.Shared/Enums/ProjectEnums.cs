@@ -1,9 +1,8 @@
-﻿namespace VirheBT.Shared.Enums
+﻿namespace VirheBT.Shared.Enums;
+
+public enum ProjectStatus
 {
-    public enum ProjectStatus
-    {
-        OnTrack,
-        Canceled,
-        Finished
-    }
+    OnTrack,
+    Canceled,
+    Finished
 }

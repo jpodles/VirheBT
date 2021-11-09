@@ -1,8 +1,6 @@
-﻿namespace VirheBT.State
+﻿namespace VirheBT.State;
+public interface IAppState
 {
-    public interface IAppState
-    {
-        public int CurrentProjectId { get; set; }
-        public int CurrentIssueId { get; set; }
-    }
+    public int CurrentProjectId { get; set; }
+    public int CurrentIssueId { get; set; }
 }

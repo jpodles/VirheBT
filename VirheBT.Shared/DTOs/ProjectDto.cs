@@ -1,6 +1,5 @@
-﻿namespace VirheBT.Shared.DTOs
+﻿namespace VirheBT.Shared.DTOs;
+
+public class ProjectDto
 {
-    public class ProjectDto
-    {
-    }
 }

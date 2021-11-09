@@ -1,24 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace VirheBT.Infrastructure.Repositories.Interfaces;
 
-using VirheBT.Infrastructure.Data.Models;
-
-namespace VirheBT.Infrastructure.Repositories.Interfaces
+public interface IApplicationUserRepository
 {
-    public interface IApplicationUserRepository
-    {
-        Task<IEnumerable<ApplicationUser>> GetApplicationUsersAsync();
+    Task<IEnumerable<ApplicationUser>> GetApplicationUsersAsync();
 
-        Task<ApplicationUser> GetApplicationUserAsync(string userId);
+    Task<ApplicationUser> GetApplicationUserAsync(string userId);
 
-        Task UpdateUserAsync(ApplicationUser applicationUser, string userId);
+    Task UpdateUserAsync(ApplicationUser applicationUser, string userId);
 
-        //to chyba nie ma miejsca
-        //void AddUser(ApplicationUser user);
+    //to chyba nie ma miejsca
+    //void AddUser(ApplicationUser user);
 
-        //Delete/Deactivate
-        void DeactivateUserAsync(string userId);
+    //Delete/Deactivate
+    void DeactivateUserAsync(string userId);
 
-        Task<ApplicationUser> GetApplicationUserByEmailAsync(string userEmail);
-    }
+    Task<ApplicationUser> GetApplicationUserByEmailAsync(string userEmail);
 }

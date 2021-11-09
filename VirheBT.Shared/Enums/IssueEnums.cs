@@ -1,30 +1,29 @@
-﻿namespace VirheBT.Shared.Enums
+﻿namespace VirheBT.Shared.Enums;
+
+public enum IssuePriority
 {
-    public enum IssuePriority
-    {
-        Low = 0,
-        Normal = 1,
-        High = 2
-    }
+    Low = 0,
+    Normal = 1,
+    High = 2
+}
 
-    public enum IssueStatus
+public enum IssueStatus
 
-    {
-        ToDo = 0,
-        InProgress = 1,
-        Done = 2
-    }
+{
+    ToDo = 0,
+    InProgress = 1,
+    Done = 2
+}
 
-    public enum IssueType
-    {
-        Bug = 0,
-        Feature = 1
-    }
+public enum IssueType
+{
+    Bug = 0,
+    Feature = 1
+}
 
-    public enum ChangeType
-    {
-        Created = 0,
-        Modified = 1,
-        Closed = 2
-    }
+public enum ChangeType
+{
+    Created = 0,
+    Modified = 1,
+    Closed = 2
 }

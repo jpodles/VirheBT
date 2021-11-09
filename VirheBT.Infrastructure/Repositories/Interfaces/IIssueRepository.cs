@@ -1,24 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using VirheBT.Infrastructure.Data.Models;
-
-namespace VirheBT.Infrastructure.Repositories.Interfaces
+﻿namespace VirheBT.Infrastructure.Repositories.Interfaces;
+public interface IIssueRepository
 {
-    public interface IIssueRepository
-    {
-        Task<IEnumerable<Issue>> GetIssuesAsync(int projectId);
+    Task<IEnumerable<Issue>> GetIssuesAsync(int projectId);
 
-        Task<Issue> GetIssueByIdAsync(int projectId, int issueId);
+    Task<Issue> GetIssueByIdAsync(int projectId, int issueId);
 
-        Task AddIsssueAsync(List<Issue> issues, Issue issue);
+    Task AddIsssueAsync(List<Issue> issues, Issue issue);
 
-        Task DeleteIssueAsync(int projectId, Issue issue);
+    Task DeleteIssueAsync(int projectId, Issue issue);
 
-        Task UpdateIssueAsync(int projectId, int issueId, Issue issue);
+    Task UpdateIssueAsync(int projectId, int issueId, Issue issue);
 
-        bool IssueExists(int projectId, int issueId);
+    bool IssueExists(int projectId, int issueId);
 
-        bool Save();
-    }
+    bool Save();
 }
