@@ -4,7 +4,6 @@ public class Project
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ProjectId { get; set; }
-
     public ApplicationUser Maintainer { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }

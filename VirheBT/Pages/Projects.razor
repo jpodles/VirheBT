@@ -8,7 +8,7 @@
         </CardHeader>
         <CardBody Padding="Padding.Is2">
             <DataGrid @ref="dataGrid"
-                      TItem="Project"
+                      TItem="ProjectDto"
                       Data="data"
                       Editable="@editable"
                       EditMode="@editMode"
@@ -37,9 +37,9 @@
 
                 <DataGridColumns>
 
-                    <DataGridColumn TItem="Project" Field="@nameof(Project.ProjectId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
+                    <DataGridColumn TItem="ProjectDto" Field="@nameof(ProjectDto.ProjectId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
 
-                    <DataGridColumn TItem="Project" Field="@nameof(Project.Name)" Caption="Title" Editable="false" Width="500px">
+                    <DataGridColumn TItem="ProjectDto" Field="@nameof(ProjectDto.Name)" Caption="Title" Editable="false" Width="500px">
                         <CaptionTemplate>
                             <Icon Name="IconName.Tag" /> @context.Caption
                         </CaptionTemplate>
@@ -54,8 +54,8 @@
                         </DisplayTemplate>
                     </DataGridColumn>
 
-                    <DataGridColumn TItem="Project"
-                                    Field="@nameof(Project.Maintainer)"
+                    <DataGridColumn TItem="ProjectDto"
+                                    Field="@nameof(ProjectDto.Maintainer)"
                                     Caption="Maintainter" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
                         <CaptionTemplate>
                             <Icon Name="IconName.UserCheck" /> @context.Caption
@@ -126,7 +126,7 @@
                         </FilterTemplate>
                     </DataGridColumn>
 
-                    <DataGridCommandColumn TItem="Project" Width="50px">
+                    <DataGridCommandColumn TItem="ProjectDto" Width="50px">
                         <ClearFilterCommandTemplate>
                             <Button Color="Color.Warning" Clicked="@context.Clicked">
                                 <Icon Name="IconName.Brush" />

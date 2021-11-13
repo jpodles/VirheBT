@@ -1,9 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using VirheBT.Shared.Enums;
-
-namespace VirheBT.Infrastructure.Data.Models
+﻿namespace VirheBT.Infrastructure.Data.Models
 {
     public class Issue
     {

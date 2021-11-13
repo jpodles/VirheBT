@@ -13,7 +13,7 @@ public partial class UserDetails
     private string UserRole { get; set; }
     private string PhoneNumber { get; set; }
 
-    private List<Project> Projects = new List<Project>();
+    private List<ProjectDto> Projects = new List<ProjectDto>();
 
     protected async Task GetUserData()
     {

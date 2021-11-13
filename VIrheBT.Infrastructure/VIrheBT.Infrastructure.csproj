@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\VirheBT.Shared\VirheBT.Shared.csproj" />
+	  <ProjectReference Include="..\VirheBT.Shared\VirheBT.Shared.csproj" />
 	</ItemGroup>
 
 </Project>

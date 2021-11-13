@@ -11,17 +11,17 @@ public partial class ProjectDetails
     private DataGridSortMode sortMode = DataGridSortMode.Single;
     private DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
     private DataGridCommandMode commandsMode = DataGridCommandMode.Default;
-    public DataGrid<ApplicationUser> dataGrid;
+    public DataGrid<ApplicationUserDto> dataGrid;
     public int currentPage { get; set; } = 1;
 
     public string Name { get; set; }
     public string Description { get; set; }
-    public Project CurrentProject { get; set; }
+    public ProjectDto CurrentProject { get; set; }
     public DateTime Created { get; set; }
     public ProjectStatus Status { get; set; }
 
-    public List<ApplicationUser> Team = new List<ApplicationUser>();
-    public List<Issue> Issues = new List<Issue>();
+    public List<ApplicationUserDto> Team = new List<ApplicationUserDto>();
+    public List<IssueDto> Issues = new List<IssueDto>();
 
     public int ToDoCount { get; set; }
     public int InProgressCount { get; set; }

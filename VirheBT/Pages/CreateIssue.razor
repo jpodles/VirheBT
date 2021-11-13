@@ -32,7 +32,7 @@
                         <Column>
                             <Field>
                                 <FieldLabel>Assigned To:</FieldLabel>
-                                <Autocomplete TItem="ApplicationUser" TValue="string"
+                                <Autocomplete TItem="ApplicationUserDto" TValue="string"
                                               Data="@projectUsers"
                                               TextField="@((item)=>item.Email)"
                                               ValueField="@((item)=>item.Email)"

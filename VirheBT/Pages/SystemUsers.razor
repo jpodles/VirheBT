@@ -10,7 +10,7 @@
         <CardBody>
 
             <DataGrid @ref="dataGrid"
-                      TItem="ApplicationUser"
+                      TItem="ApplicationUserDto"
                       Data="data"
                       Editable="@editable"
                       EditMode="@editMode"
@@ -38,7 +38,7 @@
                 </EmptyTemplate>
 
                 <DataGridColumns>
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.FirstName)" Caption="First Name" Editable="true" Width="350px">
+                    <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.FirstName)" Caption="First Name" Editable="true" Width="350px">
                         <CaptionTemplate>
                             <Icon Name="IconName.User" /> @context.Caption
                         </CaptionTemplate>
@@ -51,7 +51,7 @@
                             </Link>
                         </DisplayTemplate>
                     </DataGridColumn>
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.LastName)" Caption="Last Name" Editable="true" Width="350px">
+                    <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.LastName)" Caption="Last Name" Editable="true" Width="350px">
                         <CaptionTemplate>
                             <Icon Name="IconName.User" /> @context.Caption
                         </CaptionTemplate>
@@ -65,7 +65,7 @@
                         </DisplayTemplate>
                     </DataGridColumn>
 
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Email" Editable="true" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
+                    <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.Email)" Caption="Email" Editable="true" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
                         <CaptionTemplate>
                             <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Envelope" /> @context.Caption
                         </CaptionTemplate>
@@ -79,7 +79,7 @@
 
                     </DataGridColumn>
 
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="User Role" Editable="true" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                    <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.UserRole)" Caption="User Role" Editable="true" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
                         <CaptionTemplate>
                             <Icon Name="IconName.UserTie" /> @context.Caption
                         </CaptionTemplate>
@@ -87,7 +87,7 @@
                             <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
                             <Card Background="Background.Transparent" Style="height: 40px; border:none">
                                 @{
-                                    var item = (context as ApplicationUser);
+                                    var item = (context as ApplicationUserDto);
                                     if (item.UserRole == UserRole.Admin)
                                     {
                                         <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" /> <span>@context.UserRole</span></label>
@@ -134,7 +134,7 @@
                             }
                         </FilterTemplate>
                     </DataGridColumn>
-                    <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserStatus)" Caption="User Status" Editable="true" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                    <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.UserStatus)" Caption="User Status" Editable="true" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
                         <CaptionTemplate>
                             <Icon Name="IconName.UserTie" /> @context.Caption
                         </CaptionTemplate>
@@ -142,7 +142,7 @@
                             <Link To="#" @onclick="@(() => ShowUserDeatilsModal(context.Id))" Style="text-decoration: none">
                             <Card Background="Background.Transparent" Style="height: 40px; border:none">
                                 @{
-                                    var item = (context as ApplicationUser);
+                                    var item = (context as ApplicationUserDto);
                                     if (item.UserStatus == UserStatus.Inactive)
                                     {
                                         <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserSlash" /> <span>@context.UserStatus</span></label>
@@ -177,7 +177,7 @@
                             }
                         </FilterTemplate>
                     </DataGridColumn>
-                    <DataGridCommandColumn TItem="ApplicationUser" Width="40px">
+                    <DataGridCommandColumn TItem="ApplicationUserDto" Width="40px">
                         <ClearFilterCommandTemplate>
                             <Button Color="Color.Warning" Clicked="@context.Clicked">
                                 <Icon Name="IconName.Brush" />

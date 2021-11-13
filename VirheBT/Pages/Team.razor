@@ -21,7 +21,7 @@
                             <Column ColumnSize="ColumnSize.Is4">
 
 
-                                <Autocomplete TItem="ApplicationUser" TValue="string"
+                                <Autocomplete TItem="ApplicationUserDto" TValue="string"
                                               Data="@appUsers"
                                               TextField="@((item)=>item.Email)"
                                               ValueField="@((item)=>item.Email)"
@@ -40,7 +40,7 @@
                 </Card>
                 }
                 <DataGrid @ref="dataGrid"
-                          TItem="ApplicationUser"
+                          TItem="ApplicationUserDto"
                           Data="data"
                           Editable="@editable"
                           EditMode="@editMode"
@@ -68,7 +68,7 @@
                     </EmptyTemplate>
 
                     <DataGridColumns>
-                        <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Name" Editable="false" Width="350px" Context="dataGridContext">
+                        <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.Email)" Caption="Name" Editable="false" Width="350px" Context="dataGridContext">
                             <CaptionTemplate>
                                 <Icon Name="IconName.User" /> @dataGridContext.Caption
                             </CaptionTemplate>
@@ -81,7 +81,7 @@
                                 </Link>
                             </DisplayTemplate>
                         </DataGridColumn>
-                        <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Name" Editable="false" Width="350px" Context="dataGridContext">
+                        <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.Email)" Caption="Name" Editable="false" Width="350px" Context="dataGridContext">
                             <CaptionTemplate>
                                 <Icon Name="IconName.User" /> @dataGridContext.Caption
                             </CaptionTemplate>
@@ -95,7 +95,7 @@
                             </DisplayTemplate>
                         </DataGridColumn>
 
-                        <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Email" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true" Context="dataGridContext">
+                        <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.Email)" Caption="Email" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true" Context="dataGridContext">
                             <CaptionTemplate>
                                 <Icon Name="IconName.Mail" /> @dataGridContext.Caption
                             </CaptionTemplate>
@@ -108,7 +108,7 @@
                             </DisplayTemplate>
                         </DataGridColumn>
 
-                        <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="Role" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center" Context="dataGridContext">
+                        <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.UserRole)" Caption="Role" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center" Context="dataGridContext">
                             <CaptionTemplate>
                                 <Icon Name="IconName.UserTie" /> @dataGridContext.Caption
                             </CaptionTemplate>
@@ -117,7 +117,7 @@
                                 <Link To="#" @onclick="@(() => ShowUserDeatilsModal(dataGridContext.Id))" Style="text-decoration: none">
                                 <Card Background="Background.Transparent" Style="height: 40px; border:none">
                                     @{
-                                        var item = (dataGridContext as ApplicationUser);
+                                        var item = (dataGridContext as ApplicationUserDto);
                                         if (item.UserRole == UserRole.Admin)
                                         {
                                             <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" /> <span>@dataGridContext.UserRole</span></label>
@@ -156,7 +156,7 @@
                             </FilterTemplate>
                         </DataGridColumn>
 
-                        <DataGridCommandColumn TItem="ApplicationUser" Width="70px" TextAlignment="TextAlignment.Center">
+                        <DataGridCommandColumn TItem="ApplicationUserDto" Width="70px" TextAlignment="TextAlignment.Center">
                             <ClearFilterCommandTemplate Context="dataGridContext">
                                 <Button Color="Color.Warning" Clicked="@dataGridContext.Clicked">
 

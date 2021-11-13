@@ -6,23 +6,23 @@ public interface IIssueService
 
     Task<List<IssueHistoryDto>> GetIssueHistory(int issueId);
 
-    Task<List<Issue>> GetIssuesAsync(int projecId);
+    Task<List<IssueDto>> GetIssuesAsync(int projecId);
 
-    Task<Issue> GetIssueAsync(int projectId, int issueId);
+    Task<IssueDto> GetIssueAsync(int projectId, int issueId);
 
-    Task AddIssueAsync(int projectId, Issue issue);
+    Task AddIssueAsync(int projectId, CreateIssueDto issue);
 
-    Task EditIssueAsync(int projectId, int issueId, Issue issue);
+    Task EditIssueAsync(int projectId, int issueId, EditIssueDto issue);
 
     Task DeleteIssueAsync(int projectId, int issueId);
 
     Task<List<IssueCommentDto>> GetIssueCommentsAsync(int projectId, int issueId);
 
-    Task<IssueComment> GetIssueCommentAsync(int issueId, int commentId);
+    Task<IssueCommentDto> GetIssueCommentAsync(int issueId, int commentId);
 
-    Task AddCommentAsync(IssueComment comment);
+    Task AddCommentAsync(CreateCommentDto comment);
 
-    Task EditCommentAsync(IssueComment comment);
+    Task EditCommentAsync(EditCommentDto comment);
 
     Task DeleteCommentAsync(int issueId, int commentId);
 }

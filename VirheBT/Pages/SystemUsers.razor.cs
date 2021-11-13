@@ -20,9 +20,9 @@ public partial class SystemUsers
     private DataGridSortMode sortMode = DataGridSortMode.Single;
     private DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
     private DataGridCommandMode commandsMode = DataGridCommandMode.Default;
-    public DataGrid<ApplicationUser> dataGrid;
+    public DataGrid<ApplicationUserDto> dataGrid;
     public int currentPage { get; set; } = 1;
-    private List<ApplicationUser> data = new List<ApplicationUser>();
+    private List<ApplicationUserDto> data = new List<ApplicationUserDto>();
 
     [Inject]
     private IApplicationUserService ApplicationUserService { get; set; }
@@ -32,10 +32,9 @@ public partial class SystemUsers
         data = await ApplicationUserService.GetApplicationUsersAsync();
     }
 
-    private async Task OnRowUpdated(SavedRowItem<ApplicationUser, Dictionary<string, object>> e)
+    private async Task OnRowUpdated(SavedRowItem<ApplicationUserDto, Dictionary<string, object>> e)
     {
-        var applicationUser = e.Item;
-        await ApplicationUserService.UpdateUserAsync(applicationUser, e.Item.Id);
+        await ApplicationUserService.UpdateUserAsync(e.Item, e.Item.Id);
         data = await ApplicationUserService.GetApplicationUsersAsync();
         StateHasChanged();
     }

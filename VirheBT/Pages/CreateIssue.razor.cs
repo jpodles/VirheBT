@@ -31,7 +31,7 @@ public partial class CreateIssue
     [Inject]
     private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-    private List<ApplicationUser> projectUsers = new();
+    private List<ApplicationUserDto> projectUsers = new();
 
     private async Task OnAddIssue()
     {
@@ -39,16 +39,16 @@ public partial class CreateIssue
            .GetAuthenticationStateAsync();
         var user = authState.User.Identity?.Name;
 
-        Issue issueToAdd = new Issue
+        var issueToAdd = new CreateIssueDto
         {
             ProjectId = ProjectId,
             Title = Title,
             Description = Description,
             Created = DateTime.Now,
-            CreatedBy = projectUsers.Find(x => x.Email == user),
+            CreatedById = projectUsers.Find(x => x.Email == user).Id,
             Type = CheckedIssueType,
             Priority = CheckedIssuePriority,
-            AssignedTo = projectUsers.Find(x => x.Email == SelectedUser),
+            AssignedToId = projectUsers.Find(x => x.Email == SelectedUser).Id,
         };
 
         await IssueService.AddIssueAsync(ProjectId, issueToAdd);
@@ -67,7 +67,7 @@ public partial class CreateIssue
 
     private void HideModal()
     {
-        projectUsers = new List<ApplicationUser>();
+        projectUsers = new List<ApplicationUserDto>();
         Title = string.Empty;
         Description = string.Empty;
         CheckedIssueType = default;

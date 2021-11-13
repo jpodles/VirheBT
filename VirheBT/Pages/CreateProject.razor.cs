@@ -15,8 +15,8 @@ public partial class CreateProject
     private IApplicationUserService ApplicationUserService { get; set; }
 
     private Blazorise.Modal createProjectModal;
-    private List<ApplicationUser> appUsers = new List<ApplicationUser>();
-    private List<ApplicationUser> allowedUsers = new List<ApplicationUser>();
+    private List<ApplicationUserDto> appUsers = new List<ApplicationUserDto>();
+    private List<ApplicationUserDto> allowedUsers = new List<ApplicationUserDto>();
     private string selectedSearchValue { get; set; }
 
     private void MySearchHandler(string newValue) => selectedSearchValue = newValue;
@@ -27,7 +27,13 @@ public partial class CreateProject
             .GetAuthenticationStateAsync();
         var user = authState.User.Identity.Name;
 
-        await ProjectService.CreateProjectAsync(title, description, user);
+        var projectToCreate = new CreateProjectDto
+        {
+            Title = title,
+            Description = description,
+            MaintainerEmail = user
+        };
+        await ProjectService.CreateProjectAsync(projectToCreate);
         title = "";
         description = "";
 

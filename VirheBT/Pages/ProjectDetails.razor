@@ -136,14 +136,14 @@
                         <CardTitle>Employees in current project</CardTitle>
                     </CardHeader>
                     <CardBody>
-                        <DataGrid @ref="dataGrid" TItem="ApplicationUser" Data="Team" Editable="@editable" EditMode="@editMode"
+                        <DataGrid @ref="dataGrid" TItem="ApplicationUserDto" Data="Team" Editable="@editable" EditMode="@editMode"
                                   Sortable="@sortable" SortMode="@sortMode" Filterable="@filterable" ShowPager="@showPager"
                                   SelectionMode="@selectionMode" CommandMode="@commandsMode" PageSize="15" CurrentPage="currentPage"
                                   PageChanged="(e) => currentPage = e.Page" PagerPosition="DataGridPagerPosition.Bottom"
                                   Striped="false" Bordered="true" Hoverable="true" Responsive="true" Narrow="true">
 
                             <DataGridColumns>
-                                <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.Email)" Caption="Email"
+                                <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.Email)" Caption="Email"
                                                 Editable="false" TextAlignment="TextAlignment.Center"
                                                 HeaderTextAlignment="TextAlignment.Center" Sortable="true">
                                     <CaptionTemplate Context="dataGridContext">
@@ -158,7 +158,7 @@
                                     </DisplayTemplate>
                                 </DataGridColumn>
 
-                                <DataGridColumn TItem="ApplicationUser" Field="@nameof(ApplicationUser.UserRole)" Caption="Role"
+                                <DataGridColumn TItem="ApplicationUserDto" Field="@nameof(ApplicationUserDto.UserRole)" Caption="Role"
                                                 Editable="false" Sortable="false" HeaderTextAlignment="TextAlignment.Center"
                                                 TextAlignment="TextAlignment.Center">
                                     <CaptionTemplate Context="dataGridContext">
@@ -168,7 +168,7 @@
                                         <Link To="#" @onclick="@(() => ShowUserDeatilsModal(dataGridContext.Id))" Style="text-decoration: none">
                                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
                                             @{
-                                                var item = (dataGridContext as ApplicationUser);
+                                                var item = (dataGridContext as ApplicationUserDto);
                                                 if (item.UserRole == UserRole.Admin)
                                                 {
                                                     <label style="color: darkred">

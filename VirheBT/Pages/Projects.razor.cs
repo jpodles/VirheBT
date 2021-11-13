@@ -12,8 +12,8 @@ public partial class Projects
     private DataGridSortMode sortMode = DataGridSortMode.Single;
     private DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
     private DataGridCommandMode commandsMode = DataGridCommandMode.Default;
-    public DataGrid<Project> dataGrid;
-    public List<Project> data = new List<Project>();
+    public DataGrid<ProjectDto> dataGrid;
+    public List<ProjectDto> data = new List<ProjectDto>();
     public int currentPage { get; set; } = 1;
 
     [Inject]
@@ -41,7 +41,7 @@ public partial class Projects
         }
     }
 
-    private async Task OnRowRemoved(Project project)
+    private async Task OnRowRemoved(ProjectDto project)
     {
         if (!await MessageService.Confirm("Are you sure you want to delete this project?", $"Delete {project.Name}?",
             x =>

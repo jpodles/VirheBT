@@ -10,7 +10,7 @@ public partial class IssueDetails
     [Parameter]
     public int IssueId { get; set; }
 
-    public Issue Issue { get; set; }
+    public IssueDto Issue { get; set; }
     public List<IssueCommentDto> IssueComments { get; set; }
     public List<IssueHistoryDto> IssueHistory { get; set; }
 
@@ -40,9 +40,9 @@ public partial class IssueDetails
     private string Description { get; set; }
     private string CommentModalText { get; set; }
 
-    private IEnumerable<ApplicationUser> projectUsers;
+    private List<ApplicationUserDto> projectUsers;
 
-    private ApplicationUser AssignedUser { get; set; }
+    private ApplicationUserDto AssignedUser { get; set; }
 
     public IssueCommentDto Comment { get; set; }
 
@@ -53,7 +53,7 @@ public partial class IssueDetails
     {
         HttpContext = httpContextAccessor.HttpContext;
         projectUsers = await ProjectService.GetProjectUsersAsync(ProjectId);
-        Issue = new Issue();
+        Issue = new IssueDto();
         IssueComments = new List<IssueCommentDto>();
         IssueHistory = new List<IssueHistoryDto>();
         await GetIssueAsync();
@@ -64,7 +64,7 @@ public partial class IssueDetails
         IssueHistory = await IssueService.GetIssueHistory(IssueId);
     }
 
-    private void AssignedUserHandler(ApplicationUser newValue)
+    private void AssignedUserHandler(ApplicationUserDto newValue)
     {
         AssignedUser = newValue;
     }
@@ -92,7 +92,7 @@ public partial class IssueDetails
 
     private async Task OnEditAsync()
     {
-        var issueEdit = new Issue
+        var issueEdit = new EditIssueDto
         {
             Title = Title,
             Description = Description,
@@ -131,7 +131,7 @@ public partial class IssueDetails
 
     private async Task OnAddCommentAync()
     {
-        var comment = new IssueComment
+        var comment = new CreateCommentDto
         {
             Created = DateTimeOffset.UtcNow.LocalDateTime,
             Issue = Issue,
@@ -150,9 +150,15 @@ public partial class IssueDetails
     private async Task OnEditCommentAync()
     {
         var comment = await IssueService.GetIssueCommentAsync(IssueId, Comment.CommentId);
-        comment.Text = CommentModalText;
+        var edited = new EditCommentDto
+        {
+            CommentId = comment.CommentId,
+            IssueId = comment.Issue.IssueId,
+            Text = CommentModalText,
+            UserId = comment.User.Email,
+        };
 
-        await IssueService.EditCommentAsync(comment);
+        await IssueService.EditCommentAsync(edited);
         CommentModalText = "";
         AddCommentModal.Hide();
         IssueComments = await IssueService.GetIssueCommentsAsync(ProjectId, IssueId);

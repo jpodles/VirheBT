@@ -9,7 +9,7 @@ public class IssueRepository : IIssueRepository
         _context = context;
     }
 
-    public async Task AddIsssueAsync(List<Issue> issues, Issue issue)
+    public async Task AddIsssueAsync(IEnumerable<Issue> issues, Issue issue)
     {
         _context.Issues.Add(issue);
         await _context.SaveChangesAsync();

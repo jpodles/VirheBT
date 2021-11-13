@@ -30,12 +30,12 @@ public partial class Team
     private DataGridSortMode sortMode = DataGridSortMode.Single;
     private DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
     private DataGridCommandMode commandsMode = DataGridCommandMode.Default;
-    public DataGrid<ApplicationUser> dataGrid;
+    public DataGrid<ApplicationUserDto> dataGrid;
     public int currentPage { get; set; } = 1;
 
-    private List<ApplicationUser> data = new List<ApplicationUser>();
+    private List<ApplicationUserDto> data = new List<ApplicationUserDto>();
 
-    private List<ApplicationUser> appUsers = new List<ApplicationUser>();
+    private List<ApplicationUserDto> appUsers = new List<ApplicationUserDto>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,7 +62,7 @@ public partial class Team
         }
     }
 
-    private async Task OnRowRemoved(ApplicationUser applicationUser)
+    private async Task OnRowRemoved(ApplicationUserDto applicationUser)
     {
         await ProjectService.RemoveUserFromProject(applicationUser.Id, ProjectId);
         data = await ProjectService.GetProjectUsersAsync(ProjectId);

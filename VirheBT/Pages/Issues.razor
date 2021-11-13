@@ -1,6 +1,7 @@
 ﻿@page "/project/{ProjectId:int}/issues"
 @using VirheBT.Shared.Enums
-@using VirheBT.Infrastructure.Data.Models
+@using VirheBT.Shared.DTOs
+
 <Container  Fluid="true" Margin="Margin.Is5.OnY" Padding="Padding.Is4.OnY" ElementId="issues">
 <Card  WhiteText="false">
     <CardHeader>
@@ -8,7 +9,7 @@
     </CardHeader>
     <CardBody>
         <DataGrid @ref="dataGrid"
-                  TItem="Issue"
+                  TItem="IssueDto"
                   Data="issues"
                   Editable="@editable"
                   EditMode="@editMode"
@@ -36,9 +37,9 @@
             </EmptyTemplate>
 
             <DataGridColumns>
-                <DataGridColumn TItem="Issue" Field="@nameof(Issue.IssueId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
+                <DataGridColumn TItem="IssueDto" Field="@nameof(IssueDto.IssueId)" Caption="#" Sortable="true" Width="80px" TextAlignment="TextAlignment.Center" />
 
-                <DataGridColumn TItem="Issue" Field="@nameof(Issue.Title)" Caption="Title" Editable="false" Width="500px">
+                <DataGridColumn TItem="IssueDto" Field="@nameof(IssueDto.Title)" Caption="Title" Editable="false" Width="500px">
                     <CaptionTemplate>
                         <Icon Name="IconName.Tag" /> @context.Caption
                     </CaptionTemplate>
@@ -54,7 +55,7 @@
                     </DisplayTemplate>
                 </DataGridColumn>
 
-                <DataGridColumn TItem="Issue" Field="@nameof(Issue.AssignedTo)" Caption="Assigned To" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
+                <DataGridColumn TItem="IssueDto" Field="@nameof(IssueDto.AssignedTo)" Caption="Assigned To" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
                     <CaptionTemplate>
                         <Icon Name="IconName.UserCheck" /> @context.Caption
                     </CaptionTemplate>
@@ -95,7 +96,7 @@
                         }
                     </FilterTemplate>
                 </DataGridColumn>
-                <DataGridColumn TItem="Issue" Field="@nameof(Issue.Type)" Caption="Type" Editable="false" Width="100px" Sortable="false" HeaderTextAlignment="TextAlignment.Center">
+                <DataGridColumn TItem="IssueDto" Field="@nameof(IssueDto.Type)" Caption="Type" Editable="false" Width="100px" Sortable="false" HeaderTextAlignment="TextAlignment.Center">
                     <CaptionTemplate>
                         <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Robot" /> @context.Caption
                     </CaptionTemplate>
@@ -103,7 +104,7 @@
                         <Link To=@($"project/{ProjectId}/issue/{context.IssueId}") Style="text-decoration: none">
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
                             @{
-                                var issueItem = (context as Issue);
+                                var issueItem = (context as IssueDto);
                                 if (issueItem.Type == IssueType.Feature)
                                 {
                                     <label style="color:forestgreen"><Icon Name="IconName.PlusCircle" /> <span>@context.Type</span></label>
@@ -132,7 +133,7 @@
                         }
                     </FilterTemplate>
                 </DataGridColumn>
-                <DataGridColumn TItem="Issue" Field="@nameof(Issue.Priority)" Caption="Priority" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                <DataGridColumn TItem="IssueDto" Field="@nameof(IssueDto.Priority)" Caption="Priority" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
                     <CaptionTemplate>
                         <Icon Name="IconName.ExclamationTriangle" /> @context.Caption
                     </CaptionTemplate>
@@ -140,7 +141,7 @@
                         <Link To=@($"project/{ProjectId}/issue/{context.IssueId}") Style="text-decoration: none">
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
                             @{
-                                var issueItem = (context as Issue);
+                                var issueItem = (context as IssueDto);
                                 if (issueItem.Priority == IssuePriority.Low)
                                 {
                                     <label style="color:darkgreen"><Icon Name="IconName.ArrowUp" /> <span>@context.Priority</span></label>
@@ -174,7 +175,7 @@
                         }
                     </FilterTemplate>
                 </DataGridColumn>
-                <DataGridColumn TItem="Issue" Field="@nameof(Issue.Status)" Caption="Status" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                <DataGridColumn TItem="IssueDto" Field="@nameof(IssueDto.Status)" Caption="Status" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
                     <CaptionTemplate>
                         <Icon Name="IconName.Compass" /> @context.Caption
                     </CaptionTemplate>
@@ -182,7 +183,7 @@
                         <Link To=@($"project/{ProjectId}/issue/{context.IssueId}") Style="text-decoration: none">
                         <Card Background="Background.Transparent" Style="height: 40px; border:none">
                             @{
-                                var issueItem = (context as Issue);
+                                var issueItem = (context as IssueDto);
                                 if (issueItem.Status == IssueStatus.ToDo)
                                 {
                                     <label style="color:darkred"><Icon Name="IconName.ExclamationTriangle" /> <span>@context.Status</span></label>
@@ -218,7 +219,7 @@
                     </FilterTemplate>
                 </DataGridColumn>
 
-                <DataGridCommandColumn TItem="Issue" Width="40px">
+                <DataGridCommandColumn TItem="IssueDto" Width="40px">
                     <ClearFilterCommandTemplate>
                         <Button Color="Color.Warning" Clicked="@context.Clicked">
                             <Icon Name="IconName.Brush" />

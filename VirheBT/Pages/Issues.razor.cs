@@ -10,7 +10,7 @@ public partial class Issues
     private DataGridSortMode sortMode = DataGridSortMode.Single;
     private DataGridSelectionMode selectionMode = DataGridSelectionMode.Single;
     private DataGridCommandMode commandsMode = DataGridCommandMode.Default;
-    public DataGrid<Issue> dataGrid;
+    public DataGrid<IssueDto> dataGrid;
     public int currentPage { get; set; } = 1;
 
     [Parameter]
@@ -24,7 +24,7 @@ public partial class Issues
 
     private HttpContext HttpContext { get; set; }
 
-    private List<Issue> issues = new List<Issue>();
+    private List<IssueDto> issues = new List<IssueDto>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,7 +32,7 @@ public partial class Issues
         issues = await IssueService.GetIssuesAsync(ProjectId);
     }
 
-    private async Task OnRowRemoved(Issue issue)
+    private async Task OnRowRemoved(IssueDto issue)
     {
         await IssueService.DeleteIssueAsync(ProjectId, issue.IssueId);
         issues = await IssueService.GetIssuesAsync(ProjectId);

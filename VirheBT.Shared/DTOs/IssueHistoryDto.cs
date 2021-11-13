@@ -2,7 +2,7 @@
 
 namespace VirheBT.Shared.DTOs;
 
-public class IssueHistoryDto
+public record class IssueHistoryDto
 {
     public ChangeType ChangeType { get; set; }
     public DateTime ChangeDate { get; set; }

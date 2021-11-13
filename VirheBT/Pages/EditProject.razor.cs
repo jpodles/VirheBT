@@ -17,10 +17,10 @@ public partial class EditProject
     private string Name { get; set; }
     private string Description { get; set; }
 
-    private Project CurrentProject { get; set; }
+    private ProjectDto CurrentProject { get; set; }
 
-    private List<ApplicationUser> appUsers = new List<ApplicationUser>();
-    private List<ApplicationUser> allowedUsers = new List<ApplicationUser>();
+    private List<ApplicationUserDto> appUsers = new List<ApplicationUserDto>();
+    private List<ApplicationUserDto> allowedUsers = new List<ApplicationUserDto>();
     private string selectedSearchValue { get; set; } = "XD";
 
     private Blazorise.Modal editProjectModal;
@@ -31,10 +31,10 @@ public partial class EditProject
 
     public async void OnEditAsync()
     {
-        Project editModel = new Project
+        var editModel = new UpdateProjectDto
         {
             Name = Name,
-            Description = Description
+            Description = Description,
         };
 
         await ProjectService.UpdateProjectAsync(ProjectId, editModel);

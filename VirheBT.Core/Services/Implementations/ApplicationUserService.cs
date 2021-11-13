@@ -3,10 +3,12 @@
 public class ApplicationUserService : IApplicationUserService
 {
     private readonly IApplicationUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-    public ApplicationUserService(IApplicationUserRepository userRepository)
+    public ApplicationUserService(IApplicationUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
+        _mapper = mapper;
     }
 
     public void DeactivateUserAsync(string userId)
@@ -14,24 +16,29 @@ public class ApplicationUserService : IApplicationUserService
         throw new NotImplementedException();
     }
 
-    public async Task UpdateUserAsync(ApplicationUser applicationUser, string userId)
+    public async Task UpdateUserAsync(ApplicationUserDto applicationUser, string userId)
     {
-        await _userRepository.UpdateUserAsync(applicationUser, userId);
+       // await _userRepository.UpdateUserAsync(applicationUser, userId);
     }
 
-    public async Task<ApplicationUser> GetApplicationUserAsync(string userId)
+    public async Task<ApplicationUserDto> GetApplicationUserAsync(string userId)
     {
-        return await _userRepository.GetApplicationUserAsync(userId);
+        var user = await _userRepository.GetApplicationUserAsync(userId);
+        return _mapper.Map<ApplicationUserDto>(user);
     }
 
-    public async Task<ApplicationUser> GetApplicationUserByEmailAsync(string userEmail)
+    public async Task<ApplicationUserDto> GetApplicationUserByEmailAsync(string userEmail)
     {
-        return await _userRepository.GetApplicationUserByEmailAsync(userEmail);
+        var user = await _userRepository.GetApplicationUserByEmailAsync(userEmail);
+        return _mapper.Map<ApplicationUserDto>(user);
     }
 
-    public async Task<List<ApplicationUser>> GetApplicationUsersAsync()
+    public async Task<List<ApplicationUserDto>> GetApplicationUsersAsync()
     {
-        var users = await _userRepository.GetApplicationUsersAsync();
-        return users.ToList();
+        var users = (await _userRepository.GetApplicationUsersAsync()).ToList();
+        var usersDtos = new List<ApplicationUserDto>();
+        foreach (var item in users)
+            usersDtos.Add(_mapper.Map<ApplicationUserDto>(item));
+        return usersDtos;
     }
 }

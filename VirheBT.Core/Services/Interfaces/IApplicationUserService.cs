@@ -2,13 +2,13 @@
 
 public interface IApplicationUserService
 {
-    Task<List<ApplicationUser>> GetApplicationUsersAsync();
+    Task<List<ApplicationUserDto>> GetApplicationUsersAsync();
 
-    Task<ApplicationUser> GetApplicationUserAsync(string userId);
+    Task<ApplicationUserDto> GetApplicationUserAsync(string userId);
 
-    Task<ApplicationUser> GetApplicationUserByEmailAsync(string userEmail);
+    Task<ApplicationUserDto> GetApplicationUserByEmailAsync(string userEmail);
 
-    Task UpdateUserAsync(ApplicationUser applicationUser, string userId);
+    Task UpdateUserAsync(ApplicationUserDto applicationUser, string userId);
 
     void DeactivateUserAsync(string userId);
 }

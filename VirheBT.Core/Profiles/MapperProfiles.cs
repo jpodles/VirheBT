@@ -1,17 +1,24 @@
-﻿using AutoMapper;
+﻿namespace VirheBT.Core.Profiles;
 
-using VirheBT.Infrastructure.Data.Models;
-using VirheBT.Shared.DTOs;
-
-namespace VirheBT.Core.Profiles;
 public class MapperProfiles : Profile
 {
     public MapperProfiles()
     {
-        CreateMap<Project, ProjectShortDto>();
-        CreateMap<Project, Project>().ReverseMap();
-        CreateMap<IssueHistory, IssueHistoryDto>();
-        CreateMap<IssueComment, IssueCommentDto>();
-        CreateMap<ApplicationUser, ApplicationUserDto>();
+        CreateMap<Project, ProjectDto>().ReverseMap();
+        CreateMap<IssueHistory, IssueHistoryDto>().ReverseMap();
+        CreateMap<IssueComment, IssueCommentDto>().ReverseMap();
+        
+        CreateMap<CreateIssueDto, Issue>();
+        CreateMap<EditIssueDto, Issue>();
+        
+        CreateMap<CreateCommentDto, IssueComment>();
+        CreateMap<EditCommentDto, IssueComment>();
+        
+        CreateMap<CreateProjectDto, Project>();
+        CreateMap<UpdateProjectDto, Project>();
+
+        CreateMap<Issue, IssueDto>().ReverseMap();
+        CreateMap<UpdateProjectDto, Project>().ReverseMap();
+        CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
     }
 }

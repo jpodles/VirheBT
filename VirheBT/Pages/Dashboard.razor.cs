@@ -33,10 +33,7 @@ public partial class Dashboard
                    _green
                  };
 
-    private bool isAlreadyInitialised;
-
-    // private Random random = new Random(DateTime.Now.Millisecond);
-    private List<Issue> issues = new List<Issue>();
+    private List<IssueDto> Issues = new List<IssueDto>();
 
     private int ToDoCount { get; set; }
     private int InProgressCount { get; set; }
@@ -61,12 +58,12 @@ public partial class Dashboard
 
     private string Name { get; set; }
     private string Description { get; set; }
-    private Project CurrentProject { get; set; }
+    private ProjectDto CurrentProject { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         CurrentProject = await ProjectService.GetProjectAsync(ProjectId);
-        issues = await IssueService.GetIssuesAsync(ProjectId);
+        Issues = await IssueService.GetIssuesAsync(ProjectId);
         Name = CurrentProject.Name;
         Description = CurrentProject.Description;
 
@@ -82,27 +79,27 @@ public partial class Dashboard
 
     private void CalculateCount()
     {
-        ToDoCount = issues
+        ToDoCount = Issues
          .Count(x => x.Status == IssueStatus.ToDo);
-        InProgressCount = issues
+        InProgressCount = Issues
             .Count(x => x.Status == IssueStatus.InProgress);
-        DoneCount = issues
+        DoneCount = Issues
             .Count(x => x.Status == IssueStatus.Done);
-        Bugs = issues
+        Bugs = Issues
           .Count(x => x.Type == IssueType.Bug);
-        Features = issues
+        Features = Issues
             .Count(x => x.Type == IssueType.Feature);
 
-        BugLow = issues.Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.Low);
-        BugNormal = issues
+        BugLow = Issues.Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.Low);
+        BugNormal = Issues
             .Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.Normal);
-        BugHigh = issues
+        BugHigh = Issues
              .Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.High);
 
-        FeaturesLow = issues.Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.Low);
-        FeaturesNormal = issues
+        FeaturesLow = Issues.Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.Low);
+        FeaturesNormal = Issues
             .Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.Normal);
-        FeaturesHigh = issues
+        FeaturesHigh = Issues
              .Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.High);
     }
 
