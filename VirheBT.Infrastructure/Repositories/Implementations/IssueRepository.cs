@@ -48,11 +48,11 @@ public class IssueRepository : IIssueRepository
     public async Task UpdateIssueAsync(int projectId, int issueId, Issue issue)
     {
         var issueEntity = await GetIssueByIdAsync(projectId, issueId);
-
+        var assignedTo = _context.ApplicationUsers.FirstOrDefault(x => x.Id == issue.AssignedToId);
         issueEntity.Title = issue.Title;
         issueEntity.Description = issue.Description;
         issueEntity.Priority = issue.Priority;
-        issueEntity.AssignedTo = issue.AssignedTo;
+        issueEntity.AssignedTo = assignedTo;
         issueEntity.Type = issue.Type;
         issueEntity.Modified = issue.Modified;
         issueEntity.Status = issue.Status;

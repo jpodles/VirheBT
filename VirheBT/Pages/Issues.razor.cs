@@ -30,6 +30,8 @@ public partial class Issues
     {
         HttpContext = httpContextAccessor.HttpContext;
         issues = await IssueService.GetIssuesAsync(ProjectId);
+
+        issues.ForEach(issue => issue.AssignedToId = issue.AssignedTo?.FirstName + issue.AssignedTo?.LastName);
     }
 
     private async Task OnRowRemoved(IssueDto issue)
@@ -37,15 +39,7 @@ public partial class Issues
         await IssueService.DeleteIssueAsync(ProjectId, issue.IssueId);
         issues = await IssueService.GetIssuesAsync(ProjectId);
     }
+
+  
 }
 
-public class IssueShortDto
-{
-    public int ID { get; set; }
-    public string Title { get; set; }
-    public IssueStatus Status { get; set; }
-    public IssuePriority Priority { get; set; }
-    public IssueType Type { get; set; }
-
-    public string AssignedTo { get; set; }
-}

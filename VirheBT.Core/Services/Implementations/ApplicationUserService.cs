@@ -18,7 +18,7 @@ public class ApplicationUserService : IApplicationUserService
 
     public async Task UpdateUserAsync(ApplicationUserDto applicationUser, string userId)
     {
-       // await _userRepository.UpdateUserAsync(applicationUser, userId);
+       await _userRepository.UpdateUserAsync(_mapper.Map<ApplicationUser>(applicationUser), userId);
     }
 
     public async Task<ApplicationUserDto> GetApplicationUserAsync(string userId)

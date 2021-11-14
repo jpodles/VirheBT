@@ -191,7 +191,7 @@
                                     @foreach (var comment in IssueHistory.OrderByDescending(x => x.ChangeDate))
                                     {
                                         <TableRow>
-                                            <TableRowCell>@comment.User.Email</TableRowCell>
+                                            <TableRowCell>@comment.User?.Email</TableRowCell>
                                             <TableRowCell>@comment.ChangeType</TableRowCell>
                                             <TableRowCell>@comment.ChangeDate</TableRowCell>
                                         </TableRow>

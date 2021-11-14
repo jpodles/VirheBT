@@ -1,7 +1,14 @@
-﻿namespace VirheBT.Pages;
+﻿using Microsoft.Extensions.Logging;
+
+using VirheBT.Shared;
+
+namespace VirheBT.Pages;
 
 public partial class IssueDetails
 {
+    [CascadingParameter]
+    public Error Error { get; set; }
+
     [Inject] private IMessageService MessageService { get; set; }
 
     [Parameter]
@@ -19,6 +26,8 @@ public partial class IssueDetails
 
     [Inject]
     private IProjectService ProjectService { get; set; }
+    
+    [Inject] ILogger<IssueDetails> Logger { get; set; }
 
     [Inject]
     public IApplicationUserService ApplicationUserService { get; set; }
@@ -71,7 +80,15 @@ public partial class IssueDetails
 
     private async Task GetIssueAsync()
     {
-        Issue = await IssueService.GetIssueAsync(ProjectId, IssueId);
+        try
+        {
+        Issue = await IssueService.GetIssueAsync(0, IssueId);
+
+        }
+        catch (Exception ex)
+        {
+           Error.ProcessError(ex);
+        }
         Title = Issue.Title;
         CreatedBy = Issue.CreatedBy?.Email ?? " ";
         AssignedTo = Issue.AssignedTo?.Email ?? " ";
@@ -97,18 +114,18 @@ public partial class IssueDetails
             Title = Title,
             Description = Description,
             Type = IssueType,
-            CreatedBy = Issue.CreatedBy,
-            AssignedTo = AssignedUser,
+            CreatedById = Issue.CreatedBy?.Id,
+            AssignedToId = AssignedUser?.Id,
             Status = IssueStatus,
             Priority = IssuePriority,
-            ModifiedBy = await ApplicationUserService.GetApplicationUserByEmailAsync(HttpContext.User.Identity.Name)
+            ModifiedById = HttpContext.User.Identity.Name
         };
 
         if (Issue.Title == issueEdit.Title
             && Issue.Description == issueEdit.Description
             && Issue.Type == issueEdit.Type
-            && Issue.CreatedBy == issueEdit.CreatedBy
-            && Issue.AssignedTo == issueEdit.AssignedTo
+            && Issue.CreatedBy.Id == issueEdit.CreatedById
+            && Issue.AssignedTo?.Id == issueEdit.AssignedToId
             && Issue.Status == issueEdit.Status
             && Issue.Priority == issueEdit.Priority)
         {
@@ -120,7 +137,7 @@ public partial class IssueDetails
         {
             await IssueService.EditIssueAsync(ProjectId, IssueId, issueEdit);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             failedAlert.Show();
         }
@@ -134,8 +151,8 @@ public partial class IssueDetails
         var comment = new CreateCommentDto
         {
             Created = DateTimeOffset.UtcNow.LocalDateTime,
-            Issue = Issue,
-            User = await ApplicationUserService.GetApplicationUserByEmailAsync(HttpContext.User.Identity.Name),
+            IssueId = Issue.IssueId,
+            UserId = (await ApplicationUserService.GetApplicationUserByEmailAsync(HttpContext.User.Identity.Name)).Id,
             Text = CommentModalText,
         };
 

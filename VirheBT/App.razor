@@ -3,6 +3,7 @@
 <CascadingAuthenticationState>
     <AuthorizeView>
         <Authorized>
+           <Error>
             <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
                 <Found Context="routeData">
                     <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -13,6 +14,7 @@
                     </LayoutView>
                 </NotFound>
             </Router>
+            </Error>
             <MessageAlert />
         </Authorized>
         <NotAuthorized>

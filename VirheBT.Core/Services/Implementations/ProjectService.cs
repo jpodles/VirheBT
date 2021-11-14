@@ -70,9 +70,9 @@ public class ProjectService : IProjectService
         await _projectRepository.RemoveUserFromProjectAsync(userEntity, projectId);
     }
 
-    public async Task DeleteProject(ProjectDto project)
+    public async Task DeleteProject(int projectId)
     {
-        await _projectRepository.DeleteProject(_mapper.Map<Project>(project));
+        await _projectRepository.DeleteProject(projectId);
     }
 
     public async Task UpdateProjectAsync(int projectId, UpdateProjectDto project)

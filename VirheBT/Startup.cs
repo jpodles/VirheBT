@@ -26,7 +26,7 @@ public class Startup
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders().AddDefaultUI();
 
-        services.AddTransient<ApplicationDbContext>();
+        services.AddScoped<ApplicationDbContext>();
         services.AddRazorPages();
         services.AddServerSideBlazor();
         services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();

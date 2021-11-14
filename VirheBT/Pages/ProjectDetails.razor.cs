@@ -105,7 +105,7 @@ public partial class ProjectDetails
                x.ShowMessageIcon = false;
            }))
         {
-            await ProjectService.DeleteProject(CurrentProject);
+            await ProjectService.DeleteProject(CurrentProject.ProjectId);
             NavigationManager.NavigateTo($"/projects");
         }
     }

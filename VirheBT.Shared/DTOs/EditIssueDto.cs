@@ -11,7 +11,7 @@ public class EditIssueDto
     public IssueStatus Status { get; set; }
     public IssuePriority Priority { get; set; }
     public IssueType Type { get; set; }
-    public ApplicationUserDto CreatedBy { get; set; }
-    public ApplicationUserDto AssignedTo { get; set; }
-    public ApplicationUserDto ModifiedBy { get; set; }
+    public string CreatedById { get; set; }
+    public string AssignedToId { get; set; }
+    public string ModifiedById { get; set; }
 }

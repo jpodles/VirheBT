@@ -26,8 +26,15 @@ public class IssueService : IIssueService
 
     public async Task AddHistoryEntry(ChangeType changeType, int projectId, int issueId, string userId)
     {
+        if (projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+        if (issueId == 0)
+            throw new ArgumentException(nameof(issueId));
+        if (userId == null)
+            throw new ArgumentNullException(nameof(userId));
+
         var issue = await issueRepo.GetIssueByIdAsync(projectId, issueId);
-        var user = await userService.GetApplicationUserAsync(userId);
+        var user = await applicationUserRepo.GetApplicationUserByEmailAsync(userId);
         var historyEntry = new IssueHistory
         {
             ChangeType = changeType,
@@ -41,6 +48,9 @@ public class IssueService : IIssueService
 
     public async Task<List<IssueHistoryDto>> GetIssueHistory(int issueId)
     {
+        if (issueId == 0)
+            throw new ArgumentException(nameof(issueId));
+
         var issueHistory = await issueHistoryRepo.GetIssueHistory(issueId);
 
         var historyToReturn = new List<IssueHistoryDto>();
@@ -57,11 +67,18 @@ public class IssueService : IIssueService
 
     public async Task AddIssueAsync(int projectId, CreateIssueDto issue)
     {
+        if (projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+        if(issue == null)
+            throw new ArgumentNullException(nameof(issue));
+
         var issues = await issueRepo.GetIssuesAsync(projectId);
         var createdBy = await applicationUserRepo.GetApplicationUserAsync(issue.CreatedById);
         var assignedTo = await applicationUserRepo.GetApplicationUserAsync(issue.AssignedToId);
 
         var issueToAdd = _mapper.Map<Issue>(issue);
+        issueToAdd.AssignedToId = null;
+        issueToAdd.CreatedById = null;
         issueToAdd.CreatedBy = createdBy;
         issueToAdd.AssignedTo = assignedTo;
         await issueRepo.AddIsssueAsync(issues, issueToAdd);
@@ -78,12 +95,22 @@ public class IssueService : IIssueService
 
     public async Task DeleteCommentAsync(int issueId, int commentId)
     {
+        if (issueId == 0)
+            throw new ArgumentException(nameof(issueId));
+        if (commentId == 0)
+            throw new ArgumentException(nameof(commentId));
+
         var comment = await issueCommentRepo.GetIssueCommentAsync(issueId, commentId);
         await issueCommentRepo.DeleteCommentAsync(comment);
     }
 
     public async Task DeleteIssueAsync(int projectId, int issueId)
     {
+        if (issueId == 0)
+            throw new ArgumentException(nameof(issueId));
+        if (projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+
         var issue = await issueRepo.GetIssueByIdAsync(projectId, issueId);
         await issueRepo.DeleteIssueAsync(projectId, issue);
     }
@@ -97,19 +124,38 @@ public class IssueService : IIssueService
 
     public async Task<IssueCommentDto> GetIssueCommentAsync(int issueId, int commentId)
     {
+        if (issueId == 0)
+            throw new ArgumentException(nameof(issueId));
+        if (commentId == 0)
+            throw new ArgumentException(nameof(commentId));
+
         var issueEntity = await issueCommentRepo.GetIssueCommentAsync(issueId, commentId);
         return _mapper.Map<IssueCommentDto>(issueEntity);
     }
 
     public async Task EditIssueAsync(int projectId, int issueId, EditIssueDto issue)
     {
+        if (issueId == 0)
+            throw new ArgumentException(nameof(issueId));
+        if (projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+
         var issueToEdit = _mapper.Map<Issue>(issue);
-        await issueRepo.UpdateIssueAsync(projectId, issueId, issueToEdit);
-        await AddHistoryEntry(ChangeType.Modified, projectId, issueId, issue.ModifiedBy.Id);
+        var edited = issueRepo.UpdateIssueAsync(projectId, issueId, issueToEdit);
+
+        await edited.ContinueWith(async _ => await AddHistoryEntry(ChangeType.Modified,
+                                                                   projectId,
+                                                                   issueId,
+                                                                   issue.ModifiedById));
     }
 
     public async Task<IssueDto> GetIssueAsync(int projectId, int issueId)
     {
+        if (issueId == 0)
+            throw new ArgumentException(nameof(issueId));
+        if (projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+
         var issueEntity = await issueRepo.GetIssueByIdAsync(projectId, issueId);
         return _mapper.Map<IssueDto>(issueEntity);
     }

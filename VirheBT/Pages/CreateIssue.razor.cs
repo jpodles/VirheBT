@@ -45,10 +45,10 @@ public partial class CreateIssue
             Title = Title,
             Description = Description,
             Created = DateTime.Now,
-            CreatedById = projectUsers.Find(x => x.Email == user).Id,
+            CreatedById = projectUsers.Find(x => x.Email == user)?.Id,
             Type = CheckedIssueType,
             Priority = CheckedIssuePriority,
-            AssignedToId = projectUsers.Find(x => x.Email == SelectedUser).Id,
+            AssignedToId = projectUsers.Find(x => x.Email == SelectedUser)?.Id,
         };
 
         await IssueService.AddIssueAsync(ProjectId, issueToAdd);

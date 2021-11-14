@@ -73,9 +73,10 @@ public class ProjectRepository : IProjectRepository
         return _context.SaveChanges() >= 0;
     }
 
-    public async Task DeleteProject(Project project)
+    public async Task DeleteProject(int projectId)
     {
-        _context.Projects.Remove(project);
+        var p = await _context.Projects.SingleOrDefaultAsync(x => x.ProjectId == projectId);
+        _context.Projects.Remove(p);
         await _context.SaveChangesAsync();
     }
 }

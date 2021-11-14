@@ -17,5 +17,5 @@ public interface IProjectRepository
     //void DeactivateProjectAsync(int projectId);
     Task AddUserToProjectAsync(ApplicationUser user, int projectId);
 
-    Task DeleteProject(Project project);
+    Task DeleteProject(int projectId);
 }

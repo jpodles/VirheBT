@@ -15,5 +15,5 @@ public interface IProjectService
 
     Task AddUserToProjectAsync(string userEmail, int projecId);
 
-    Task DeleteProject(ProjectDto project);
+    Task DeleteProject(int projectId);
 }

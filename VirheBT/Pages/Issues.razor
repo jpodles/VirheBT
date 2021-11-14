@@ -55,7 +55,8 @@
                     </DisplayTemplate>
                 </DataGridColumn>
 
-                <DataGridColumn TItem="IssueDto" Field="@nameof(IssueDto.AssignedTo)" Caption="Assigned To" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
+                <DataGridColumn TItem="IssueDto" Field="@nameof(IssueDto.AssignedToId)" Caption="Assigned To" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true"
+                    >
                     <CaptionTemplate>
                         <Icon Name="IconName.UserCheck" /> @context.Caption
                     </CaptionTemplate>
@@ -71,30 +72,34 @@
                             }
                             else
                             {
-                                @context.AssignedTo.FirstName @context.AssignedTo.LastName
+                               <span> @context.AssignedTo.FirstName  @context.AssignedTo.LastName</span>
                             }
                             
                         </Card>
                         </Link>
                     </DisplayTemplate>
-                    <FilterTemplate>
+
+                   @* <filtertemplate>
                         @{
-                            var selectedValue = @context.SearchValue ?? "*";
-                            <Select TValue="string" SelectedValue="@selectedValue.ToString()" SelectedValueChanged="@(e => context.TriggerFilterChange(e == "*" ? "" : e.ToString()))">
-                                <SelectItem Value="@(HttpContext.User.Identity.Name)">ME</SelectItem>
-                                <SelectItem Value="@("*")">All</SelectItem>
+                            var selectedvalue = @context.searchvalue ?? "*";
+                            <select tvalue="string" selectedvalue="@selectedvalue.tostring()" selectedvaluechanged="@(e => context.triggerfilterchange(e == "*" ? "" : e.tostring()))">
+                                <selectitem value="@(httpcontext.user.identity.name)">me</selectitem>
+                                <selectitem value="@("*")">all</selectitem>
 
-                                @foreach (var item in issues.Select(p => p.AssignedTo).Distinct())
-                                {
-                                    if (item != null)
+  
+                                    @foreach (var item in issues.distinctby(x => x.assignedtoid).select(x => x.assignedto))
                                     {
-
-                                        <SelectItem Value="@item">@item</SelectItem>
+                                        if (item != null)
+                                        {
+                                            <selectitem value="@item">@item.firstname @item.lastname</selectitem>
+                                        }
                                     }
-                                }
-                            </Select>
+
+
+                                
+                            </select>
                         }
-                    </FilterTemplate>
+                    </filtertemplate>*@
                 </DataGridColumn>
                 <DataGridColumn TItem="IssueDto" Field="@nameof(IssueDto.Type)" Caption="Type" Editable="false" Width="100px" Sortable="false" HeaderTextAlignment="TextAlignment.Center">
                     <CaptionTemplate>
