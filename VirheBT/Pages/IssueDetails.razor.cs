@@ -57,7 +57,7 @@ public partial class IssueDetails
 
     private Snackbar successAlert { get; set; }
     private Snackbar failedAlert { get; set; }
-
+    private bool LoadFailed { get; set; }
     protected override async Task OnInitializedAsync()
     {
         HttpContext = httpContextAccessor.HttpContext;
@@ -80,13 +80,14 @@ public partial class IssueDetails
 
     private async Task GetIssueAsync()
     {
+        LoadFailed = false;
         try
         {
-        Issue = await IssueService.GetIssueAsync(0, IssueId);
-
+            Issue = await IssueService.GetIssueAsync(0, 0);
         }
         catch (Exception ex)
         {
+           LoadFailed= true;
            Error.ProcessError(ex);
         }
         Title = Issue.Title;
@@ -98,14 +99,7 @@ public partial class IssueDetails
         IssuePriority = Issue.Priority;
     }
 
-    public bool CanChange()
-    {
-        if (HttpContext.User.IsInRole("Admin") || HttpContext.User.IsInRole("ProjectManager") || HttpContext.User.Identity.Name == CreatedBy)
-        {
-            return true;
-        }
-        return false;
-    }
+    public bool CanChange() => HttpContext.User.IsInRole("Admin") || HttpContext.User.IsInRole("ProjectManager") || HttpContext.User.Identity.Name == CreatedBy;
 
     private async Task OnEditAsync()
     {

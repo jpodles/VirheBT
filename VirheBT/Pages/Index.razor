@@ -50,13 +50,6 @@
 @code {
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        //var result = await ProtectedSessionStore.GetAsync<string>("currentProject");
-        //string xd = result.Value;
-
-        //if ()
-        //{
-
-        //}
         await ProtectedSessionStore.DeleteAsync("currentProject");
     }
 }
