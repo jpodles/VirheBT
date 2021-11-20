@@ -79,6 +79,7 @@ public class Startup
         });
 
         CreateRoles(serviceProvider);
+       
     }
 
     private void CreateRoles(IServiceProvider serviceProvider)

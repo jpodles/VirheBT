@@ -6,34 +6,33 @@ public class IssueService : IIssueService
     private readonly IIssueCommentRepository issueCommentRepo;
     private readonly IApplicationUserRepository applicationUserRepo;
     private readonly IIssueHistoryRepository issueHistoryRepo;
-    private readonly IApplicationUserService userService;
+
     private readonly IMapper _mapper;
 
     public IssueService(IIssueRepository issueRepo,
                         IIssueCommentRepository issueCommentRepo,
                         IApplicationUserRepository applicationUserRepo,
                         IIssueHistoryRepository issueHistoryRepo,
-                        IApplicationUserService userService,
                         IMapper mapper)
     {
         this.issueRepo = issueRepo;
         this.issueCommentRepo = issueCommentRepo;
         this.applicationUserRepo = applicationUserRepo;
         this.issueHistoryRepo = issueHistoryRepo;
-        this.userService = userService;
+
         this._mapper = mapper;
     }
 
-    public async Task AddHistoryEntry(ChangeType changeType, int projectId, int issueId, string userId)
+    public async Task AddHistoryEntry(ChangeType changeType, int? projectId, int? issueId, string userId)
     {
-        if (projectId == 0)
-            throw new ArgumentException(nameof(projectId));
-        if (issueId == 0)
-            throw new ArgumentException(nameof(issueId));
-        if (userId == null)
+        if (userId is null)
             throw new ArgumentNullException(nameof(userId));
+        if (!projectId.HasValue || projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+        if (!issueId.HasValue || issueId == 0)
+            throw new ArgumentNullException(nameof(issueId));
 
-        var issue = await issueRepo.GetIssueByIdAsync(projectId, issueId);
+        var issue = await issueRepo.GetIssueByIdAsync(projectId.Value, issueId.Value);
         var user = await applicationUserRepo.GetApplicationUserByEmailAsync(userId);
         var historyEntry = new IssueHistory
         {
@@ -46,12 +45,12 @@ public class IssueService : IIssueService
         await issueHistoryRepo.AddIssueHistoryAsync(historyEntry);
     }
 
-    public async Task<List<IssueHistoryDto>> GetIssueHistory(int issueId)
+    public async Task<List<IssueHistoryDto>> GetIssueHistory(int? issueId)
     {
-        if (issueId == 0)
+        if (!issueId.HasValue || issueId == 0)
             throw new ArgumentException(nameof(issueId));
 
-        var issueHistory = await issueHistoryRepo.GetIssueHistory(issueId);
+        var issueHistory = await issueHistoryRepo.GetIssueHistory(issueId.Value);
 
         var historyToReturn = new List<IssueHistoryDto>();
         foreach (var item in issueHistory)
@@ -62,17 +61,20 @@ public class IssueService : IIssueService
 
     public async Task AddCommentAsync(CreateCommentDto comment)
     {
+        if(comment == null)
+            throw new ArgumentNullException(nameof(comment));
         await issueCommentRepo.AddCommentAsync(_mapper.Map<IssueComment>(comment));
     }
 
-    public async Task AddIssueAsync(int projectId, CreateIssueDto issue)
+    public async Task AddIssueAsync(int? projectId, CreateIssueDto issue)
     {
-        if (projectId == 0)
+        if (!projectId.HasValue || projectId == 0)
             throw new ArgumentException(nameof(projectId));
-        if(issue == null)
+        if (issue is null)
             throw new ArgumentNullException(nameof(issue));
+   
 
-        var issues = await issueRepo.GetIssuesAsync(projectId);
+        var issues = await issueRepo.GetIssuesAsync(projectId.Value);
         var createdBy = await applicationUserRepo.GetApplicationUserAsync(issue.CreatedById);
         var assignedTo = await applicationUserRepo.GetApplicationUserAsync(issue.AssignedToId);
 
@@ -93,85 +95,98 @@ public class IssueService : IIssueService
         await issueHistoryRepo.AddIssueHistoryAsync(historyEntry);
     }
 
-    public async Task DeleteCommentAsync(int issueId, int commentId)
+    public async Task DeleteCommentAsync(int? issueId, int? commentId)
     {
-        if (issueId == 0)
+        if (!issueId.HasValue || issueId == 0)
             throw new ArgumentException(nameof(issueId));
-        if (commentId == 0)
+        if (!commentId.HasValue || commentId == 0)
             throw new ArgumentException(nameof(commentId));
 
-        var comment = await issueCommentRepo.GetIssueCommentAsync(issueId, commentId);
+        var comment = await issueCommentRepo.GetIssueCommentAsync(issueId.Value, commentId.Value);
         await issueCommentRepo.DeleteCommentAsync(comment);
     }
 
-    public async Task DeleteIssueAsync(int projectId, int issueId)
+    public async Task DeleteIssueAsync(int? projectId, int? issueId)
     {
-        if (issueId == 0)
+
+        if (!issueId.HasValue || issueId == 0)
             throw new ArgumentException(nameof(issueId));
-        if (projectId == 0)
+        if (!projectId.HasValue || projectId == 0)
             throw new ArgumentException(nameof(projectId));
 
-        var issue = await issueRepo.GetIssueByIdAsync(projectId, issueId);
-        await issueRepo.DeleteIssueAsync(projectId, issue);
+        var issue = await issueRepo.GetIssueByIdAsync(projectId.Value, issueId.Value);
+        await issueRepo.DeleteIssueAsync(projectId.Value, issue);
     }
 
     public async Task EditCommentAsync(EditCommentDto comment)
     {
+        if(comment == null)
+            throw new ArgumentNullException(nameof(comment));
         var commentToEdit = await issueCommentRepo.GetIssueCommentAsync(comment.IssueId, comment.CommentId);
         commentToEdit.Text = comment.Text;
         await issueCommentRepo.EditCommentAsync(commentToEdit);
     }
 
-    public async Task<IssueCommentDto> GetIssueCommentAsync(int issueId, int commentId)
+    public async Task<IssueCommentDto> GetIssueCommentAsync(int? issueId, int? commentId)
     {
-        if (issueId == 0)
+        if (!issueId.HasValue || issueId == 0)
             throw new ArgumentException(nameof(issueId));
-        if (commentId == 0)
+        if (!commentId.HasValue || commentId == 0)
             throw new ArgumentException(nameof(commentId));
 
-        var issueEntity = await issueCommentRepo.GetIssueCommentAsync(issueId, commentId);
+        var issueEntity = await issueCommentRepo.GetIssueCommentAsync(issueId.Value, commentId.Value);
         return _mapper.Map<IssueCommentDto>(issueEntity);
     }
 
-    public async Task EditIssueAsync(int projectId, int issueId, EditIssueDto issue)
+    public async Task EditIssueAsync(int? projectId, int? issueId, EditIssueDto issue)
     {
-        if (issueId == 0)
+        if (!issueId.HasValue || issueId == 0)
             throw new ArgumentException(nameof(issueId));
-        if (projectId == 0)
+        if (!projectId.HasValue || projectId == 0)
             throw new ArgumentException(nameof(projectId));
+        if (issue is null)
+            throw new ArgumentNullException(nameof(issue));
 
         var issueToEdit = _mapper.Map<Issue>(issue);
-        var edited = issueRepo.UpdateIssueAsync(projectId, issueId, issueToEdit);
+        var edited = issueRepo.UpdateIssueAsync(projectId.Value, issueId.Value, issueToEdit);
 
         await edited.ContinueWith(async _ => await AddHistoryEntry(ChangeType.Modified,
-                                                                   projectId,
-                                                                   issueId,
+                                                                   projectId.Value,
+                                                                   issueId.Value,
                                                                    issue.ModifiedById));
     }
 
-    public async Task<IssueDto> GetIssueAsync(int projectId, int issueId)
+    public async Task<IssueDto> GetIssueAsync(int? projectId, int? issueId)
     {
-        if (issueId == 0)
+        if (!issueId.HasValue || issueId == 0)
             throw new ArgumentException(nameof(issueId));
-        if (projectId == 0)
+        if (!projectId.HasValue || projectId == 0)
             throw new ArgumentException(nameof(projectId));
 
-        var issueEntity = await issueRepo.GetIssueByIdAsync(projectId, issueId);
+        var issueEntity = await issueRepo.GetIssueByIdAsync(projectId.Value, issueId.Value);
         return _mapper.Map<IssueDto>(issueEntity);
     }
 
-    public async Task<List<IssueCommentDto>> GetIssueCommentsAsync(int projectId, int issueId)
+    public async Task<List<IssueCommentDto>> GetIssueCommentsAsync(int? projectId, int? issueId)
     {
-        var comments = await issueCommentRepo.GetIssueCommentsAsync(issueId);
+        if (!issueId.HasValue || issueId == 0)
+            throw new ArgumentException(nameof(issueId));
+        if (!projectId.HasValue || projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+
+        var comments = await issueCommentRepo.GetIssueCommentsAsync(issueId.Value);
         var commentsToReturn = new List<IssueCommentDto>();
         foreach (var item in comments)
             commentsToReturn.Add(_mapper.Map<IssueCommentDto>(item));
         return commentsToReturn;
     }
 
-    public async Task<List<IssueDto>> GetIssuesAsync(int projectId)
+    public async Task<List<IssueDto>> GetIssuesAsync(int? projectId)
     {
-        var issues = await issueRepo.GetIssuesAsync(projectId);
+        if (!projectId.HasValue || projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+
+        var issues = await issueRepo.GetIssuesAsync(projectId.Value);
         var issuesToReturn = new List<IssueDto>();
         foreach (var item in issues)
             issuesToReturn.Add(_mapper.Map<IssueDto>(item));

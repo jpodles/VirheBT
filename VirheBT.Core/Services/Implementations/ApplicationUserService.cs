@@ -13,22 +13,32 @@ public class ApplicationUserService : IApplicationUserService
 
     public void DeactivateUserAsync(string userId)
     {
+        if (userId == null)
+            throw new ArgumentNullException(nameof(userId));
         throw new NotImplementedException();
     }
 
     public async Task UpdateUserAsync(ApplicationUserDto applicationUser, string userId)
     {
-       await _userRepository.UpdateUserAsync(_mapper.Map<ApplicationUser>(applicationUser), userId);
+        if (userId == null)
+            throw new ArgumentNullException(nameof(userId));
+        if(applicationUser == null)
+            throw new ArgumentNullException(nameof(applicationUser));
+        await _userRepository.UpdateUserAsync(_mapper.Map<ApplicationUser>(applicationUser), userId);
     }
 
     public async Task<ApplicationUserDto> GetApplicationUserAsync(string userId)
     {
+        if(userId == null)
+            throw new ArgumentNullException(nameof(userId));
         var user = await _userRepository.GetApplicationUserAsync(userId);
         return _mapper.Map<ApplicationUserDto>(user);
     }
 
     public async Task<ApplicationUserDto> GetApplicationUserByEmailAsync(string userEmail)
     {
+        if(userEmail == null)
+            throw new ArgumentNullException(nameof(userEmail));
         var user = await _userRepository.GetApplicationUserByEmailAsync(userEmail);
         return _mapper.Map<ApplicationUserDto>(user);
     }

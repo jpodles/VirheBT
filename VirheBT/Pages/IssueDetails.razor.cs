@@ -25,8 +25,7 @@ public partial class IssueDetails
     private IIssueService IssueService { get; set; }
 
     [Inject]
-    private IProjectService ProjectService { get; set; }
-    
+    private IProjectService ProjectService { get; set; }  
     [Inject] ILogger<IssueDetails> Logger { get; set; }
 
     [Inject]
@@ -131,7 +130,7 @@ public partial class IssueDetails
         {
             await IssueService.EditIssueAsync(ProjectId, IssueId, issueEdit);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             failedAlert.Show();
         }

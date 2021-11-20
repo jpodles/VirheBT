@@ -16,15 +16,23 @@ public class ProjectService : IProjectService
         _mapper = mapper;
     }
 
-    public async Task AddUserToProjectAsync(string userEmail, int projectId)
+    public async Task AddUserToProjectAsync(string userEmail, int? projectId)
     {
+        if (!projectId.HasValue || projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+        if(userEmail == null)
+            throw new ArgumentNullException(nameof(userEmail));
+
         var user = await _userRepository.GetApplicationUserByEmailAsync(userEmail);
 
-        await _projectRepository.AddUserToProjectAsync(user, projectId);
+        await _projectRepository.AddUserToProjectAsync(user, projectId.Value);
     }
 
     public async Task CreateProjectAsync(CreateProjectDto createProject)
     {
+        if (createProject == null)
+            throw new ArgumentNullException(nameof(createProject));
+
         var maintainer = await _userRepository.GetApplicationUserByEmailAsync(createProject.MaintainerEmail);
 
         var project = new Project
@@ -40,9 +48,11 @@ public class ProjectService : IProjectService
         await _projectRepository.CreateProjectAsync(project);
     }
 
-    public async Task<ProjectDto> GetProjectAsync(int projectId)
+    public async Task<ProjectDto> GetProjectAsync(int? projectId)
     {
-        var projectEntity = await _projectRepository.GetProjectAsync(projectId);
+        if (!projectId.HasValue || projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+        var projectEntity = await _projectRepository.GetProjectAsync(projectId.Value);
         return _mapper.Map<ProjectDto>(projectEntity);
     }
 
@@ -55,33 +65,41 @@ public class ProjectService : IProjectService
         return projects.ToList();
     }
 
-    public async Task<List<ApplicationUserDto>> GetProjectUsersAsync(int projectId)
+    public async Task<List<ApplicationUserDto>> GetProjectUsersAsync(int? projectId)
     {
-        var projectUsers = await _projectRepository.GetProjectUsersAsync(projectId);
+        if (!projectId.HasValue || projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+        var projectUsers = await _projectRepository.GetProjectUsersAsync(projectId.Value);
         var users = new List<ApplicationUserDto>();
         foreach (var user in projectUsers)
             users.Add(_mapper.Map<ApplicationUserDto>(user));
         return users;
     }
 
-    public async Task RemoveUserFromProject(string userId, int projectId)
+    public async Task RemoveUserFromProject(string userId, int? projectId)
     {
+        if(userId == null)
+            throw new ArgumentNullException(nameof(userId));
+        if (!projectId.HasValue || projectId == 0)
+            throw new ArgumentException(nameof(projectId));
         var userEntity = await _userRepository.GetApplicationUserAsync(userId);
-        await _projectRepository.RemoveUserFromProjectAsync(userEntity, projectId);
+        await _projectRepository.RemoveUserFromProjectAsync(userEntity, projectId.Value);
     }
 
-    public async Task DeleteProject(int projectId)
+    public async Task DeleteProject(int? projectId)
     {
-        await _projectRepository.DeleteProject(projectId);
+        if (!projectId.HasValue || projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+        await _projectRepository.DeleteProject(projectId.Value);
     }
 
-    public async Task UpdateProjectAsync(int projectId, UpdateProjectDto project)
+    public async Task UpdateProjectAsync(int? projectId, UpdateProjectDto project)
     {
-        if (projectId == 0)
-            throw new ArgumentException("Parameter cannot has zero value", nameof(projectId));
-        if (project == null)
-            throw new ArgumentNullException("Object cannot be null", nameof(project));
+        if (!projectId.HasValue || projectId == 0)
+            throw new ArgumentException(nameof(projectId));
+        if(project is null)
+            throw new ArgumentNullException(nameof(project));
 
-        await _projectRepository.UpdateProjectAsync(projectId, _mapper.Map<Project>(project));
+        await _projectRepository.UpdateProjectAsync(projectId.Value, _mapper.Map<Project>(project));
     }
 }
