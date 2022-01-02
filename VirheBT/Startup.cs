@@ -1,3 +1,5 @@
+using VirheBT.State;
+
 namespace VirheBT;
 
 public class Startup
@@ -42,8 +44,6 @@ public class Startup
 
         services.AddScoped<IIssueRepository, IssueRepository>();
         services.AddScoped<IIssueService, IssueService>();
-
-        services.AddSingleton<IAppState, AppState>();
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }

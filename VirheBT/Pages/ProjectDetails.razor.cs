@@ -1,4 +1,6 @@
-﻿namespace VirheBT.Pages;
+﻿using VirheBT.State;
+
+namespace VirheBT.Pages;
 
 public partial class ProjectDetails
 {

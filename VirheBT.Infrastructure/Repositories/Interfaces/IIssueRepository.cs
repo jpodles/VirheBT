@@ -1,4 +1,4 @@
-﻿using VirheBT.Shared.DTOs;
+﻿
 
 namespace VirheBT.Infrastructure.Repositories.Interfaces;
 public interface IIssueRepository

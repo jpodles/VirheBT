@@ -82,7 +82,7 @@ public partial class IssueDetails
         LoadFailed = false;
         try
         {
-            Issue = await IssueService.GetIssueAsync(0, 0);
+            Issue = await IssueService.GetIssueAsync(ProjectId, IssueId);
         }
         catch (Exception ex)
         {

@@ -1,4 +1,5 @@
-﻿namespace VirheBT.Infrastructure.Data.Models;
+﻿
+namespace VirheBT.Infrastructure.Data.Models;
 public class Project
 {
     [Key]

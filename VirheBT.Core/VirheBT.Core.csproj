@@ -11,6 +11,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\VirheBT.Infrastructure\VirheBT.Infrastructure.csproj" />
+		<ProjectReference Include="..\VirheBT.Shared\VirheBT.Shared.csproj" />
 	</ItemGroup>
 
 </Project>
