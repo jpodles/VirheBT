@@ -31,6 +31,7 @@ public class ApplicationUserRepository : IApplicationUserRepository
         userEntity.FirstName = applicationUser.FirstName;
         userEntity.LastName = applicationUser.LastName;
         userEntity.UserStatus = applicationUser.UserStatus;
+        userEntity.UserRole = applicationUser.UserRole;
 
         await _context.SaveChangesAsync();
     }

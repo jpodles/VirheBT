@@ -5,14 +5,24 @@
 <AuthorizeView>
 
     <NotAuthorized>
-        <Container Margin="Margin.Is5.OnY">
-            <Row Margin="Margin.Is5.OnY">
+        <Container Margin="Margin.Is5.OnY"  Padding="Padding.Is5.OnY">
+            <Row>
+                  <Column ColumnSize="ColumnSize.Is4"></Column>
+                    <Column ColumnSize="ColumnSize.Is4" TextAlignment="TextAlignment.Center">
+                     <Title Style="color: #484848">
+                        <BarIcon IconName="IconName.Bug" /> VirheBT
+                     </Title>
+                    </Column>
+                     <Column ColumnSize="ColumnSize.Is4"></Column>
+             
+            </Row>
+            <Row Padding="Padding.Is5.OnY">
                 <Column ColumnSize="ColumnSize.Is2"></Column>
                 <Column ColumnSize="ColumnSize.Is8">
-                    <Card>
+                    <Card Style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
                         <CardHeader>
                             <CardTitle Size="1" Alignment="TextAlignment.Center" Color="TextColor.Black50">
-                                Welcome in VirheBT
+                                Welcome!
                             </CardTitle>
                         </CardHeader>
                         <CardBody>
@@ -28,8 +38,7 @@
                                 </Column>
                                 <Column ColumnSize="ColumnSize.Is6">
                                     <Button Color="Color.Secondary" Type="ButtonType.Link" Size="Size.ExtraLarge"
-                                            To="Identity/Account/Register" Style="width: 100%;height: 200px;padding: 70px;
-">
+                                            To="Identity/Account/Register" Style="width: 100%;height: 200px;padding: 70px;">
                                         <Icon Name="IconName.UserPlus"></Icon>
                                         Register
                                     </Button>

@@ -163,7 +163,8 @@ public class IssueService : IIssueService
         if (!projectId.HasValue || projectId == 0)
             throw new ArgumentException(nameof(projectId));
 
-        var issueEntity = await issueRepo.GetIssueByIdAsync(projectId.Value, issueId.Value);
+        var issueEntity = await issueRepo
+            .GetIssueByIdAsync(projectId.Value, issueId.Value);
         return _mapper.Map<IssueDto>(issueEntity);
     }
 

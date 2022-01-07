@@ -1,9 +1,14 @@
-﻿
+﻿@inject ProtectedSessionStorage ProtectedSessionStore
 
 <AuthorizeView>
     <Authorized>
-        <Bar Mode="BarMode.Horizontal" Style="background-color: #ECECEC; min-height: 54px">
+        <Bar Mode="BarMode.Horizontal" Style="background-color: #ECECEC; min-height: 54px">  
+
+               @if(currentProject != null){
+                    <BarItem Style="margin-left: 250px">Current project: @currentProject - @projectName</BarItem>
+               }
             <BarEnd>
+               
                 <BarMenu>
                     <LoginDisplay />
                 </BarMenu>
@@ -14,6 +19,15 @@
 
 
 @code {
+    private int? currentProject;
+    private string projectName;
 
+    protected override async Task OnInitializedAsync()
+    {
+        var r1 = await ProtectedSessionStore.GetAsync<int>("currentProjectId");
+        currentProject = r1.Success ? r1.Value : null;
+        var r2 = await ProtectedSessionStore.GetAsync<string>("currentProjectName");
+        projectName = r2.Success ? r2.Value : "";
+    }
 
 }

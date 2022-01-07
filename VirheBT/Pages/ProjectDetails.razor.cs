@@ -93,13 +93,14 @@ public partial class ProjectDetails
 
     private async void SwitchToProject()
     {
-        await ProtectedSessionStore.SetAsync("currentProject", ProjectId);
+        await ProtectedSessionStore.SetAsync("currentProjectId", ProjectId);
+        await ProtectedSessionStore.SetAsync("currentProjectName", CurrentProject.Name);
         NavigationManager.NavigateTo("/project/" + ProjectId.ToString() + "/dashboard", true);
     }
 
     private async void OnDeleteProject()
     {
-        if (!await MessageService.Confirm("Are you sure you want to delete this project?", $"Delete issue #{CurrentProject.ProjectId}?",
+        if (!await MessageService.Confirm("Are you sure you want to delete this project?", $"Delete project #{CurrentProject.ProjectId}?",
            x =>
            {
                x.CancelButtonText = "Delete";

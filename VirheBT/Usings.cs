@@ -25,3 +25,5 @@ global using VirheBT.Services.Implementations;
 global using VirheBT.Services.Interfaces;
 global using VirheBT.Shared.DTOs;
 global using VirheBT.Shared.Enums;
+
+global using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;

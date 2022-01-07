@@ -33,7 +33,8 @@ public class ProjectService : IProjectService
         if (createProject == null)
             throw new ArgumentNullException(nameof(createProject));
 
-        var maintainer = await _userRepository.GetApplicationUserByEmailAsync(createProject.MaintainerEmail);
+        var maintainer = await _userRepository
+            .GetApplicationUserByEmailAsync(createProject.MaintainerEmail);
 
         var project = new Project
         {

@@ -4,9 +4,13 @@
     <AuthorizeView>
         <Authorized>
            <Error>
-            <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+           <Router 
+                AppAssembly="@typeof(Program).Assembly" 
+                PreferExactMatches="@true">
                 <Found Context="routeData">
-                    <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+                    <AuthorizeRouteView 
+                        RouteData="@routeData" 
+                        DefaultLayout="@typeof(MainLayout)" />
                 </Found>
                 <NotFound>
                     <LayoutView Layout="@typeof(MainLayout)">
@@ -17,6 +21,7 @@
             </Error>
             <MessageAlert />
         </Authorized>
+
         <NotAuthorized>
             <VirheBT.Pages.Index></VirheBT.Pages.Index>
         </NotAuthorized>
