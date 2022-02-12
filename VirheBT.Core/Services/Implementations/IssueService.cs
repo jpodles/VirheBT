@@ -61,7 +61,7 @@ public class IssueService : IIssueService
 
     public async Task AddCommentAsync(CreateCommentDto comment)
     {
-        if(comment == null)
+        if (comment == null)
             throw new ArgumentNullException(nameof(comment));
         await issueCommentRepo.AddCommentAsync(_mapper.Map<IssueComment>(comment));
     }
@@ -72,7 +72,6 @@ public class IssueService : IIssueService
             throw new ArgumentException(nameof(projectId));
         if (issue is null)
             throw new ArgumentNullException(nameof(issue));
-   
 
         var issues = await issueRepo.GetIssuesAsync(projectId.Value);
         var createdBy = await applicationUserRepo.GetApplicationUserAsync(issue.CreatedById);
@@ -108,7 +107,6 @@ public class IssueService : IIssueService
 
     public async Task DeleteIssueAsync(int? projectId, int? issueId)
     {
-
         if (!issueId.HasValue || issueId == 0)
             throw new ArgumentException(nameof(issueId));
         if (!projectId.HasValue || projectId == 0)
@@ -120,7 +118,7 @@ public class IssueService : IIssueService
 
     public async Task EditCommentAsync(EditCommentDto comment)
     {
-        if(comment == null)
+        if (comment == null)
             throw new ArgumentNullException(nameof(comment));
         var commentToEdit = await issueCommentRepo.GetIssueCommentAsync(comment.IssueId, comment.CommentId);
         commentToEdit.Text = comment.Text;
@@ -138,23 +136,20 @@ public class IssueService : IIssueService
         return _mapper.Map<IssueCommentDto>(issueEntity);
     }
 
-    public async Task EditIssueAsync(int? projectId, int? issueId, EditIssueDto issue)
+    //Przykład tworzenia łańcucha asynchronicznych zadań
+    public async Task EditIssueAsync(int? projectId, int? issueId, 
+        EditIssueDto issue)
     {
-        if (!issueId.HasValue || issueId == 0)
-            throw new ArgumentException(nameof(issueId));
-        if (!projectId.HasValue || projectId == 0)
-            throw new ArgumentException(nameof(projectId));
-        if (issue is null)
-            throw new ArgumentNullException(nameof(issue));
-
         var issueToEdit = _mapper.Map<Issue>(issue);
-        var edited = issueRepo.UpdateIssueAsync(projectId.Value, issueId.Value, issueToEdit);
 
-        await edited.ContinueWith(async _ => await AddHistoryEntry(ChangeType.Modified,
-                                                                   projectId.Value,
-                                                                   issueId.Value,
-                                                                   issue.ModifiedById));
+        var edited = issueRepo.UpdateIssueAsync(projectId.Value, issueId.Value, issueToEdit);
+        await edited.ContinueWith(async _ => 
+            await AddHistoryEntry(ChangeType.Modified, projectId,
+                issueId, issue.ModifiedById));
     }
+
+  
+
 
     public async Task<IssueDto> GetIssueAsync(int? projectId, int? issueId)
     {

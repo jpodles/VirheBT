@@ -48,9 +48,10 @@ public class ProjectRepository : IProjectRepository
     public async Task UpdateProjectAsync(int projectId, Project project)
     {
         var projectEntity = await GetProjectAsync(projectId);
-
+        var userEntity = _context.ApplicationUsers.Where(x => x.Email == project.Maintainer.Email).FirstOrDefault();
         projectEntity.Name = project.Name;
         projectEntity.Description = project.Description;
+        projectEntity.Maintainer = userEntity;
 
         Save();
     }

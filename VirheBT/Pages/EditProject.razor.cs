@@ -35,6 +35,7 @@ public partial class EditProject
         {
             Name = Name,
             Description = Description,
+            Maintainer = appUsers.Find(x => x.Email == selectedSearchValue)
         };
 
         await ProjectService.UpdateProjectAsync(ProjectId, editModel);

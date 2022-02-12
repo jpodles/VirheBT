@@ -11,7 +11,7 @@ using VirheBT.Shared.DTOs;
 
 namespace VirheBT.Tests
 {
-    public class Tests
+    public class IssueServiceTests
     {
         public IIssueService MockIssueService { get; set; }
 
@@ -27,7 +27,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void InvalidIssueIdGetIssueHistory()
+        public void GetIssueHistory_InvalidIssueId_ShouldThrowException()
         {
             int? issueId = null;
             Assert.ThrowsAsync<ArgumentException>(
@@ -35,7 +35,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void NullCommentAddComment()
+        public void AddComment_NullComment_ShouldThrowException()
         {
             CreateCommentDto commentDto = null;
             Assert.ThrowsAsync<ArgumentNullException>(
@@ -43,7 +43,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void InvalidAddIssue()
+        public void AddIssue_InvalidIssue_ShouldThrowException()
         {
             CreateIssueDto issue = null;
             Assert.ThrowsAsync<ArgumentNullException>(
@@ -59,7 +59,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void InvalidIssueIdDeleteComment()
+        public void DeleteComment_InvalidIssueId_ShouldThrowException()
         {
             int? issueId = null;
             Assert.ThrowsAsync<ArgumentException>(
@@ -67,7 +67,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void InvalidCommentIdDeleteComment()
+        public void DeleteComment_InvalidCommentId_ShouldThrowException()
         {
             int? commentId = null;
             Assert.ThrowsAsync<ArgumentException>(
@@ -75,7 +75,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void InvalidIssueIdDeleteIssue()
+        public void DeleteIssue_InvalidIssueId_ShouldThrowException()
         {
             int? issueId = null;
             Assert.ThrowsAsync<ArgumentException>(
@@ -83,7 +83,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void InvalidCommentIdDeleteIssue()
+        public void DeleteIssue_InvalidProjectId_ShouldThrowException()
         {
             int? projectId = null;
             Assert.ThrowsAsync<ArgumentException>(
@@ -91,7 +91,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void NullEditComment()
+        public void EditComment_InvalidComment_ShouldThrowException()
         {
             EditCommentDto editCommentDto = null;
             Assert.ThrowsAsync<ArgumentNullException>(
@@ -99,7 +99,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void InvalidProjectIdGetIssue()
+        public void GetIssue_InvalidProjectId_ShouldThrowException()
         {
             int? projectId = null;
             Assert.ThrowsAsync<ArgumentException>(
@@ -107,7 +107,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void InvalidIssueIdGetIssue()
+        public void GetIssue_InvalidIssueId_ShouldThrowException()
         {
             int? issueId = null;
             Assert.ThrowsAsync<ArgumentException>(
@@ -115,7 +115,7 @@ namespace VirheBT.Tests
         }
 
         [Test]
-        public void InvalidProjectIdGetIsssues()
+        public void GetIsssues_InvalidProjectId_ShouldThrowException()
         {
             int? projectId = null;
             Assert.ThrowsAsync<ArgumentException>(
