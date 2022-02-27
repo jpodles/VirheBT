@@ -1,5 +1,5 @@
 # About
-VirheBT is a web-based  bug tracking system to assist development teams in project management and to track bugs or features in IT projects.
+VirheBT is a web-based  bug tracking system to assist development teams in project management and to track progress of fixing bugs or creating new features in IT projects.
 
 # Tech Stack
 - .NET 6
