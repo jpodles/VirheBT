@@ -4,7 +4,7 @@ VirheBT is a web-based  bug tracking system to assist development teams in proje
 # Tech Stack
 - .NET 6
 - Blazor Server Side
-- ASP.NET 6
+- ASP.NET Core
 - MSSQL
 - Blazorise
 
