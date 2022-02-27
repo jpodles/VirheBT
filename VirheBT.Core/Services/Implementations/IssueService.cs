@@ -144,8 +144,7 @@ public class IssueService : IIssueService
 
         var edited = issueRepo.UpdateIssueAsync(projectId.Value, issueId.Value, issueToEdit);
         await edited.ContinueWith(async _ => 
-            await AddHistoryEntry(ChangeType.Modified, projectId,
-                issueId, issue.ModifiedById));
+            await AddHistoryEntry(ChangeType.Modified, projectId, issueId, issue.ModifiedById));
     }
 
   

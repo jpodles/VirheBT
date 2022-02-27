@@ -91,6 +91,11 @@ public partial class ProjectDetails
         return CurrentProject?.Status is ProjectStatus.Canceled or ProjectStatus.Finished;
     }
 
+    public bool CanEdit()
+    {
+        return CurrentProject?.Status is ProjectStatus.Canceled or ProjectStatus.Finished;
+    }
+
     private async void SwitchToProject()
     {
         await ProtectedSessionStore.SetAsync("currentProjectId", ProjectId);

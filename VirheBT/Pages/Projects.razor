@@ -53,7 +53,7 @@
                             </Link>
                         </DisplayTemplate>
                     </DataGridColumn>
-
+                   
                     <DataGridColumn TItem="ProjectDto"
                                     Field="@nameof(ProjectDto.Maintainer)"
                                     Caption="Maintainter" Editable="false" Width="300px" TextAlignment="TextAlignment.Center" HeaderTextAlignment="TextAlignment.Center" Sortable="true">
@@ -83,8 +83,7 @@
                             }
                         </FilterTemplate>
                     </DataGridColumn>
-
-                    <DataGridColumn TItem="Project" Field="@nameof(Project.Status)" Caption="Status" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
+                      <DataGridColumn TItem="ProjectDto" Field="@nameof(ProjectDto.Status)" Caption="Status" Editable="false" Sortable="false" Width="100px" HeaderTextAlignment="TextAlignment.Center">
                         <CaptionTemplate>
                             <Icon Name="IconName.ExclamationTriangle" /> @context.Caption
                         </CaptionTemplate>
@@ -92,7 +91,7 @@
                             <Link To=@($"projects/{context.ProjectId}") Style="text-decoration: none">
                             <Card Background="Background.Transparent" Style="height: 40px; border:none">
                                 @{
-                                    var item = (context as Project);
+                                    var item = (context as ProjectDto);
                                     if (item.Status == ProjectStatus.OnTrack)
                                     {
                                         <label style="color:cornflowerblue"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Spinner" /> <span>@context.Status</span></label>
@@ -125,6 +124,7 @@
                             }
                         </FilterTemplate>
                     </DataGridColumn>
+                   
 
                     <DataGridCommandColumn TItem="ProjectDto" Width="50px">
                         <ClearFilterCommandTemplate>

@@ -50,6 +50,7 @@ public class ProjectRepository : IProjectRepository
         var projectEntity = await GetProjectAsync(projectId);
         var userEntity = _context.ApplicationUsers.Where(x => x.Email == project.Maintainer.Email).FirstOrDefault();
         projectEntity.Name = project.Name;
+        projectEntity.Status = project.Status;
         projectEntity.Description = project.Description;
         projectEntity.Maintainer = userEntity;
 

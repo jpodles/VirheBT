@@ -17,6 +17,8 @@ public partial class EditProject
     private string Name { get; set; }
     private string Description { get; set; }
 
+    private ProjectStatus ProjectStatus { get; set; }
+
     private ProjectDto CurrentProject { get; set; }
 
     private List<ApplicationUserDto> appUsers = new List<ApplicationUserDto>();
@@ -39,6 +41,7 @@ public partial class EditProject
         {
             Name = Name,
             Description = Description,
+            Status = ProjectStatus,
             Maintainer = appUsers.Find(x => x.Email == user)
         };
 
@@ -52,6 +55,7 @@ public partial class EditProject
         CurrentProject = await ProjectService.GetProjectAsync(ProjectId);
         Name = CurrentProject.Name;
         Description = CurrentProject.Description;
+        ProjectStatus = CurrentProject.Status;
     }
 
     public async Task ShowModal()

@@ -45,6 +45,23 @@
                                 </Field>
                             </Column>
                         </Row>
+                          <Row>
+                               <Column ColumnSize="ColumnSize.Is6">
+                               <Field>
+                                    <FieldLabel>
+                                       Project Status:
+                                    </FieldLabel>
+                                    <FieldBody>
+                                        <Select TValue="@ProjectStatus" Style="width: 65%" @bind-SelectedValue="@ProjectStatus" >
+                                            <SelectItem Value="@ProjectStatus.OnTrack">On Track</SelectItem>
+                                            <SelectItem Value="@ProjectStatus.Finished">Finished</SelectItem>
+                                            <SelectItem Value="@ProjectStatus.Canceled">Canceled</SelectItem>
+                                        </Select>
+                                     </FieldBody>
+                                </Field>
+                             </Column>
+                           
+                        </Row>
                         <Row>
                             <Column ColumnSize="ColumnSize.Is12">
                                 <Field>
@@ -57,6 +74,7 @@
                                 </Field>
                             </Column>
                         </Row>
+                      
                     </Container>
                 </ModalBody>
                 <ModalFooter>

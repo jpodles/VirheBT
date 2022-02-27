@@ -30,11 +30,11 @@
 
 
                 <Button Color="Color.Warning" Type="ButtonType.Link"
-                        Margin="Margin.Is1" Clicked="(() => editProjectRef.ShowModal())" Disabled="!CanChange() || IsProjectDisabled()">
+                        Margin="Margin.Is1" Clicked="(() => editProjectRef.ShowModal())" Disabled="!CanChange()">
                     EDIT
                 </Button>
                 <Button Color="Color.Danger" Type="ButtonType.Link" Clicked="@OnDeleteProject"
-                        Margin="Margin.Is1" Disabled="!CanChange() || IsProjectDisabled()">
+                        Margin="Margin.Is1" Disabled="!CanChange()">
                     DELETE
                 </Button>
 
@@ -68,6 +68,32 @@
                             </Column>
                             <Column>
                                 @Created
+                            </Column>
+
+                        </Row>
+                         <Row>
+                            <Column ColumnSize="ColumnSize.Is3">
+                                <Icon Name="IconName.Star"></Icon>
+                               Project status:
+                            </Column>
+                            <Column>
+                                 @{
+                                      if (Status == ProjectStatus.OnTrack)
+                                        {
+                                            <label style="color:cornflowerblue"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Spinner" /> <span>@Status</span></label>
+                                        }
+                                        if (Status == ProjectStatus.Canceled)
+                                        {
+                                            <label style="color:darkred"><Icon Name="IconName.ExclamationTriangle" /> <span>@Status</span></label>
+
+                                        }
+                                        if (Status == ProjectStatus.Finished)
+                                        {
+                                            <label style="color:green"><Icon Name="IconName.CheckCircle" /> <span>@Status</span></label>
+
+                                        }
+                                    }
+
                             </Column>
 
                         </Row>

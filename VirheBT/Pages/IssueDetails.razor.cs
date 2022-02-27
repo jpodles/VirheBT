@@ -128,13 +128,18 @@ public partial class IssueDetails
         issueEdit.Modified = DateTimeOffset.UtcNow.LocalDateTime;
         try
         {
-            await IssueService.EditIssueAsync(ProjectId, IssueId, issueEdit);
+            await IssueService.EditIssueAsync(ProjectId, IssueId, issueEdit).ContinueWith(async _ => await UpdateIssueHistory());
         }
         catch (Exception)
         {
             failedAlert.Show();
         }
         successAlert.Show();
+        StateHasChanged();
+    }
+
+    private async Task UpdateIssueHistory()
+    {
         IssueHistory = await IssueService.GetIssueHistory(IssueId);
         StateHasChanged();
     }
