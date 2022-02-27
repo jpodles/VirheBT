@@ -136,6 +136,7 @@
                                               ValueField="@((item) => item)"
                                               SelectedText="@AssignedUser?.Email"
                                               SelectedValue="@AssignedUser"
+                                              Disabled = "@IsManager()"
                                               SelectedValueChanged="@AssignedUserHandler"/>
                             </Column>
                         </Row>

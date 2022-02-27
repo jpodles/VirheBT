@@ -52,6 +52,11 @@ public partial class Team
         return httpAccessor.HttpContext.User.IsInRole("Admin") || httpAccessor.HttpContext.User.IsInRole("ProjectManager");
     }
 
+    public bool CanDeleteUser()
+    {
+        return httpAccessor.HttpContext.User.IsInRole("Admin") || httpAccessor.HttpContext.User.IsInRole("ProjectManager");
+    }
+
     private async Task OnAddUserToProject()
     {
         if (!string.IsNullOrEmpty(selectedSearchValue))

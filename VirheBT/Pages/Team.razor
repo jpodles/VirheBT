@@ -164,7 +164,7 @@
                                 </Button>
                             </ClearFilterCommandTemplate>
                             <DeleteCommandTemplate Context="dataGridContext">
-                                <Button Clicked="@dataGridContext.Clicked" Color="Color.Danger">
+                                <Button Clicked="@dataGridContext.Clicked" Color="Color.Danger" Disabled="!CanDeleteUser()">
                                     <Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.Trash" />
                                 </Button>
                             </DeleteCommandTemplate>

@@ -98,7 +98,8 @@ public partial class IssueDetails
         IssuePriority = Issue.Priority;
     }
 
-    public bool CanChange() => HttpContext.User.IsInRole("Admin") || HttpContext.User.IsInRole("ProjectManager") || HttpContext.User.Identity.Name == CreatedBy;
+    public bool CanChange() => IsManager() || HttpContext.User.Identity.Name == CreatedBy || HttpContext.User.Identity.Name == AssignedTo;
+    public bool IsManager() => !(HttpContext.User.IsInRole("Admin") || HttpContext.User.IsInRole("ProjectManager"));
 
     private async Task OnEditAsync()
     {
