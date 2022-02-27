@@ -25,8 +25,9 @@ public partial class CreateProject
     {
         var authState = await AuthenticationStateProvider
             .GetAuthenticationStateAsync();
-        var user = authState.User.Identity.Name;
-
+        var user = selectedSearchValue;
+        if(selectedSearchValue == null)
+            user = authState.User.Identity.Name;
         var projectToCreate = new CreateProjectDto
         {
             Title = title,

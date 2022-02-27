@@ -21,7 +21,7 @@ public partial class EditProject
 
     private List<ApplicationUserDto> appUsers = new List<ApplicationUserDto>();
     private List<ApplicationUserDto> allowedUsers = new List<ApplicationUserDto>();
-    private string selectedSearchValue { get; set; } = "XD";
+    private string selectedSearchValue { get; set; }
 
     private Blazorise.Modal editProjectModal;
 
@@ -31,11 +31,15 @@ public partial class EditProject
 
     public async void OnEditAsync()
     {
+        var user = selectedSearchValue;
+        if (selectedSearchValue == null)
+            user = selectedAutoCompleteText;
+
         var editModel = new UpdateProjectDto
         {
             Name = Name,
             Description = Description,
-            Maintainer = appUsers.Find(x => x.Email == selectedSearchValue)
+            Maintainer = appUsers.Find(x => x.Email == user)
         };
 
         await ProjectService.UpdateProjectAsync(ProjectId, editModel);

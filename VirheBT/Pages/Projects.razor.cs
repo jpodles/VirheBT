@@ -27,7 +27,7 @@ public partial class Projects
 
     protected override async Task OnInitializedAsync()
     {
-        if (httpContextAccessor.HttpContext.User.IsInRole("Admmin"))
+        if (httpContextAccessor.HttpContext.User.IsInRole("Admin"))
         {
             data = await ProjectService.GetProjectsAsync();
         }

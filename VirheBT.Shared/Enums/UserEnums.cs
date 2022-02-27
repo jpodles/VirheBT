@@ -5,7 +5,8 @@ public enum UserRole
     Admin,
     Tester,
     Programmer,
-    ProjectManager
+    ProjectManager,
+    User
 }
 
 public enum UserStatus

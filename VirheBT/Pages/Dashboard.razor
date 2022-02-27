@@ -7,7 +7,7 @@
             <Row>
                 <Column ColumnSize="ColumnSize.Is6">
                     <Jumbotron Background="Background.Light">
-                        <JumbotronTitle Size="JumbotronTitleSize.Is4">Witaj,  @context.User.Identity.Name</JumbotronTitle>
+                        <JumbotronTitle Size="JumbotronTitleSize.Is4">Witaj, @UserName</JumbotronTitle>
                         <JumbotronSubtitle>
                             @Name
                         </JumbotronSubtitle>
@@ -23,7 +23,7 @@
                 <Column ColumnSize="ColumnSize.Is6">
                     <Card Margin="Margin.Is4.FromBottom" Background="Background.Light">
                         <CardHeader>
-                            <CardTitle>Your Tasks</CardTitle>
+                            <CardTitle>Your tasks</CardTitle>
                         </CardHeader>
 
                         <CardBody>
@@ -36,7 +36,7 @@
                 <Column ColumnSize="ColumnSize.Is3">
                     <Card Margin="Margin.Is4.FromBottom" Background="Background.Light">
                         <CardHeader>
-                            <CardTitle>All Tasks Status In Projects</CardTitle>
+                            <CardTitle>All tasks status in projects</CardTitle>
                         </CardHeader>
 
                         <CardBody>
@@ -47,7 +47,7 @@
                 <Column ColumnSize=" ColumnSize.Is3">
                     <Card Margin="Margin.Is4.FromBottom" Background="Background.Light">
                         <CardHeader>
-                            <CardTitle>All Tasks In Project</CardTitle>
+                            <CardTitle>All tasks in project</CardTitle>
                         </CardHeader>
 
                         <CardBody>
@@ -58,7 +58,7 @@
                 <Column ColumnSize="ColumnSize.Is3">
                     <Card Background="Background.Light">
                         <CardHeader>
-                            <CardTitle>Bugs By Priority</CardTitle>
+                            <CardTitle>All bugs by priority</CardTitle>
                         </CardHeader>
 
                         <CardBody>
@@ -69,7 +69,7 @@
                 <Column ColumnSize="ColumnSize.Is3">
                     <Card Background="Background.Light">
                         <CardHeader>
-                            <CardTitle>Features By Priority</CardTitle>
+                            <CardTitle>All features by priority</CardTitle>
                         </CardHeader>
 
                         <CardBody>
@@ -78,9 +78,10 @@
                     </Card>
                 </Column>
             </Row>
+             <Button @onclick="GeneratePDF" Color="Color.Secondary" Float="Float.Right"> Generate PDF File</Button>
         </Container>
 
-        <Button @onclick="GeneratePDF" Color="Color.Secondary" Float="Float.Right"> Generate PDF File</Button>
+        
 
         @using Microsoft.JSInterop
         @inject IJSRuntime JS;

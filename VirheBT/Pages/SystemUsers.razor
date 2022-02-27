@@ -92,19 +92,24 @@
                                     {
                                         <label style="color: darkred"><Icon Name="Blazorise.Icons.FontAwesome.FontAwesomeIcons.UserCog" /> <span>@context.UserRole</span></label>
                                     }
-                                    if (item.UserRole == UserRole.Programmer)
+                                     if (item.UserRole == UserRole.Programmer)
                                     {
                                         <label style="color:green"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
 
                                     }
-                                    if (item.UserRole == UserRole.Tester)
+                                     if (item.UserRole == UserRole.Tester)
                                     {
                                         <label style="color: cornflowerblue"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
 
                                     }
-                                    if (item.UserRole == UserRole.ProjectManager)
+                                     if (item.UserRole == UserRole.ProjectManager)
                                     {
                                         <label style="color:darkorange"><Icon Name="IconName.UserTie" /> <span>@context.UserRole</span></label>
+
+                                    }
+                                    if (item.UserRole == UserRole.User)
+                                    {
+                                        <label style="color:cornflowerblue"><Icon Name="IconName.User" /> <span>@context.UserRole</span></label>
 
                                     }
 
@@ -118,6 +123,7 @@
                                 <SelectItem TValue="UserRole" Value=UserRole.Admin>Admin</SelectItem>
                                 <SelectItem TValue="UserRole" Value=UserRole.Programmer>Programmer</SelectItem>
                                 <SelectItem TValue="UserRole" Value=UserRole.ProjectManager>ProjectManager</SelectItem>
+                                <SelectItem TValue="UserRole" Value=UserRole.User>User</SelectItem>
                             </Select>
                         </EditTemplate>
                         <FilterTemplate>

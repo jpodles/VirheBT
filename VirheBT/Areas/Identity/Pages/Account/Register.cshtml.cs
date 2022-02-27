@@ -56,7 +56,7 @@ namespace VirheBT.Areas.Identity.Pages.Account
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
-            public UserStatus UserStatus { get; set; } = UserStatus.Active;
+            public UserStatus UserStatus { get; set; } = UserStatus.Inactive;
 
             [Required]
             [EmailAddress]
@@ -87,7 +87,7 @@ namespace VirheBT.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, UserStatus = Input.UserStatus, FirstName = Input.FirstName, LastName = Input.LastName, EmailConfirmed = true };
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, UserStatus = Input.UserStatus, FirstName = Input.FirstName, LastName = Input.LastName, EmailConfirmed = true, UserRole = UserRole.User };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 
                 if (result.Succeeded)

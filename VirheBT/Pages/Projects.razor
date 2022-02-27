@@ -64,7 +64,7 @@
 
                             <Link To=@($"projects/{context.ProjectId}") Style="text-decoration: none">
                             <Card Background="Background.Transparent" Style="height: 40px; border:none">
-                                @context.Maintainer.FirstName @context.Maintainer.LastName
+                                @context.Maintainer?.FirstName @context.Maintainer?.LastName
                             </Card>
                             </Link>
                         </DisplayTemplate>

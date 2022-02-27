@@ -89,7 +89,7 @@ public class Startup
         Task<IdentityResult> roleResult;
         string email = "test@test.com";
 
-        string[] roles = { "Admin", "Programmer", "Tester", "ProjectManager" };
+        string[] roles = { "Admin", "Programmer", "Tester", "ProjectManager", "User" };
 
         foreach (var item in roles)
         {
@@ -111,6 +111,8 @@ public class Startup
             ApplicationUser administrator = new ApplicationUser();
             administrator.Email = email;
             administrator.UserName = email;
+            administrator.FirstName = "admin";
+            administrator.LastName = "adminowski";
 
             Task<IdentityResult> newUser = userManager.CreateAsync(administrator, "Qazwsx1.");
             newUser.Wait();

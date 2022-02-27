@@ -5,6 +5,9 @@ public partial class Dashboard
     [Inject]
     private ProtectedSessionStorage ProtectedSessionStore { get; set; }
 
+    [Inject]
+    private IHttpContextAccessor httpAccessor { get; set; }
+
     [Parameter]
     public int ProjectId { get; set; }
 
@@ -39,6 +42,11 @@ public partial class Dashboard
     private int InProgressCount { get; set; }
     private int DoneCount { get; set; }
 
+    private int UserToDoCount { get; set; }
+    private int UserInProgressCount { get; set; }
+    private int UserDoneCount { get; set; }
+
+
     private int Bugs { get; set; }
     private int Features { get; set; }
     private int BugLow { get; set; }
@@ -54,19 +62,29 @@ public partial class Dashboard
     [Inject]
     private IIssueService IssueService { get; set; }
 
+    [Inject]
+    private IApplicationUserService ApplicationUserService { get; set; }
+
+
     //private string CurrentProjectId { get; set; }
 
     private string Name { get; set; }
+
+    private string UserName { get; set; }
     private string Description { get; set; }
     private ProjectDto CurrentProject { get; set; }
+
+    private ApplicationUserDto User { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         CurrentProject = await ProjectService.GetProjectAsync(ProjectId);
         Issues = await IssueService.GetIssuesAsync(ProjectId);
-        Name = CurrentProject.Name;
-        Description = CurrentProject.Description;
+        User = await ApplicationUserService.GetApplicationUserByEmailAsync(httpAccessor.HttpContext.User.Identity.Name);
 
+        Name = CurrentProject?.Name;
+        Description = CurrentProject?.Description;
+        UserName = $"{User?.FirstName} {User?.LastName}";
         CalculateCount();
 
         await Task.WhenAll(
@@ -85,22 +103,30 @@ public partial class Dashboard
             .Count(x => x.Status == IssueStatus.InProgress);
         DoneCount = Issues
             .Count(x => x.Status == IssueStatus.Done);
+
+
+        UserToDoCount = Issues
+         .Count(x => x.Status == IssueStatus.ToDo && x.AssignedTo.Email == httpAccessor.HttpContext.User.Identity.Name);
+        UserInProgressCount = Issues
+            .Count(x => x.Status == IssueStatus.InProgress && x.AssignedTo.Email == httpAccessor.HttpContext.User.Identity.Name);
+        UserDoneCount = Issues
+            .Count(x => x.Status == IssueStatus.Done && x.AssignedTo.Email == httpAccessor.HttpContext.User.Identity.Name);
         Bugs = Issues
           .Count(x => x.Type == IssueType.Bug);
         Features = Issues
             .Count(x => x.Type == IssueType.Feature);
 
-        BugLow = Issues.Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.Low);
+        BugLow = Issues.Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.Low );
         BugNormal = Issues
-            .Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.Normal);
+            .Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.Normal );
         BugHigh = Issues
-             .Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.High);
+             .Where(x => x.Type == IssueType.Bug).Count(x => x.Priority == IssuePriority.High );
 
-        FeaturesLow = Issues.Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.Low);
+        FeaturesLow = Issues.Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.Low );
         FeaturesNormal = Issues
             .Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.Normal);
         FeaturesHigh = Issues
-             .Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.High);
+             .Where(x => x.Type == IssueType.Feature).Count(x => x.Priority == IssuePriority.High );
     }
 
     private async Task HandleRedraw<TDataSet, TItem, TOptions, TModel>
@@ -163,7 +189,7 @@ public partial class Dashboard
         return new PolarAreaChartDataset<int>
         {
             Label = "# of randoms",
-            Data = new List<int> { ToDoCount, InProgressCount, DoneCount },
+            Data = new List<int> { UserToDoCount, UserInProgressCount, UserDoneCount },
             BackgroundColor = backgroundColors,
             BorderColor = backgroundColors,
             BorderWidth = 1
